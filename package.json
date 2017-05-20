@@ -1,0 +1,37 @@
+{
+  "name": "musicalscales",
+  "version": "0.0.1",
+  "description": "A simple API for generating frequencies for use with the Web Audio API",
+  "main": "musicalscales.js",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  },
+  "scripts": {
+    "start": "SET NODE_ENV=dev && node server.js",
+    "test": "mocha --timeout 10000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rjbultitude/darksky.net-javascript-api.git"
+  },
+  "keywords": [
+    "music",
+    "scales",
+    "webaudio"
+  ],
+  "author": "Richard Bultitude <richard.bultitude@gmail.com>",
+  "contributors": [
+    "Richard Bultitude"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=4.2.4"
+  },
+  "bugs": {
+    "url": ""
+  },
+  "homepage": ""
+}

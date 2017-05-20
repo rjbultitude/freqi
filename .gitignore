@@ -1,0 +1,53 @@
+# Gitignore
+# Add files/folders below to ignore from source control
+
+# Extensions
+*.editorconfig
+*.suo
+*.user
+*.sln.docstates
+*.sln.cache
+*.obj
+*.pdb
+*.user
+*.suo
+*.[Cc]ache
+*.orig
+*.exe
+*.log
+*.DS_Store
+*.tmp
+*.7z
+*.zip
+*.bak
+*.nupkg
+*.dbmdl
+*.publishsettings
+
+# Front-end
+.sass-cache/
+node_modules/
+
+# JavaScript
+dist/
+
+# Others
+sql/
+__MACOSX/
+ClientBin/
+[Ss]tyle[Cc]op.*
+
+# Backup & report files from converting an old project file to
+# a newer Visual Studio version.
+_UpgradeReport_Files/
+Backup*/
+UpgradeLog*.XML
+UpgradeLog*.htm
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Project
+# add project specific ignores here
