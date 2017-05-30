@@ -1,17 +1,19 @@
 {
   "name": "musicalscales",
   "version": "0.0.1",
-  "description": "A simple API for generating frequencies for use with the Web Audio API",
+  "description": "An API that generates frequencies for use with the Web Audio API",
   "main": "musicalscales.js",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "chai": "^3.5.0",
-    "mocha": "^3.2.0"
+    "cross-env": "^5.0.0",
+    "mocha": "^3.2.0",
+    "npm-run-all": "^4.0.2"
   },
   "scripts": {
     "start": "SET NODE_ENV=dev && node server.js",
-    "test": "mocha --timeout 10000"
+    "test": "npm-run-all test:unit",
+    "test:unit": "cross-env NODE_ENV=test mocha --env.dev --opts ./mocha.opts \"./test/unit/**/*.js\""
   },
   "repository": {
     "type": "git",
@@ -20,7 +22,10 @@
   "keywords": [
     "music",
     "scales",
-    "webaudio"
+    "webaudio",
+    "frequencies",
+    "tones",
+    "notes"
   ],
   "author": "Richard Bultitude <richard.bultitude@gmail.com>",
   "contributors": [
