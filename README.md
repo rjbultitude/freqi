@@ -2,7 +2,9 @@
 
 A javascript api for generating frequencies for use with the web audio API
 
-## Please note this is a work in progress and is, as yet, untested
+## Please note this is a work in progress.
+Though it functions, it is not published on NPM and doesn't describe the return values.
+I will endeavour to publish the first full release later in 2017
 
 ---
 
@@ -32,21 +34,16 @@ musicalscales is configured to work with both [AMD](https://en.wikipedia.org/wik
 
 If you're using [Webpack](http://webpack.github.io/), [Browserify](http://browserify.org/) or some other CJS module loader simply require the module like so
 
-`var MusicalScales = require('darkskyjs');`
+`var musicalScales = require('musicalscales');`
 
 or using ES6 import, like so
 
-`import MusicalScales from 'musicalscales'`
-
-and use the `MusicalScales` constructor like so:
-
-`var musicalscales = new MusicalScales()`
+`import musicalScales from 'musicalscales'`
 
 You can then use one of the three methods listed below to retrieve location specific weather data.
 
 * `createScale`
 * `findCentreFreqIndex`
-* `createEqTempMusicalScale`
 
 If you're using [Require.JS](http://requirejs.org/) you will need to download [momentjs](https://momentjs.com/) and [es6-promise](https://github.com/stefanpenner/es6-promise).
 
