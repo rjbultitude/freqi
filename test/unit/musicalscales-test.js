@@ -25,61 +25,64 @@ describe('Test the getSpecificScale return value types', function() {
         this.config = {
             startFreq: 440,
             numSemitones: 12,
-            intervals: [-5, 0, 7];
+            intervals: [-5, 0, 7]
         };
     });
 
     it('should return an object', function() {
         // test the type
-        expect(musicalscales(this.config)).to.be.an('object');
+        expect(musicalscales.getSpecificScale(this.config)).to.be.an('array');
     });
-    it('should return an object with the property getSpecificScale', function() {
+    it('should return an array of numbers', function() {
         // test the type
-        expect(musicalscales(this.config).getSpecificScale).to.be.a('function');
-    });
-    it('should return an object with the property scale', function() {
-        // test the type
-        expect(musicalscales(this.config).scale).to.be.an('array');
+        expect(musicalscales.getSpecificScale(this.config)[0]).to.be.a('number');
     });
 });
 
-describe('Test the musicalscales scales array values', function() {
+describe('Test the getSpecificScale startFreq values', function() {
     // executes once, before all tests
     beforeEach(function() {
         this.randomStartFreq = getRandomInt(0, 10000);
         this.randomNegStartFreq = -Math.abs(getRandomInt(0, 180));
+        this.posConfig = {
+            startFreq: this.randomStartFreq,
+            numSemitones: 12,
+            intervals: [-5, 0, 7]
+        };
+        this.negConfig = {
+            startFreq: this.randomNegStartFreq,
+            numSemitones: 12,
+            intervals: [-5, 0, 7]
+        };
+        this.nanConfig = {
+            startFreq: this.randomNegStartFreq,
+            numSemitones: 12,
+            intervals: [-5, 0, 7]
+        };
+        this.badConfig = {
+            startFreq: 'bad value',
+            numSemitones: 12,
+            intervals: [-5, 0, 7]
+        };
     });
 
     it('should return an array when using 0 or high integer', function() {
         // test the type
-        expect(musicalscales({startFreq: this.randomStartFreq, numOctaves: 2, numSemitones: 12, downFirst: true}).scale).to.be.an('array');
+        expect(musicalscales.getSpecificScale(this.posConfig)).to.be.an('array');
     });
 
-    xit('should throw an error when using a negative number', function() {
+    it('should throw an error when using a negative number', function() {
         // test the type
-        expect(musicalscales({startFreq: this.randomStartFreq, numOctaves: 2, numSemitones: 12, downFirst: true}).scale).to.throw(new TypeError);
+        expect(musicalscales.getSpecificScale(this.negConfig)).to.throw(TypeError);
     });
 
-    xit('should throw a type error when using an incorrect data type', function() {
+    it('should throw a type error when using an incorrect data type', function() {
         // test the type
-        expect(musicalscales({startFreq: 'test', numOctaves: 2, numSemitones: 12, downFirst: true}).scale).to.throw(new TypeError);
+        expect(musicalscales.getSpecificScale(this.badConfig)).to.throw(TypeError);
     });
 
-    xit('should return false when using an incorrect data type', function() {
+    it('should throw a type error when NaN is generated', function() {
         // test the type
-        expect(musicalscales({startFreq: 'test', numOctaves: 2, numSemitones: 12, downFirst: true}).scale).to.be.false;
-    });
-
-    it('should contain the original startFreq value', function() {
-        // test the type
-        expect(musicalscales({startFreq: 1, numOctaves: 2, numSemitones: 12, downFirst: true}).scale).to.include(1);
-    });
-});
-
-describe('Test the musicalscales scales array length', function() {
-
-    it('should return an object', function() {
-        // test the type
-        expect(musicalscales({startFreq: 440, numOctaves: 2, numSemitones: 12, downFirst: true}).scale).to.have.length(25);
+        expect(musicalscales.getSpecificScale(this.nanConfig)).to.throw(TypeError);
     });
 });
