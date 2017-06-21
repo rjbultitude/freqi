@@ -20,13 +20,12 @@ function generateRandomNumbers(length) {
 
 // Group specs with describe
 // Use as many specs as you like
-describe('Test the musicalscales return value types', function() {
+describe('Test the getSpecificScale return value types', function() {
     before(function() {
         this.config = {
             startFreq: 440,
-            numOctaves: 2,
             numSemitones: 12,
-            downFirst: true
+            intervals: [-5, 0, 7];
         };
     });
 
@@ -34,9 +33,9 @@ describe('Test the musicalscales return value types', function() {
         // test the type
         expect(musicalscales(this.config)).to.be.an('object');
     });
-    it('should return an object with the property centreFreqIndex', function() {
+    it('should return an object with the property getSpecificScale', function() {
         // test the type
-        expect(musicalscales(this.config).centreFreqIndex).to.be.a('number');
+        expect(musicalscales(this.config).getSpecificScale).to.be.a('function');
     });
     it('should return an object with the property scale', function() {
         // test the type
@@ -55,22 +54,22 @@ describe('Test the musicalscales scales array values', function() {
         // test the type
         expect(musicalscales({startFreq: this.randomStartFreq, numOctaves: 2, numSemitones: 12, downFirst: true}).scale).to.be.an('array');
     });
-    
+
     xit('should throw an error when using a negative number', function() {
         // test the type
         expect(musicalscales({startFreq: this.randomStartFreq, numOctaves: 2, numSemitones: 12, downFirst: true}).scale).to.throw(new TypeError);
     });
-    
+
     xit('should throw a type error when using an incorrect data type', function() {
         // test the type
         expect(musicalscales({startFreq: 'test', numOctaves: 2, numSemitones: 12, downFirst: true}).scale).to.throw(new TypeError);
     });
-    
+
     xit('should return false when using an incorrect data type', function() {
         // test the type
         expect(musicalscales({startFreq: 'test', numOctaves: 2, numSemitones: 12, downFirst: true}).scale).to.be.false;
     });
-    
+
     it('should contain the original startFreq value', function() {
         // test the type
         expect(musicalscales({startFreq: 1, numOctaves: 2, numSemitones: 12, downFirst: true}).scale).to.include(1);
