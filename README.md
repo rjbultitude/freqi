@@ -57,4 +57,10 @@ To run the demo run `npm install` to install the dependencies, then `npm run bui
 
 ## Plans
 
+Finish writing tests
+
+Delete demo repo
+
+Create gh-pages branch
+
 In a later version it will be possible to generate musical scales that use just intonation rather than equal temperament
