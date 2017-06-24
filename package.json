@@ -11,7 +11,7 @@
     "npm-run-all": "^4.0.2"
   },
   "scripts": {
-    "start": "SET NODE_ENV=dev && node server.js",
+    "start": "cross-env NODE_ENV=dev && node server.js",
     "test": "npm-run-all test:unit",
     "test:unit": "cross-env NODE_ENV=test mocha --env.dev --opts ./mocha.opts \"./test/unit/**/*.js\""
   },
