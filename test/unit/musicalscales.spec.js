@@ -97,3 +97,50 @@ describe('Test augmentArray', function() {
     expect(musicalscales.augmentArray(this.config)).to.have.lengthOf(_finalLenth);
   });
 });
+
+describe('Test getSpecificNote arguments', function() {
+  beforeEach(function() {
+    this.randomStartFreq = getRandomInt(0, 10000);
+    this.randomNegStartFreq = -Math.abs(getRandomInt(0, 180));
+    this.posConfig = {
+        startFreq: this.randomStartFreq,
+        numSemitones: 12,
+        interval: 0,
+        upwardsScale: true
+    };
+    this.negConfig = {
+        startFreq: this.randomNegStartFreq,
+        numSemitones: 12,
+        interval: 0,
+        upwardsScale: true
+    };
+    this.nanConfig = {
+        startFreq: NaN,
+        numSemitones: 12,
+        interval: 0,
+        upwardsScale: true
+    };
+    this.badConfig = {
+        startFreq: 'bad value',
+        numSemitones: 12,
+        interval: 0,
+        upwardsScale: true
+    };
+  });
+  
+  it('should return an number when using 0 or high integer', function() {
+      expect(musicalscales.getSpecificNote(this.posConfig)).to.be.a('number');
+  });
+
+  it('should return false when using a negative number', function() {
+      expect(musicalscales.getSpecificNote(this.negConfig)).to.be.false;
+  });
+
+  it('should return false when using an incorrect data type', function() {
+      expect(musicalscales.getSpecificNote(this.badConfig)).to.be.false;
+  });
+
+  it('should return false when NaN is generated', function() {
+      expect(musicalscales.getSpecificNote(this.nanConfig)).to.be.false;
+  });
+});
