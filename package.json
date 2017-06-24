@@ -3,7 +3,11 @@
   "version": "0.0.1",
   "description": "An API that generates frequencies for use with the Web Audio API",
   "main": "musicalscales.js",
-  "dependencies": {},
+  "dependencies": {
+    "browserify": "^14.4.0",
+    "connect": "^3.6.2",
+    "serve-static": "^1.12.3"
+  },
   "devDependencies": {
     "chai": "^3.5.0",
     "cross-env": "^5.0.1",
@@ -11,6 +15,7 @@
     "npm-run-all": "^4.0.2"
   },
   "scripts": {
+    "build": "browserify demo/app.js > demo/musicalscales.js",
     "start": "cross-env NODE_ENV=dev && node server.js",
     "test": "npm-run-all test:unit",
     "test:unit": "cross-env NODE_ENV=test mocha --env.dev --opts ./mocha.opts \"./test/unit/**/*.js\""
