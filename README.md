@@ -40,10 +40,10 @@ or using ES6 import, like so
 
 `import musicalScales from 'musicalscales'`
 
-You can then use one of the three methods listed below to retrieve location specific weather data.
+You can then use one of the two methods listed below to retrieve location specific weather data.
 
-* `createScale`
-* `findCentreFreqIndex`
+* `getSpecificScale`
+* `getEqTempNote`
 
 If you're using [Require.JS](http://requirejs.org/) you will need to download [momentjs](https://momentjs.com/) and [es6-promise](https://github.com/stefanpenner/es6-promise).
 
@@ -51,14 +51,9 @@ If you're using [Require.JS](http://requirejs.org/) you will need to download [m
 
 TBC
 
-## Dependencies
+## Demo
 
-DarkSkyJS uses
-[moment.js](http://momentjs.com/) to handle date/time data and
-[ES6 Promises Polyfill](https://github.com/jakearchibald/es6-promise) to handle the requests via promises
-
-Ref: [https://www.npmjs.com/package/moment](https://www.npmjs.com/package/moment)
-Ref: [https://www.npmjs.com/package/es6-promise](https://www.npmjs.com/package/es6-promise)
+To run the demo run `npm install` to install the dependencies, then `npm run build` to create the demo bundle and then `npm run start` which will start a new server at localhost:8080. Be sure to navigate to the demo folder in order to see the page i.e. localhost:8080/demo
 
 ## Plans
 
