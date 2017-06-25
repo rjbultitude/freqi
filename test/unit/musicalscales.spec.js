@@ -186,10 +186,10 @@ describe('Test augmentNumArray return value', function() {
       repeatMultiple: 0
     };
   });
-  xit('should return an array', function() {
+  it('should return an array', function() {
     expect(musicalscales.augmentNumArray(this.config)).to.be.an('array');
   });
-  xit('should return an array of the correct length', function() {
+  it('should return an array of the correct length', function() {
     var _finalLenth = this.config.originalArray.length + this.config.difference;
     expect(musicalscales.augmentNumArray(this.config)).to.have.lengthOf(_finalLenth);
   });
@@ -216,13 +216,13 @@ describe('Test augmentNumArray originalArray argument', function() {
       repeatMultiple: 0
     };
   });
-  xit('should return true if array contains numbers', function() {
+  it('should return true if array contains numbers', function() {
     expect(musicalscales.augmentNumArray(this.config)).to.be.ok;
   });
-  xit('should return false if array contains NaNs', function() {
+  it('should return false if array contains NaNs', function() {
     expect(musicalscales.augmentNumArray(this.NaNConfig)).to.be.false;
   });
-  xit('should return false if array contains strings', function() {
+  it('should return false if array contains strings', function() {
     expect(musicalscales.augmentNumArray(this.BadConfig)).to.have.be.false;
   });
 });
@@ -248,13 +248,13 @@ describe('Test augmentNumArray difference argument', function() {
       repeatMultiple: 0
     };
   });
-  xit('should return true if difference is a number', function() {
+  it('should return true if difference is a number', function() {
     expect(musicalscales.augmentNumArray(this.config)).to.be.ok;
   });
-  xit('should return false if difference is NaN', function() {
+  it('should return false if difference is NaN', function() {
     expect(musicalscales.augmentNumArray(this.NaNConfig)).to.be.false;
   });
-  xit('should return false if difference is a string', function() {
+  it('should return false if difference is a string', function() {
     expect(musicalscales.augmentNumArray(this.BadConfig)).to.have.be.false;
   });
 });
@@ -287,16 +287,16 @@ describe('Test augmentNumArray amountToAdd argument', function() {
     };
 
   });
-  xit('should return true if amountToAdd is a number', function() {
+  it('should return true if amountToAdd is a number', function() {
     expect(musicalscales.augmentNumArray(this.config)).to.be.ok;
   });
-  xit('should return false if amountToAdd is a negative number', function() {
+  it('should return false if amountToAdd is a negative number', function() {
     expect(musicalscales.augmentNumArray(this.negConfig)).to.be.false;
   });
-  xit('should return false if amountToAdd is NaN', function() {
+  it('should return false if amountToAdd is NaN', function() {
     expect(musicalscales.augmentNumArray(this.NaNConfig)).to.be.false;
   });
-  xit('should return false if amountToAdd is a string', function() {
+  it('should return false if amountToAdd is a string', function() {
     expect(musicalscales.augmentNumArray(this.BadConfig)).to.have.be.false;
   });
 });
@@ -333,13 +333,13 @@ describe('Test augmentNumArray repeatMultiple argument', function() {
     console.log('TYPE OF repeatMultiple', typeof this.config.repeatMultiple);
     expect(musicalscales.augmentNumArray(this.config)).to.be.an('array');
   });
-  xit('should return false if repeatMultiple is a negative number', function() {
+  it('should return false if repeatMultiple is a negative number', function() {
     expect(musicalscales.augmentNumArray(this.negConfig)).to.be.false;
   });
-  xit('should return false if repeatMultiple is NaN', function() {
+  it('should return false if repeatMultiple is NaN', function() {
     expect(musicalscales.augmentNumArray(this.NaNConfig)).to.be.false;
   });
-  xit('should return false if repeatMultiple is a string', function() {
+  it('should return false if repeatMultiple is a string', function() {
     expect(musicalscales.augmentNumArray(this.BadConfig)).to.have.be.false;
   });
 });

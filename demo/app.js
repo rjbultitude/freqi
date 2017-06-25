@@ -19,6 +19,15 @@ var scaleConfigOpts = {
   intervals: [-7, 0, 7, 12]
 };
 
+var augArrayOpts = {
+  originalArray: [-7, 0, 7, 12],
+  difference: 3,
+  amountToAdd: 12,
+  repeatMultiple: 0
+}
+
+musicalScales.augmentNumArray(augArrayOpts);
+
 //var chordFrequencies = musicalScales.getSpecificScale(scaleConfigAllOpts);
 var chordFrequencies = musicalScales.getSpecificScale(scaleConfigOpts);
 console.log('chordFrequencies', chordFrequencies);
