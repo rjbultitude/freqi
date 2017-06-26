@@ -1,8 +1,8 @@
 {
-  "name": "musicalscales",
+  "name": "freqi",
   "version": "0.0.1",
-  "description": "An API that generates frequencies for use with the Web Audio API",
-  "main": "musicalscales.js",
+  "description": "A library that generates musical frequencies use with the Web Audio API",
+  "main": "freqi.js",
   "dependencies": {
     "browserify": "^14.4.0",
     "connect": "^3.6.2",
@@ -15,14 +15,14 @@
     "npm-run-all": "^4.0.2"
   },
   "scripts": {
-    "build": "browserify demo/app.js > demo/musicalscales.js",
+    "build": "browserify demo/app.js > demo/freqi-demo.js",
     "start": "cross-env NODE_ENV=dev && node server.js",
     "test": "npm-run-all test:unit",
     "test:unit": "cross-env NODE_ENV=test mocha --env.dev --opts ./mocha.opts \"./test/unit/**/*.js\""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rjbultitude/darksky.net-javascript-api.git"
+    "url": "git+https://github.com/rjbultitude/freqi.git"
   },
   "keywords": [
     "music",

@@ -27,7 +27,7 @@
 # Front-end
 .sass-cache/
 node_modules/
-demo/musicalscales.js
+demo/freqi-demo.js
 
 # JavaScript
 dist/
