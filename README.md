@@ -6,19 +6,25 @@ A javascript api for generating frequencies for use with the web audio API
 
 ## Features
 
-This package is designed to provide :
+This package aims to:
 
-* A simple API for creating sets of frequencies
-* Frequencies can be generated that are any number of semitones per octave
-* An even or odd number of octaves can be generated
-* For odd numbers of octaves an option is available for whether the remaining octave is lower or upper
-* The centre frequency can be returned - useful for...
+* Provide a simple API for creating sets of frequencies
+* Return actual sonic frequencies in Hz or relative frequencies for use with audio files
+* Return a set of frequencies of any number
+* Allow for any number of semitones per octave
+* Handle bad data
 
 What it doesn't do:
 
 * Does not allow for input of notes as letters
 * Does not allow for input of chords by name
 
+## Demo
+
+[View the online demo on GitHub here](https://rjbultitude.github.io/freqi/demo/index.html)
+
+Or download/clone it and run `npm install` which will install any dependencies, `npm run build` to create the demo bundle and `npm run start` which will start a new server at localhost:8080.
+Then, be sure to navigate to the demo folder in order to see the page i.e. localhost:8080/demo
 
 ## Getting Started
 
@@ -66,12 +72,6 @@ and these auxiliary properties
 
 e.g. `freqi.getFreqs({startFreq: 440, intervals: [-5, 0, 7]})`
 
-
-## Demo
-
-To run the demo run `npm install` which will install any dependencies, then `npm run build` to create the demo bundle and then `npm run start` which will start a new server at localhost:8080.
-
-Then, be sure to navigate to the demo folder in order to see the page i.e. localhost:8080/demo
 
 ## Plans
 
