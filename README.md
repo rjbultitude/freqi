@@ -2,10 +2,6 @@
 
 A javascript api for generating frequencies for use with the web audio API
 
-## Please note this is a work in progress.
-Though it functions, it is not published on NPM and doesn't describe the return values.
-I will endeavor to publish the first full release later in 2017
-
 ---
 
 ## Features
