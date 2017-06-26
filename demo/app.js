@@ -1,5 +1,5 @@
 'use strict';
-var musicalScales = require('../lib/musicalScales');
+var freqi = require('../lib/freqi');
 
 var scaleConfigAllOpts = {
   startFreq: 440,
@@ -26,11 +26,11 @@ var augArrayOpts = {
   repeatMultiple: 0
 }
 
-musicalScales.augmentNumArray(augArrayOpts);
+freqi.augmentNumArray(augArrayOpts);
 
-//var chordFrequencies = musicalScales.getSpecificScale(scaleConfigAllOpts);
-var chordFrequencies = musicalScales.getSpecificScale(scaleConfigOpts);
-console.log('chordFrequencies', chordFrequencies);
+//var scaleFrequencies = freqi.getSpecificScale(scaleConfigAllOpts);
+var scaleFrequencies = freqi.getFreqs(scaleConfigOpts);
+console.log('scaleFrequencies', scaleFrequencies);
 
 var playBtn = document.getElementById('play');
 var stopBtn = document.getElementById('stop');
@@ -76,7 +76,7 @@ playBtn.addEventListener('click', function(e) {
   e.preventDefault();
   if (!connected) {
     //play(myScale.scale, 1000);
-    play(chordFrequencies, 1000);
+    play(scaleFrequencies, 1000);
   }
 });
 
