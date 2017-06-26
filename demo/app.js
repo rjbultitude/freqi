@@ -58,7 +58,6 @@ function playSineCb(scale) {
   } else {
     index++;
   }
-  console.log('index', index);
 }
 
 function stop() {

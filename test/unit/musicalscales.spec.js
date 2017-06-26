@@ -209,8 +209,8 @@ describe('Test augmentNumArray originalArray argument', function() {
       amountToAdd: 12,
       repeatMultiple: 0
     };
-    this.BadConfig = {
-      originalArray: ['-5', '0', '7'],
+    this.ObjConfig = {
+      originalArray: [{index: -5}, {index: 0}, {index: 1}],
       difference: 3,
       amountToAdd: 12,
       repeatMultiple: 0
@@ -222,8 +222,8 @@ describe('Test augmentNumArray originalArray argument', function() {
   it('should return false if array contains NaNs', function() {
     expect(musicalscales.augmentNumArray(this.NaNConfig)).to.be.false;
   });
-  it('should return false if array contains strings', function() {
-    expect(musicalscales.augmentNumArray(this.BadConfig)).to.have.be.false;
+  it('should return true if array contains objects', function() {
+    expect(musicalscales.augmentNumArray(this.ObjConfig)).to.have.be.ok;
   });
 });
 
