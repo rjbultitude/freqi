@@ -3,15 +3,72 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Musical Scales Demo</title>
-        <meta name="description" content="">
+        <title>Freqi Demo</title>
+        <meta name="description" content="A simple JavaScript API for generating frequencies from intervals">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+          @import url('https://fonts.googleapis.com/css?family=Droid+Serif');
+          body {
+            text-align: center;
+            font-family: tahoma, sans-serif;
+            background-color: #dce2ed;
+            font-size: 16px;
+            color: #0d2142;
+            padding: 0;
+            margin: 0;
+          }
+          .wrapper {
+            max-width: 960px;
+            margin: 0 20px;
+          }
+          .header {
+            background-color: white;
+            padding: 20px 0;
+          }
+          h1,
+          h2 {
+            font-family: 'Droid Serif', sans-serif;
+          }
+          h1 {
+            margin: 0;
+            font-size: 36px;
+          }
+          h2 {
+            font-size: 22px;
+          }
+          button {
+            font-family: 'Droid Serif', sans-serif;
+            padding: 6px 10px;
+            font-size: 18px;
+            background-color: #80e1f2;
+            border: 1px solid #0d2142;
+            border-radius: 3px;
+          }
+          button:active,
+          button:focus,
+          button:hover {
+            background-color: #5eaebc;
+            cursor: pointer;
+          }
+        </style>
     </head>
     <body>
-        <h1>Musical Scales Demo</h1>
-        <p>See the readme in the repository for full instructions</p>
+      <div class="header">
+        <h1>Freqi <span class="special"></span></h1>
+      </div>
+      <div class="wrapper">
+        <h2>A simple JavaScript API for generating frequencies from intervals</h2>
         <button id="play">Play</button>
         <button id="stop">Stop</button>
-        <script src="freqi-demo.js"></script>
+        <p>Edit the app.js file in the demo folder to play with this library.
+          To get started, there's two config objects you can use <em>scaleConfigAllOpts</em>
+          (all the possible options) and <em>scaleConfigOpts</em> (just the bare minimum ones).
+        <p>See the readme in the <a href="https://github.com/rjbultitude/freqi" target="_blank">repository</a> for full instructions</p>
+        <div>
+          <p>Written by <a href="https://github.com/rjbultitude" target="_blank">Richard Bultitude</a></p>
+          <p>Download it from <a href="https://www.npmjs.com/package/freqi" target="_blank">NPM here</a></p>
+        </div>
+      </div>
+      <script src="freqi-demo.js"></script>
     </body>
 </html>

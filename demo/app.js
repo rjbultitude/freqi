@@ -19,15 +19,6 @@ var scaleConfigOpts = {
   intervals: [-7, 0, 7, 12]
 };
 
-var augArrayOpts = {
-  originalArray: [-7, 0, 7, 12],
-  difference: 3,
-  amountToAdd: 12,
-  repeatMultiple: 0
-}
-
-freqi.augmentNumArray(augArrayOpts);
-
 //var scaleFrequencies = freqi.getSpecificScale(scaleConfigAllOpts);
 var scaleFrequencies = freqi.getFreqs(scaleConfigOpts);
 console.log('scaleFrequencies', scaleFrequencies);
@@ -67,6 +58,7 @@ function stop() {
 }
 
 function play(scale, noteLength) {
+  playSineCb(scale);
   myInterval = setInterval(function() {
     playSineCb(scale);
   }, noteLength || 300);
