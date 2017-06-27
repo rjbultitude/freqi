@@ -13,6 +13,18 @@ var scaleConfigAllOpts = {
   type: 'sine'
 };
 
+var scaleConfigTestOpts = {
+  startFreq: 440,
+  numSemitones: 12,
+  numNotes: 5,
+  inversionStartNote: 0,
+  rootNote: 0,
+  intervals: [0, 3, 5, 7, 10],
+  amountToAdd: 12,
+  repeatMultiple: 0,
+  type: 'sine'
+};
+
 var scaleConfigOpts = {
   startFreq: 440,
   numSemitones: 12,
@@ -20,8 +32,7 @@ var scaleConfigOpts = {
 };
 
 //var scaleFrequencies = freqi.getSpecificScale(scaleConfigAllOpts);
-var scaleFrequencies = freqi.getFreqs(scaleConfigOpts);
-console.log('scaleFrequencies', scaleFrequencies);
+var scaleFrequencies = freqi.getFreqs(scaleConfigTestOpts);
 
 var playBtn = document.getElementById('play');
 var stopBtn = document.getElementById('stop');

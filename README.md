@@ -52,11 +52,15 @@ or for CommonJS use
 
 ## Usage
 
-Freqi provides a pure function, `getFreqs`, which accepts a config object and returns an array of frequencies. `startFreq` can be a frequency in Hz, such as 440 (for A) or a relative frequency such 1 which is useful for playing back audio files, such as MP3s or OGGs where `1` is the original playback rate. A set of intervals must be provided, using the `intervals` property, for it to generate frequencies from. These intervals can be any integer, positive or negative e.g. ``[-5, 0, 7]``.
+*Freqi* provides a pure function, `getFreqs`, which accepts a config object and returns an array of frequencies. There are two mandatory properties: `startFreq` and `intervals`.
 
-Optionally you can pass in a custom number of semitones. The default is 12, for a western chromatic scale, but you could pass in 19 for a non-western scale. This can produce interesting results!
+`startFreq` can be a frequency in Hz, such as `440` (for A) or a relative frequency such `1` which is useful for playing back audio files, such as MP3s or OGGs, where `1` is the original playback rate. `intervals` is the set of notes you want to generate frequencies from. These intervals can be any integer, positive or negative e.g. ``[-5, 0, 7]``.
 
-If you are using Freqi to generate sequences of notes you can offset the root note using the `rootNote` property. Also, you can offset the intervals themselves to produce inversions e.g. `{intervals: [0, 3, 5, 7, 10], inversionStartNote: 2}` is the equivalent of `{intervals: [5, 7, 10, 12, 15], inversionStartNote: 2}` - note that the intervals array is automatically extended to the next octave to ensure the same number of notes are created.
+Optionally, you can pass in a custom number of semitones. The default is `12`, a western chromatic scale, but you could pass in 19 for a non-western scale - this can produce very interesting results!
+
+If you are using *Freqi* to generate multiple sequences of notes you can offset the root note using the `rootNote` property. A value of `2` for example will pitch the provided intervals up by two semitones.
+
+Also, you can offset the intervals themselves to produce inversions e.g. `{intervals: [0, 3, 5, 7, 10], inversionStartNote: 2}` is the equivalent of `{intervals: [5, 7, 10, 12, 15], inversionStartNote: 2}`. Note that the intervals array is automatically extended to the next octave to ensure the same number of notes are created.
 
 Following on from the above, a larger number of notes can be set than is provided by the `intervals` property e.g. `{intervals : [0, 3, 5], numNotes: 5}`. In this case Freqi will add the missing array items and extend them to the next octave. You can have Freqi add any value to these missing items - setting `amountToAdd` to `0` will effectively add the same numbers again.
 
@@ -79,8 +83,6 @@ If, for any reason, you want an even longer set of frequencies back simply use t
  * amountToAdd : [number] // 12 if you want to go up an octave;
  * repeatMultiple : [number];
  * type : [string] // for debugging;
-
-e.g. `freqi.getFreqs({startFreq: 440, intervals: [-5, 0, 7]})`
 
 
 ## Plans
