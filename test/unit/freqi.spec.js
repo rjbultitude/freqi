@@ -31,6 +31,7 @@ describe('Test the getFreqs return value types', function() {
             numSemitones: 12,
             intervals: [-5, 0, 7]
         };
+        this.badConfig = '';
     });
 
     it('should return an array when valid config is used', function() {
@@ -38,6 +39,9 @@ describe('Test the getFreqs return value types', function() {
     });
     it('should return an array of numbers when valid config is used', function() {
         expect(freqi.getFreqs(this.config)[0]).to.be.a('number');
+    });
+    it('should return false when an invalid config is used', function() {
+        expect(freqi.getFreqs(this.badConfig)).to.be.false;
     });
 });
 
@@ -204,6 +208,10 @@ describe('Test the getFreqs intervals argument', function() {
             numSemitones: 12,
             intervals: ['bad value', 'bad value']
         };
+        this.undefConfig = {
+            startFreq: 440,
+            numSemitones: 12
+        };
     });
 
     it('should return an array when using 0 or high integer', function() {
@@ -221,6 +229,9 @@ describe('Test the getFreqs intervals argument', function() {
     it('should return false when NaN is generated', function() {
         expect(freqi.getFreqs(this.nanConfig)).to.be.false;
     });
+    it('should return false when intervals is undefined', function() {
+        expect(freqi.getFreqs(this.undefConfig)).to.be.false;
+    });
 });
 
 /**
@@ -231,7 +242,7 @@ describe('Test the getFreqs intervals argument', function() {
 
 describe('Test augmentNumArray return value', function() {
   beforeEach(function() {
-    this.randomDifference = getRandomInt(0, 30);
+    this.randomDifference = getRandomInt(1, 30);
     this.config = {
       originalArray: [0, 1, 2],
       difference: this.randomDifference,
@@ -300,6 +311,12 @@ describe('Test augmentNumArray difference argument', function() {
       amountToAdd: 12,
       repeatMultiple: 0
     };
+    this.ZeroConfig = {
+      originalArray: [-5, 0, 7],
+      difference: 0,
+      amountToAdd: 12,
+      repeatMultiple: 0
+    };
   });
   it('should return true if difference is a number', function() {
     expect(freqi.augmentNumArray(this.config)).to.be.ok;
@@ -309,6 +326,9 @@ describe('Test augmentNumArray difference argument', function() {
   });
   it('should return false if difference is a string', function() {
     expect(freqi.augmentNumArray(this.BadConfig)).to.have.be.false;
+  });
+  it('should return false if difference is zero or less', function() {
+    expect(freqi.augmentNumArray(this.ZeroConfig)).to.have.be.false;
   });
 });
 
@@ -401,7 +421,6 @@ describe('Test augmentNumArray repeatMultiple argument', function() {
 
   });
   it('should return true if repeatMultiple is a positive number', function() {
-    console.log('TYPE OF repeatMultiple', typeof this.config.repeatMultiple);
     expect(freqi.augmentNumArray(this.config)).to.be.an('array');
   });
   it('should return false if repeatMultiple is a negative number', function() {

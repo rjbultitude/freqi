@@ -53,15 +53,17 @@ or for CommonJS use
 
 ## Usage
 
-*Freqi* provides a pure function, `getFreqs`, which accepts a config object and returns an array of frequencies. There are two mandatory properties: `startFreq` and `intervals`.
+*Freqi* provides a pure function, `getFreqs`, which accepts a config object and returns an array of frequencies. There is one mandatory property: `intervals`, though it is recommended that `startFreq` be set too.
 
-`startFreq` can be a frequency in Hz, such as `440` (for A) or a relative frequency such `1` which is useful for playing back audio files, such as MP3s or OGGs, where `1` is the original playback rate. `intervals` is the set of notes you want to generate frequencies from. These intervals can be any integer, positive or negative e.g. ``[-5, 0, 7]``.
+`intervals` is the set of notes you want to generate frequencies from. These intervals can be any integer, positive or negative e.g. `[-5, 0, 7]`.
+
+`startFreq` can be a frequency in Hz, such as `440` (for the note A) or a relative frequency such `1` which is useful for playing back audio files, such as MP3s or OGGs, where `1` is the original playback rate. 440 is the default value.
 
 Optionally, you can pass in a custom number of semitones. The default is `12`, a western chromatic scale, but you could pass in 19 for a non-western scale - this can produce very interesting results!
 
 If you are using *Freqi* to generate multiple sequences of notes you can offset the root note using the `rootNote` property. A value of `2` for example will pitch the provided intervals up by two semitones.
 
-Also, you can offset the intervals themselves to produce inversions or rootless voicings e.g. `{intervals: [0, 3, 5, 7, 10], intervalStartIndex: 2}` is the equivalent of `{intervals: [5, 7, 10, 12, 15], intervalStartIndex: 2}`. Note that the intervals array is automatically extended to the next octave to ensure the correct number of notes are created.
+Also, you can offset the intervals themselves to produce inversions or rootless voicings.  `{intervals: [0, 3, 5, 7, 10], intervalStartIndex: 2}` will create a set of frequencies from the 2nd index in the intervals array, so it's equivalent to `{intervals: [5, 7, 10]`. If you always want arrays of the same length use the `numNotes` property. If that is set *Freqi* will automatically produce the desired number of notes. Use this in conjunction with `amountToAdd` if you want it to extend the intervals by a certain number of semitones e.g. `{intervals: [0, 3, 5, 7, 10], intervalStartIndex: 2, amountToAdd: 12, numNotes: 5}` will yield  
 
 Following on from the above, by using `numNotes`, a larger or smaller number of notes can be set than is provided by the `intervals` property e.g. `{intervals : [0, 3, 5], numNotes: 5}`. In this case *Freqi* will add the missing array items and extend them to the next octave. You can have *Freqi* add any value to these missing items - setting `amountToAdd` to `0` will effectively add the same numbers again.
 
