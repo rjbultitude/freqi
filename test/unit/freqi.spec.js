@@ -33,12 +33,68 @@ describe('Test the getFreqs return value types', function() {
         };
     });
 
-    it('should return an object', function() {
+    it('should return an array when valid config is used', function() {
         expect(freqi.getFreqs(this.config)).to.be.an('array');
     });
-    it('should return an array of numbers', function() {
+    it('should return an array of numbers when valid config is used', function() {
         expect(freqi.getFreqs(this.config)[0]).to.be.a('number');
     });
+});
+
+describe('Test the getFreqs return array length', function() {
+  beforeEach(function() {
+      this.MoreNotesconfig = {
+        startFreq: 440,
+        numSemitones: 12,
+        intervals: [0, 3, 5],
+        numNotes: 5
+      };
+      this.LessNotesconfig = {
+        startFreq: 440,
+        numSemitones: 12,
+        intervals: [0, 3, 5],
+        numNotes: 2
+      };
+      this.InversionStartNoteconfig = {
+        startFreq: 440,
+        numSemitones: 12,
+        intervals: [0, 3, 5],
+        intervalStartIndex: 4
+      };
+      this.NumNotesOverrideConfig = {
+        startFreq: 440,
+        numSemitones: 12,
+        intervals: [0, 3, 5],
+        intervalStartIndex: 4,
+        numNotes: 4
+      };
+      this.NumNotesIgnoredConfig = {
+        startFreq: 440,
+        numSemitones: 12,
+        intervals: [0, 3, 5],
+        intervalStartIndex: 4,
+        numNotes: 1
+      };
+  });
+
+  it('should return an array numNotes long, when numNotes is higher than intervals length', function() {
+    expect(freqi.getFreqs(this.MoreNotesconfig)).to.have.lengthOf(this.MoreNotesconfig.numNotes);
+  });
+  it('should return an array intervals length long, when numNotes is smaller than intervals length', function() {
+    expect(freqi.getFreqs(this.LessNotesconfig)).to.have.lengthOf(this.LessNotesconfig.intervals.length);
+  });
+  it('should return an array intervals length long, even if intervalStartIndex is larger than intervals length', function() {
+    var _InversionArr = freqi.getFreqs(this.InversionStartNoteconfig);
+    expect(_InversionArr).to.have.lengthOf(this.InversionStartNoteconfig.intervals.length);
+  });
+  it('should return an array numNotes long, when intervalStartIndex is larger than intervals length', function() {
+    var _InversionArr = freqi.getFreqs(this.NumNotesOverrideConfig);
+    expect(_InversionArr).to.have.lengthOf(this.NumNotesOverrideConfig.numNotes);
+  });
+  it('should return an array numNotes long, '
+  + 'when numNotes is smaller than intervals length and intervalStartIndex is higher than inversions length', function() {
+    expect(freqi.getFreqs(this.NumNotesIgnoredConfig)).to.have.lengthOf(this.NumNotesIgnoredConfig.numNotes);
+  });
 });
 
 describe('Test the getFreqs startFreq argument', function() {
@@ -282,6 +338,12 @@ describe('Test augmentNumArray amountToAdd argument', function() {
       amountToAdd: '12',
       repeatMultiple: 0
     };
+    this.ExtraItemConfig = {
+      originalArray: [-5, 0, 7],
+      difference: 1,
+      amountToAdd: 12,
+      repeatMultiple: 0
+    };
 
   });
   it('should return true if amountToAdd is a number', function() {
@@ -295,6 +357,12 @@ describe('Test augmentNumArray amountToAdd argument', function() {
   });
   it('should return false if amountToAdd is a string', function() {
     expect(freqi.augmentNumArray(this.BadConfig)).to.have.be.false;
+  });
+  it('should return an array with the amountToAdd added to any missing items', function() {
+    var _extraItemIndex = this.ExtraItemConfig.originalArray.length + this.ExtraItemConfig.difference - 1;
+    var _firstItemValue = this.ExtraItemConfig.originalArray[0];
+    var _ExtraItemFreq = freqi.augmentNumArray(this.ExtraItemConfig)[_extraItemIndex];
+    expect(_ExtraItemFreq).to.equal(_firstItemValue + this.ExtraItemConfig.amountToAdd);
   });
 });
 
@@ -324,6 +392,12 @@ describe('Test augmentNumArray repeatMultiple argument', function() {
       amountToAdd: 12,
       repeatMultiple: '0'
     };
+    this.RepeatConfig = {
+      originalArray: [-5, 0, 7],
+      difference: 10,
+      amountToAdd: 12,
+      repeatMultiple: 2
+    };
 
   });
   it('should return true if repeatMultiple is a positive number', function() {
@@ -338,6 +412,12 @@ describe('Test augmentNumArray repeatMultiple argument', function() {
   });
   it('should return false if repeatMultiple is a string', function() {
     expect(freqi.augmentNumArray(this.BadConfig)).to.have.be.false;
+  });
+  it('should return an array that repeats values when repeatMultiple is reached', function() {
+    var _repeatIndex = this.RepeatConfig.difference + this.RepeatConfig.originalArray.length - 1;
+    var _repeatArr = freqi.augmentNumArray(this.RepeatConfig);
+    var _repeatVal = _repeatArr[_repeatIndex];
+    expect(_repeatVal).to.equal(_repeatArr[0]);
   });
 });
 

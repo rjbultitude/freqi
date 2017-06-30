@@ -9,30 +9,17 @@ var scaleConfigAllOpts = {
   rootNote: 0,
   intervals: [-12, 0, 12, 7],
   amountToAdd: 12,
-  repeatMultiple: 0,
   type: 'sine'
 };
 
-var scaleConfigTestOpts = {
+var scaleConfigMandatoryOpts = {
   startFreq: 440,
-  numSemitones: 12,
-  numNotes: 5,
-  inversionStartNote: 0,
-  rootNote: 0,
-  intervals: [0, 3, 5, 7, 10],
-  amountToAdd: 12,
-  repeatMultiple: 0,
-  type: 'sine'
-};
-
-var scaleConfigOpts = {
-  startFreq: 440,
-  numSemitones: 12,
   intervals: [-7, 0, 7, 12]
 };
 
-//var scaleFrequencies = freqi.getSpecificScale(scaleConfigAllOpts);
-var scaleFrequencies = freqi.getFreqs(scaleConfigTestOpts);
+//var scaleFrequencies = freqi.getSpecificScale(scaleConfigMandatoryOpts);
+var scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
+console.log('scaleFrequencies', scaleFrequencies);
 
 var playBtn = document.getElementById('play');
 var stopBtn = document.getElementById('stop');

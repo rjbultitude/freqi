@@ -8,10 +8,11 @@ A javascript api for generating frequencies for use with the web audio API
 
 This package aims to:
 
-* Provide a simple API for creating sets of frequencies
+* Provide a simple API for creating sets of frequencies from intervals
 * Return actual sonic frequencies in Hz or relative frequencies for use with audio files
 * Return a set of frequencies of any length
 * Allow for any number of semitones per octave
+* Provide a way of creating frequencies from within the intervals
 * Handle bad data
 
 What it doesn't do:
@@ -60,11 +61,9 @@ Optionally, you can pass in a custom number of semitones. The default is `12`, a
 
 If you are using *Freqi* to generate multiple sequences of notes you can offset the root note using the `rootNote` property. A value of `2` for example will pitch the provided intervals up by two semitones.
 
-Also, you can offset the intervals themselves to produce inversions e.g. `{intervals: [0, 3, 5, 7, 10], inversionStartNote: 2}` is the equivalent of `{intervals: [5, 7, 10, 12, 15], inversionStartNote: 2}`. Note that the intervals array is automatically extended to the next octave to ensure the same number of notes are created.
+Also, you can offset the intervals themselves to produce inversions or rootless voicings e.g. `{intervals: [0, 3, 5, 7, 10], intervalStartIndex: 2}` is the equivalent of `{intervals: [5, 7, 10, 12, 15], intervalStartIndex: 2}`. Note that the intervals array is automatically extended to the next octave to ensure the correct number of notes are created.
 
-Following on from the above, a larger number of notes can be set than is provided by the `intervals` property e.g. `{intervals : [0, 3, 5], numNotes: 5}`. In this case Freqi will add the missing array items and extend them to the next octave. You can have Freqi add any value to these missing items - setting `amountToAdd` to `0` will effectively add the same numbers again.
-
-If, for any reason, you want an even longer set of frequencies back simply use the `repeatMultiple` property, which will repeat the duplication process x number of times.
+Following on from the above, by using `numNotes`, a larger or smaller number of notes can be set than is provided by the `intervals` property e.g. `{intervals : [0, 3, 5], numNotes: 5}`. In this case *Freqi* will add the missing array items and extend them to the next octave. You can have *Freqi* add any value to these missing items - setting `amountToAdd` to `0` will effectively add the same numbers again.
 
 ### Mandatory properties:
 
@@ -75,7 +74,7 @@ If, for any reason, you want an even longer set of frequencies back simply use t
 
  * numSemitones : [number]
  * rootNote : [number]
- * inversionStartNote : [number];
+ * intervalStartIndex : [number];
 
 ### Auxiliary properties
 
