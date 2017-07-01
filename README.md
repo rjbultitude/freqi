@@ -90,7 +90,6 @@ Following on from the above, by using `numNotes`, a larger or smaller number of 
 
  * numNotes : [number];
  * amountToAdd : [number] // 12 if you want to go up an octave;
- * repeatMultiple : [number];
  * type : [string] // for debugging;
 
 
