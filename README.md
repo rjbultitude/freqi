@@ -20,6 +20,14 @@ What it doesn't do:
 * Does not allow for input of notes as letters
 * Does not allow for input of chords by name
 
+## Dependencies
+
+This module has _no_ dependencies, though dependencies for the demo were mistakenly listed in pre 1.0.1 versions.
+
+## Release notes
+
+The first major release (version 1.0.0) included one breaking change whereby `inversionStartNote` was changed to `intervalStartIndex` to better express its purpose. If you're not explicitly using this property in your app you should be able to safely upgrade to the latest version.
+
 ## Demo
 
 [View the online demo on GitHub here](https://rjbultitude.github.io/freqi/demo/index.html)
@@ -41,19 +49,19 @@ or
 
 Freqi is configured to work with both [AMD](https://en.wikipedia.org/wiki/Asynchronous_module_definition) and [CJS](https://en.wikipedia.org/wiki/CommonJS) applications.
 
-If you're using [Webpack](http://webpack.github.io/), [Browserify](http://browserify.org/) or some other CJS module loader
+If you're using [Webpack](http://webpack.github.io/) or some other CJS module loader
 
 import (ES6), like so
 
 `import freqi from 'freqi'`
 
-or for CommonJS use
+or for CommonJS loaders (such as [Browserify](http://browserify.org/)) use
 `var freqi = require('freqi');`
 
 
 ## Usage
 
-*Freqi* provides a pure function, `getFreqs`, which accepts a config object and returns an array of frequencies. There is one mandatory property: `intervals`, though it is recommended that `startFreq` be set too.
+**Freqi** provides a pure function, `getFreqs`, which accepts a config object and returns an array of frequencies. There is one mandatory property: `intervals`, though it is recommended that `startFreq` be set too.
 
 `intervals` is the set of notes you want to generate frequencies from. These intervals can be any integer, positive or negative e.g. `[-5, 0, 7]`.
 
@@ -61,11 +69,11 @@ or for CommonJS use
 
 Optionally, you can pass in a custom number of semitones. The default is `12`, a western chromatic scale, but you could pass in 19 for a non-western scale - this can produce very interesting results!
 
-If you are using *Freqi* to generate multiple sequences of notes you can offset the root note using the `rootNote` property. A value of `2` for example will pitch the provided intervals up by two semitones.
+If you are using **Freqi** to generate multiple sequences of notes you can offset the root note using the `rootNote` property. A value of `2` for example will pitch the provided intervals up by two semitones.
 
-Also, you can offset the intervals themselves to produce inversions or rootless voicings.  `{intervals: [0, 3, 5, 7, 10], intervalStartIndex: 2}` will create a set of frequencies from the 2nd index in the intervals array, so it's equivalent to `{intervals: [5, 7, 10]`. If you always want arrays of the same length use the `numNotes` property. If that is set *Freqi* will automatically produce the desired number of notes. Use this in conjunction with `amountToAdd` if you want it to extend the intervals by a certain number of semitones e.g. `{intervals: [0, 3, 5, 7, 10], intervalStartIndex: 2, amountToAdd: 12, numNotes: 5}` will yield  
+Also, you can offset the intervals themselves to produce inversions or rootless voicings.  `{intervals: [0, 3, 5, 7, 10], intervalStartIndex: 2}` will create a set of frequencies from the 2nd index in the intervals array, so it's equivalent to `{intervals: [5, 7, 10]`. If you always want arrays of the same length use the `numNotes` property. If that is set **Freqi** will automatically produce the desired number of notes. Use this in conjunction with `amountToAdd` if you want it to extend the intervals by a certain number of semitones e.g. `{intervals: [0, 3, 5, 7, 10], intervalStartIndex: 2, amountToAdd: 12, numNotes: 5}` will yield  
 
-Following on from the above, by using `numNotes`, a larger or smaller number of notes can be set than is provided by the `intervals` property e.g. `{intervals : [0, 3, 5], numNotes: 5}`. In this case *Freqi* will add the missing array items and extend them to the next octave. You can have *Freqi* add any value to these missing items - setting `amountToAdd` to `0` will effectively add the same numbers again.
+Following on from the above, by using `numNotes`, a larger or smaller number of notes can be set than is provided by the `intervals` property e.g. `{intervals : [0, 3, 5], numNotes: 5}`. In this case **Freqi** will add the missing array items and extend them to the next octave. You can have **Freqi** add any value to these missing items - setting `amountToAdd` to `0` will effectively add the same numbers again.
 
 ### Mandatory properties:
 
@@ -88,6 +96,8 @@ Following on from the above, by using `numNotes`, a larger or smaller number of 
 
 ## Plans
 
-In a later version it will be possible to generate musical scales that use just intonation rather than equal temperament
+In a later version it will be possible to generate musical scales that use just intonation rather than only equal temperament.
 
-Also, it will be possible to pass in note letters, such as `C#`
+Also, it will be possible to pass in note letters, such as `C#`.
+
+Likes, shares, comments, suggestions and collaborators welcome.

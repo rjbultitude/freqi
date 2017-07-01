@@ -3,16 +3,14 @@
   "version": "1.0.0",
   "description": "A library that generates musical frequencies for use with the Web Audio API",
   "main": "freqi.js",
-  "dependencies": {
-    "browserify": "^14.4.0",
-    "connect": "^3.6.2",
-    "serve-static": "^1.12.3"
-  },
   "devDependencies": {
+    "browserify": "^14.4.0",
     "chai": "^3.5.0",
+    "connect": "^3.6.2",
     "cross-env": "^5.0.1",
     "mocha": "^3.4.2",
-    "npm-run-all": "^4.0.2"
+    "npm-run-all": "^4.0.2",
+    "serve-static": "^1.12.3"
   },
   "scripts": {
     "build": "browserify demo/app.js > demo/freqi-demo.js",
