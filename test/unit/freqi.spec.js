@@ -7,15 +7,15 @@ var expect = require('chai').expect;
 var freqi = require('../../lib/freqi');
 
 function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function generateRandomNumbers(length) {
-    var numArray = [];
-    for (var i = 0; i < length; i++) {
-        numArray[i] = getRandomInt(1, 10000);
-    }
-    return numArray;
+  var numArray = [];
+  for (var i = 0; i < length; i++) {
+      numArray[i] = getRandomInt(1, 10000);
+  }
+  return numArray;
 }
 
 /**
@@ -24,61 +24,61 @@ function generateRandomNumbers(length) {
  * ---------------------
  */
 
-describe('Test the getFreqs return value types', function() {
-    before(function() {
-        this.config = {
-            startFreq: 440,
-            numSemitones: 12,
-            intervals: [-5, 0, 7]
-        };
-        this.badConfig = '';
-    });
+describe('getFreqs return value types', function() {
+  before(function() {
+    this.config = {
+      startFreq: 440,
+      numSemitones: 12,
+      intervals: [-5, 0, 7]
+    };
+    this.badConfig = '';
+  });
 
-    it('should return an array when valid config is used', function() {
-        expect(freqi.getFreqs(this.config)).to.be.an('array');
-    });
-    it('should return an array of numbers when valid config is used', function() {
-        expect(freqi.getFreqs(this.config)[0]).to.be.a('number');
-    });
-    it('should return false when an invalid config is used', function() {
-        expect(freqi.getFreqs(this.badConfig)).to.be.false;
-    });
+  it('should return an array when valid config is used', function() {
+    expect(freqi.getFreqs(this.config)).to.be.an('array');
+  });
+  it('should return an array of numbers when valid config is used', function() {
+    expect(freqi.getFreqs(this.config)[0]).to.be.a('number');
+  });
+  it('should return false when an invalid config is used', function() {
+    expect(freqi.getFreqs(this.badConfig)).to.be.false;
+  });
 });
 
-describe('Test the getFreqs return array length', function() {
+describe('getFreqs return array length', function() {
   beforeEach(function() {
-      this.MoreNotesconfig = {
-        startFreq: 440,
-        numSemitones: 12,
-        intervals: [0, 3, 5],
-        numNotes: 5
-      };
-      this.LessNotesconfig = {
-        startFreq: 440,
-        numSemitones: 12,
-        intervals: [0, 3, 5],
-        numNotes: 2
-      };
-      this.InversionStartNoteconfig = {
-        startFreq: 440,
-        numSemitones: 12,
-        intervals: [0, 3, 5],
-        intervalStartIndex: 4
-      };
-      this.NumNotesOverrideConfig = {
-        startFreq: 440,
-        numSemitones: 12,
-        intervals: [0, 3, 5],
-        intervalStartIndex: 4,
-        numNotes: 4
-      };
-      this.NumNotesIgnoredConfig = {
-        startFreq: 440,
-        numSemitones: 12,
-        intervals: [0, 3, 5],
-        intervalStartIndex: 4,
-        numNotes: 1
-      };
+    this.MoreNotesconfig = {
+      startFreq: 440,
+      numSemitones: 12,
+      intervals: [0, 3, 5],
+      numNotes: 5
+    };
+    this.LessNotesconfig = {
+      startFreq: 440,
+      numSemitones: 12,
+      intervals: [0, 3, 5],
+      numNotes: 2
+    };
+    this.InversionStartNoteconfig = {
+      startFreq: 440,
+      numSemitones: 12,
+      intervals: [0, 3, 5],
+      intervalStartIndex: 4
+    };
+    this.NumNotesOverrideConfig = {
+      startFreq: 440,
+      numSemitones: 12,
+      intervals: [0, 3, 5],
+      intervalStartIndex: 4,
+      numNotes: 4
+    };
+    this.NumNotesIgnoredConfig = {
+      startFreq: 440,
+      numSemitones: 12,
+      intervals: [0, 3, 5],
+      intervalStartIndex: 4,
+      numNotes: 1
+    };
   });
 
   it('should return an array numNotes long, when numNotes is higher than intervals length', function() {
@@ -101,137 +101,145 @@ describe('Test the getFreqs return array length', function() {
   });
 });
 
-describe('Test the getFreqs startFreq argument', function() {
-    beforeEach(function() {
-        this.randomStartFreq = getRandomInt(0, 10000);
-        this.randomNegStartFreq = -Math.abs(getRandomInt(0, 180));
-        this.posConfig = {
-            startFreq: this.randomStartFreq,
-            numSemitones: 12,
-            intervals: [-5, 0, 7]
-        };
-        this.negConfig = {
-            startFreq: this.randomNegStartFreq,
-            numSemitones: 12,
-            intervals: [-5, 0, 7]
-        };
-        this.nanConfig = {
-            startFreq: NaN,
-            numSemitones: 12,
-            intervals: [-5, 0, 7]
-        };
-        this.badConfig = {
-            startFreq: 'bad value',
-            numSemitones: 12,
-            intervals: [-5, 0, 7]
-        };
-    });
+describe('getFreqs startFreq argument', function() {
+  beforeEach(function() {
+    this.randomStartFreq = getRandomInt(0, 10000);
+    this.randomNegStartFreq = -Math.abs(getRandomInt(0, 180));
+    this.posConfig = {
+      startFreq: this.randomStartFreq,
+      numSemitones: 12,
+      intervals: [-5, 0, 7]
+    };
+    this.negConfig = {
+      startFreq: this.randomNegStartFreq,
+      numSemitones: 12,
+      intervals: [-5, 0, 7]
+    };
+    this.nanConfig = {
+      startFreq: NaN,
+      numSemitones: 12,
+      intervals: [-5, 0, 7]
+    };
+    this.badConfig = {
+      startFreq: 'bad value',
+      numSemitones: 12,
+      intervals: [-5, 0, 7]
+    };
+  });
 
     it('should return an array when using 0 or high integer', function() {
-        expect(freqi.getFreqs(this.posConfig)).to.be.an('array');
+      expect(freqi.getFreqs(this.posConfig)).to.be.an('array');
     });
 
     it('should return false when using a negative number', function() {
-        expect(freqi.getFreqs(this.negConfig)).to.be.false;
+      expect(freqi.getFreqs(this.negConfig)).to.be.false;
     });
 
     it('should return false when using an incorrect data type', function() {
-        expect(freqi.getFreqs(this.badConfig)).to.be.false;
+      expect(freqi.getFreqs(this.badConfig)).to.be.false;
     });
 
     it('should return false when NaN is generated', function() {
-        expect(freqi.getFreqs(this.nanConfig)).to.be.false;
+      expect(freqi.getFreqs(this.nanConfig)).to.be.false;
     });
 });
 
-describe('Test the getFreqs numSemitones argument', function() {
-    // executes once, before all tests
-    beforeEach(function() {
-        this.randomNumSemitones = getRandomInt(0, 100);
-        this.randomNegNumSemitones = -Math.abs(getRandomInt(0, 100));
-        this.posConfig = {
-            startFreq: 440,
-            numSemitones: this.randomNumSemitones,
-            intervals: [-5, 0, 7]
-        };
-        this.negConfig = {
-            startFreq: 440,
-            numSemitones: this.randomNegNumSemitones,
-            intervals: [-5, 0, 7]
-        };
-        this.nanConfig = {
-            startFreq: 440,
-            numSemitones: NaN,
-            intervals: [-5, 0, 7]
-        };
-        this.badConfig = {
-            startFreq: 440,
-            numSemitones: 'bad value',
-            intervals: [-5, 0, 7]
-        };
-    });
+describe('getFreqs numSemitones argument', function() {
+  beforeEach(function() {
+      this.randomNumSemitones = getRandomInt(1, 100);
+      this.randomNegNumSemitones = -Math.abs(getRandomInt(1, 100));
+      this.posConfig = {
+        startFreq: 440,
+        numSemitones: this.randomNumSemitones,
+        intervals: [-5, 0, 7]
+      };
+      this.negConfig = {
+        startFreq: 440,
+        numSemitones: this.randomNegNumSemitones,
+        intervals: [-5, 0, 7]
+      };
+      this.nanConfig = {
+        startFreq: 440,
+        numSemitones: NaN,
+        intervals: [-5, 0, 7]
+      };
+      this.badConfig = {
+        startFreq: 440,
+        numSemitones: 'bad value',
+        intervals: [-5, 0, 7]
+      };
+      this.zeroConfig = {
+        startFreq: 440,
+        numSemitones: 0,
+        intervals: [-5, 0, 7]
+      };
+  });
 
-    it('should return an array when using 0 or high integer', function() {
-        expect(freqi.getFreqs(this.posConfig)).to.be.an('array');
-    });
+  it('should return an array when using one or higher', function() {
+    expect(freqi.getFreqs(this.posConfig)).to.be.an('array');
+  });
 
-    it('should return false when using a negative number', function() {
-        expect(freqi.getFreqs(this.negConfig)).to.be.false;
-    });
+  it('should return false when using a negative number', function() {
+    expect(freqi.getFreqs(this.negConfig)).to.be.false;
+  });
 
-    it('should return false when using an incorrect data type', function() {
-        expect(freqi.getFreqs(this.badConfig)).to.be.false;
-    });
+  it('should return false when using an incorrect data type', function() {
+    expect(freqi.getFreqs(this.badConfig)).to.be.false;
+  });
 
-    it('should return false when NaN is generated', function() {
-        expect(freqi.getFreqs(this.nanConfig)).to.be.false;
-    });
+  it('should return false when NaN is generated', function() {
+    expect(freqi.getFreqs(this.nanConfig)).to.be.false;
+  });
+
+  it('should return false when using zero', function() {
+    expect(freqi.getFreqs(this.zeroConfig)).to.be.false;
+  });
 });
 
-describe('Test the getFreqs intervals argument', function() {
-    beforeEach(function() {
-        this.randomInterval = getRandomInt(0, 100);
-        this.randomNegInterval = -Math.abs(getRandomInt(0, 100));
-        this.intervals = [this.randomInterval, this.randomNegInterval];
-        this.config = {
-            startFreq: 440,
-            numSemitones: 12,
-            intervals: this.intervals
-        };
-        this.nanConfig = {
-            startFreq: 440,
-            numSemitones: 12,
-            intervals: [NaN, NaN]
-        };
-        this.badConfig = {
-            startFreq: 440,
-            numSemitones: 12,
-            intervals: ['bad value', 'bad value']
-        };
-        this.undefConfig = {
-            startFreq: 440,
-            numSemitones: 12
-        };
-    });
+describe('getFreqs intervals argument', function() {
+  beforeEach(function() {
+    this.randomInterval = getRandomInt(0, 100);
+    this.randomNegInterval = -Math.abs(getRandomInt(0, 100));
+    this.intervals = [this.randomInterval, this.randomNegInterval];
+    this.config = {
+      startFreq: 440,
+      numSemitones: 12,
+      intervals: this.intervals
+    };
+    this.nanConfig = {
+      startFreq: 440,
+      numSemitones: 12,
+      intervals: [NaN, NaN]
+    };
+    this.badConfig = {
+      startFreq: 440,
+      numSemitones: 12,
+      intervals: ['bad value', 'bad value']
+    };
+    this.undefConfig = {
+      startFreq: 440,
+      numSemitones: 12
+    };
+  });
 
-    it('should return an array when using 0 or high integer', function() {
-        expect(freqi.getFreqs(this.config)).to.be.an('array');
-    });
+  it('should return an array when using 0 or high integer', function() {
+    expect(freqi.getFreqs(this.config)).to.be.an('array');
+  });
 
-    it('should return an array of the same length as the intervals', function() {
-        expect(freqi.getFreqs(this.config)).to.have.a.lengthOf(this.config.intervals.length);
-    });
+  it('should return an array of the same length as the intervals', function() {
+    expect(freqi.getFreqs(this.config)).to.have.a.lengthOf(this.config.intervals.length);
+  });
 
-    it('should return false when using an incorrect data type', function() {
-        expect(freqi.getFreqs(this.badConfig)).to.be.false;
-    });
+  it('should return false when using an incorrect data type', function() {
+    expect(freqi.getFreqs(this.badConfig)).to.be.false;
+  });
 
-    it('should return false when NaN is generated', function() {
-        expect(freqi.getFreqs(this.nanConfig)).to.be.false;
-    });
-    it('should return false when intervals is undefined', function() {
-        expect(freqi.getFreqs(this.undefConfig)).to.be.false;
-    });
+  it('should return false when NaN is generated', function() {
+    expect(freqi.getFreqs(this.nanConfig)).to.be.false;
+  });
+  it('should return false when intervals is undefined', function() {
+    expect(freqi.getFreqs(this.undefConfig)).to.be.false;
+  });
 });
 
 /**
@@ -240,7 +248,7 @@ describe('Test the getFreqs intervals argument', function() {
  * ---------------------
  */
 
-describe('Test augmentNumArray return value', function() {
+describe('augmentNumArray return value', function() {
   beforeEach(function() {
     this.randomDifference = getRandomInt(1, 30);
     this.config = {
@@ -259,7 +267,7 @@ describe('Test augmentNumArray return value', function() {
   });
 });
 
-describe('Test augmentNumArray originalArray argument', function() {
+describe('augmentNumArray originalArray argument', function() {
   beforeEach(function() {
     this.config = {
       originalArray: [-5, 0, 7],
@@ -291,7 +299,7 @@ describe('Test augmentNumArray originalArray argument', function() {
   });
 });
 
-describe('Test augmentNumArray difference argument', function() {
+describe('augmentNumArray difference argument', function() {
   beforeEach(function() {
     this.config = {
       originalArray: [-5, 0, 7],
@@ -332,7 +340,7 @@ describe('Test augmentNumArray difference argument', function() {
   });
 });
 
-describe('Test augmentNumArray amountToAdd argument', function() {
+describe('augmentNumArray amountToAdd argument', function() {
   beforeEach(function() {
     this.config = {
       originalArray: [-5, 0, 7],
@@ -386,7 +394,7 @@ describe('Test augmentNumArray amountToAdd argument', function() {
   });
 });
 
-describe('Test augmentNumArray repeatMultiple argument', function() {
+describe('augmentNumArray repeatMultiple argument', function() {
   beforeEach(function() {
     this.config = {
       originalArray: [-5, 0, 7],
@@ -446,7 +454,7 @@ describe('Test augmentNumArray repeatMultiple argument', function() {
  * ---------------------
  */
 
-describe('Test getSingleFreq startFreq argument', function() {
+describe('getSingleFreq startFreq argument', function() {
   beforeEach(function() {
     this.randomStartFreq = getRandomInt(0, 10000);
     this.randomNegStartFreq = -Math.abs(getRandomInt(0, 180));
@@ -474,115 +482,125 @@ describe('Test getSingleFreq startFreq argument', function() {
         interval: 0,
         upwardsScale: true
     };
+    this.zeroConfig = {
+        startFreq: 0,
+        numSemitones: 12,
+        interval: 0,
+        upwardsScale: true
+    };
   });
 
   it('should return a number when using 0 or high integer', function() {
-      expect(freqi.getSingleFreq(this.posConfig)).to.be.a('number');
+    expect(freqi.getSingleFreq(this.posConfig)).to.be.a('number');
+  });
+
+  it('should return a number when startFreq is zero', function() {
+    expect(freqi.getSingleFreq(this.zeroConfig)).to.be.a('number');
   });
 
   it('should return false when using a negative number', function() {
-      expect(freqi.getSingleFreq(this.negConfig)).to.be.false;
+    expect(freqi.getSingleFreq(this.negConfig)).to.be.false;
   });
 
   it('should return false when using an incorrect data type', function() {
-      expect(freqi.getSingleFreq(this.badConfig)).to.be.false;
+    expect(freqi.getSingleFreq(this.badConfig)).to.be.false;
   });
 
   it('should return false when NaN is generated', function() {
-      expect(freqi.getSingleFreq(this.nanConfig)).to.be.false;
+    expect(freqi.getSingleFreq(this.nanConfig)).to.be.false;
   });
 });
 
-describe('Test getSingleFreq numSemitones argument', function() {
+describe('getSingleFreq numSemitones argument', function() {
   beforeEach(function() {
-    this.randomNumSemitones = getRandomInt(0, 100);
-    this.randomNegNumSemitones = -Math.abs(getRandomInt(0, 100));
+    this.randomNumSemitones = getRandomInt(1, 100);
+    this.randomNegNumSemitones = -Math.abs(getRandomInt(1, 100));
     this.posConfig = {
-        startFreq: 400,
-        numSemitones: this.randomNumSemitones,
-        interval: 0,
-        upwardsScale: true
+      startFreq: 400,
+      numSemitones: this.randomNumSemitones,
+      interval: 0,
+      upwardsScale: true
     };
     this.negConfig = {
-        startFreq: 440,
-        numSemitones: this.randomNegNumSemitones,
-        interval: 0,
-        upwardsScale: true
+      startFreq: 440,
+      numSemitones: this.randomNegNumSemitones,
+      interval: 0,
+      upwardsScale: true
     };
     this.nanConfig = {
-        startFreq: 440,
-        numSemitones: NaN,
-        interval: 0,
-        upwardsScale: true
+      startFreq: 440,
+      numSemitones: NaN,
+      interval: 0,
+      upwardsScale: true
     };
     this.badConfig = {
-        startFreq: 440,
-        numSemitones: 'test',
-        interval: 0,
-        upwardsScale: true
+      startFreq: 440,
+      numSemitones: 'test',
+      interval: 0,
+      upwardsScale: true
     };
   });
 
   it('should return a number when using 0 or high integer', function() {
-      expect(freqi.getSingleFreq(this.posConfig)).to.be.a('number');
+    expect(freqi.getSingleFreq(this.posConfig)).to.be.a('number');
   });
 
   it('should return false when using a negative number', function() {
-      expect(freqi.getSingleFreq(this.negConfig)).to.be.false;
+    expect(freqi.getSingleFreq(this.negConfig)).to.be.false;
   });
 
   it('should return false when using an incorrect data type', function() {
-      expect(freqi.getSingleFreq(this.badConfig)).to.be.false;
+    expect(freqi.getSingleFreq(this.badConfig)).to.be.false;
   });
 
   it('should return false when NaN is generated', function() {
-      expect(freqi.getSingleFreq(this.nanConfig)).to.be.false;
+    expect(freqi.getSingleFreq(this.nanConfig)).to.be.false;
   });
 });
 
-describe('Test getSingleFreq interval argument', function() {
+describe('getSingleFreq interval argument', function() {
   beforeEach(function() {
     this.randomInterval = getRandomInt(0, 100);
     this.randomNegInterval = -Math.abs(getRandomInt(0, 100));
     this.posConfig = {
-        startFreq: 400,
-        numSemitones: 12,
-        interval: this.randomInterval,
-        upwardsScale: true
+      startFreq: 400,
+      numSemitones: 12,
+      interval: this.randomInterval,
+      upwardsScale: true
     };
     this.negConfig = {
-        startFreq: 440,
-        numSemitones: 12,
-        interval: this.randomNegInterval,
-        upwardsScale: true
+      startFreq: 440,
+      numSemitones: 12,
+      interval: this.randomNegInterval,
+      upwardsScale: true
     };
     this.nanConfig = {
-        startFreq: 440,
-        numSemitones: 12,
-        interval: NaN,
-        upwardsScale: true
+      startFreq: 440,
+      numSemitones: 12,
+      interval: NaN,
+      upwardsScale: true
     };
     this.badConfig = {
-        startFreq: 440,
-        numSemitones: 12,
-        interval: 'test',
-        upwardsScale: true
+      startFreq: 440,
+      numSemitones: 12,
+      interval: 'test',
+      upwardsScale: true
     };
   });
 
   it('should return a number when using 0 or high integer', function() {
-      expect(freqi.getSingleFreq(this.posConfig)).to.be.a('number');
+    expect(freqi.getSingleFreq(this.posConfig)).to.be.a('number');
   });
 
   it('should return a number when using 0 or lower integer', function() {
-      expect(freqi.getSingleFreq(this.negConfig)).to.be.a('number');
+    expect(freqi.getSingleFreq(this.negConfig)).to.be.a('number');
   });
 
   it('should return false when using an incorrect data type', function() {
-      expect(freqi.getSingleFreq(this.badConfig)).to.be.false;
+    expect(freqi.getSingleFreq(this.badConfig)).to.be.false;
   });
 
   it('should return false when NaN is generated', function() {
-      expect(freqi.getSingleFreq(this.nanConfig)).to.be.false;
+    expect(freqi.getSingleFreq(this.nanConfig)).to.be.false;
   });
 });

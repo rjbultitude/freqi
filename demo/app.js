@@ -16,8 +16,8 @@ var scaleConfigMandatoryOpts = {
   intervals: [0, 3, 5]
 };
 
-var scaleFrequencies = freqi.getFreqs(scaleConfigMandatoryOpts);
-//var scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
+//var scaleFrequencies = freqi.getFreqs(scaleConfigMandatoryOpts);
+var scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
 console.log('scaleFrequencies', scaleFrequencies);
 
 var playBtn = document.getElementById('play');
