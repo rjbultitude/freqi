@@ -2,6 +2,7 @@
 
 A javascript api for generating frequencies for use with the web audio API
 
+[![Build Status](https://travis-ci.org/rjbultitude/freqi.svg?branch=master)](https://travis-ci.org/rjbultitude/freqi)
 ---
 
 ## Features
