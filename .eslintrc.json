@@ -1,0 +1,20 @@
+{
+    "env": {
+        "amd": true
+    },
+    "rules": {
+        "no-underscore-dangle": 0,
+        "indent": ["error", 2],
+        "no-param-reassign": 0,
+        "prefer-arrow-callback": 0,
+        "no-self-compare": 1,
+        "no-plusplus": [2, { "allowForLoopAfterthoughts": true }],
+        "vars-on-top": 0,
+        "no-continue": 0,
+        "no-extra-label": 0,
+        "no-restricted-syntax": 1,
+        "no-labels": 0,
+        "no-lonely-if": 1,
+        "max-len": 0
+    }
+}
