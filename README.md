@@ -78,20 +78,20 @@ Following on from the above, by using `numNotes`, a larger or smaller number of 
 
 ### Mandatory properties:
 
- * startFreq : [number]
- * intervals : [array] // e.g. [0, 3, 5]
+ * startFreq : \[number\]
+ * intervals : \[array\] // e.g. [0, 3, 5]
 
 ### Optional properties
 
- * numSemitones : [number]
- * rootNote : [number]
- * intervalStartIndex : [number];
+ * numSemitones : \[number\]
+ * rootNote : \[number\]
+ * intervalStartIndex : \[number\];
 
 ### Auxiliary properties
 
- * numNotes : [number];
- * amountToAdd : [number] // 12 if you want to go up an octave;
- * type : [string] // for debugging;
+ * numNotes : \[number\];
+ * amountToAdd : \[number\] // 12 if you want to go up an octave;
+ * type : \[string\] // for debugging;
 
 
 ## Plans
