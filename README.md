@@ -85,7 +85,7 @@ Following on from the above, by using `numNotes`, a larger or smaller number of 
 
  * numSemitones : \[number\]
  * rootNote : \[number\]
- * intervalStartIndex : \[number\];
+ * intervalStartIndex : \[number\]
 
 ### Auxiliary properties
 
