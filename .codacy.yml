@@ -1,4 +1,5 @@
 exclude_paths:
   - 'dist/**'
+  - 'demo/**'
   - 'test/**/*'
   - '**/*.md'
