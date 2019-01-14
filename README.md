@@ -5,6 +5,8 @@ A javascript api for generating frequencies for use with the web audio API
 [![Build Status](https://travis-ci.org/rjbultitude/freqi.svg?branch=master)](https://travis-ci.org/rjbultitude/freqi)
 ---
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0bb328eb9dc14cca98a6db914c66e425)](https://www.codacy.com/app/rjbultitude/freqi?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=rjbultitude/freqi&amp;utm_campaign=Badge_Grade)
+
 ## Features
 
 This package aims to:
