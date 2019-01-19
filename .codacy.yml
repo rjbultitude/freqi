@@ -3,3 +3,4 @@ exclude_paths:
   - 'demo/**'
   - 'test/**/*'
   - '**/*.md'
+  - '*.md'
