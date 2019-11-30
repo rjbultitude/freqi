@@ -10,14 +10,6 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function generateRandomNumbers(length) {
-  var numArray = [];
-  for (var i = 0; i < length; i++) {
-      numArray[i] = getRandomInt(1, 10000);
-  }
-  return numArray;
-}
-
 /**
  * ---------------------
  * getFreqs tests
@@ -291,8 +283,8 @@ describe('augmentNumArray originalArray argument', function() {
   it('should return true if array contains numbers', function() {
     expect(freqi.augmentNumArray(this.config)).to.be.ok;
   });
-  it('should return false if array contains NaNs', function() {
-    expect(freqi.augmentNumArray(this.NaNConfig)).to.be.false;
+  it('should return empty array if array contains NaNs', function() {
+    expect(freqi.augmentNumArray(this.NaNConfig)).to.have.length(0);
   });
   it('should return true if array contains objects', function() {
     expect(freqi.augmentNumArray(this.ObjConfig)).to.have.be.ok;
@@ -329,14 +321,14 @@ describe('augmentNumArray difference argument', function() {
   it('should return true if difference is a number', function() {
     expect(freqi.augmentNumArray(this.config)).to.be.ok;
   });
-  it('should return false if difference is NaN', function() {
-    expect(freqi.augmentNumArray(this.NaNConfig)).to.be.false;
+  it('should return empty array if difference is NaN', function() {
+    expect(freqi.augmentNumArray(this.NaNConfig)).to.have.length(0);
   });
-  it('should return false if difference is a string', function() {
-    expect(freqi.augmentNumArray(this.BadConfig)).to.have.be.false;
+  it('should return empty array if difference is a string', function() {
+    expect(freqi.augmentNumArray(this.BadConfig)).to.have.length(0);
   });
-  it('should return false if difference is zero or less', function() {
-    expect(freqi.augmentNumArray(this.ZeroConfig)).to.have.be.false;
+  it('should return empty array if difference is zero or less', function() {
+    expect(freqi.augmentNumArray(this.ZeroConfig)).to.have.length(0);
   });
 });
 
@@ -377,14 +369,14 @@ describe('augmentNumArray amountToAdd argument', function() {
   it('should return true if amountToAdd is a number', function() {
     expect(freqi.augmentNumArray(this.config)).to.be.ok;
   });
-  it('should return false if amountToAdd is a negative number', function() {
-    expect(freqi.augmentNumArray(this.negConfig)).to.be.false;
+  it('should return empty array if amountToAdd is a negative number', function() {
+    expect(freqi.augmentNumArray(this.negConfig)).to.have.length(0);
   });
-  it('should return false if amountToAdd is NaN', function() {
-    expect(freqi.augmentNumArray(this.NaNConfig)).to.be.false;
+  it('should return empty array if amountToAdd is NaN', function() {
+    expect(freqi.augmentNumArray(this.NaNConfig)).to.have.length(0);
   });
-  it('should return false if amountToAdd is a string', function() {
-    expect(freqi.augmentNumArray(this.BadConfig)).to.have.be.false;
+  it('should return empty array if amountToAdd is a string', function() {
+    expect(freqi.augmentNumArray(this.BadConfig)).to.have.length(0);
   });
   it('should return an array with the amountToAdd added to any missing items', function() {
     var _extraItemIndex = this.ExtraItemConfig.originalArray.length + this.ExtraItemConfig.difference - 1;
@@ -431,14 +423,14 @@ describe('augmentNumArray repeatMultiple argument', function() {
   it('should return true if repeatMultiple is a positive number', function() {
     expect(freqi.augmentNumArray(this.config)).to.be.an('array');
   });
-  it('should return false if repeatMultiple is a negative number', function() {
-    expect(freqi.augmentNumArray(this.negConfig)).to.be.false;
+  it('should return empty array if repeatMultiple is a negative number', function() {
+    expect(freqi.augmentNumArray(this.negConfig)).to.have.length(0);
   });
-  it('should return false if repeatMultiple is NaN', function() {
-    expect(freqi.augmentNumArray(this.NaNConfig)).to.be.false;
+  it('should return empty array if repeatMultiple is NaN', function() {
+    expect(freqi.augmentNumArray(this.NaNConfig)).to.have.length(0);
   });
-  it('should return false if repeatMultiple is a string', function() {
-    expect(freqi.augmentNumArray(this.BadConfig)).to.have.be.false;
+  it('should return empty array if repeatMultiple is a string', function() {
+    expect(freqi.augmentNumArray(this.BadConfig)).to.have.length(0);
   });
   it('should return an array that repeats values when repeatMultiple is reached', function() {
     var _repeatIndex = this.RepeatConfig.difference + this.RepeatConfig.originalArray.length - 1;
