@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "umd",
+    "allowSyntheticDefaultImports": true,
+    "declaration": false,
+    "noImplicitAny": false,
+    "removeComments": false,
+    "experimentalDecorators": true,
+    "noLib": false,
+    "outDir": "./lib",
+    "allowJs": true,
+  },
+  "include" : [
+      "src/freqi.ts"
+    ],
+  "exclude": [
+    "dist",
+    "lib",
+    "node_modules",
+    "test",
+  ]
+}
