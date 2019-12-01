@@ -19,27 +19,27 @@ interface UserConfigObj {
   type?: string
 }
 
-interface ConfigObj {
-  intervals: Array<number>,
-  startFreq: number,
-  numSemitones : number,
-  rootNote : number,
+interface PConfigObj {
+  scaleIntervals: Array<number>,
+  numNotes : number,
   intervalStartIndex: number,
   repeatMultiple: number,
-  type: string
+  amountToAdd: number,
+  type?: string
 }
 
 interface ETNoteConfig {
   interval: number,
   startFreq: number,
-  upwardsScale: boolean
+  upwardsScale?: boolean,
+  numSemitones: number,
 }
 
 interface AugArrConfig {
   originalArray: Array<number>,
   difference: number,
   repeatMultiple: number,
-  amountToAdd: number
+  amountToAdd?: number
 }
 
 function reallyIsNaN(x: any) {
@@ -220,11 +220,13 @@ function checkGetFreqsNumericDataTypes(dataObj) {
 function checkGetFreqsIntervalsProp(intervals: Array<number>) {
   if (Array.isArray(intervals) !== true) {
     throw new TypeError('intervals is not an array');
-  } else {
-    for (var i = 0, length = intervals.length; i < length; i++) {
-      if (typeof intervals[i] !== 'number' || Number.isNaN(intervals[i])) {
-        throw new TypeError('intervals is not an array of numbers');
-      }
+  }
+  if (intervals.length === 0) {
+    throw new TypeError('intervals array is empty');
+  }
+  for (var i = 0, length = intervals.length; i < length; i++) {
+    if (typeof intervals[i] !== 'number' || Number.isNaN(intervals[i])) {
+      throw new TypeError('intervals is not an array of numbers');
     }
   }
 }
@@ -267,7 +269,7 @@ function GetFreqsConfig(configObj: UserConfigObj) {
 * ------------
 */
 
-function getSingleFreq(eTNoteConfig) {
+function getSingleFreq(eTNoteConfig: ETNoteConfig) {
   try {
     checkGetSingleFreqConfigDataTypes(eTNoteConfig);
   } catch (e) {
@@ -297,9 +299,9 @@ function getSingleFreq(eTNoteConfig) {
 
 // Adds new items to the intervals array
 // should it not have enough notes
-function addMissingNotesFromInterval(pConfig): Array<number> {
+function addMissingNotesFromInterval(pConfig: PConfigObj): Array<number> {
   var _intervals:Array<number> = [];
-  var _highestIndex = pConfig.intervalStartIndexIndex + pConfig.numNotes;
+  var _highestIndex = pConfig.intervalStartIndex + pConfig.numNotes;
   var _intervalsLength = pConfig.scaleIntervals.length;
   if (_highestIndex > _intervalsLength) {
     var _diff = _highestIndex - _intervalsLength;
@@ -318,13 +320,13 @@ function addMissingNotesFromInterval(pConfig): Array<number> {
 function getNotesFromIntervals(pConfig) {
   var _scaleArray = [];
   // For Inversions or rootless voicings
-  var _intervalStartIndexIndex = pConfig.intervalStartIndex;
+  var _intervalStartIndex = pConfig.intervalStartIndex;
   var _newNote;
   for (var i = 0; i < pConfig.loopLength; i++) {
     // __PROD__ && console.log('note ' + i + ' ' + pConfig.type);
-    // __PROD__ && console.log('scaleInterval', pConfig.scaleIntervals[_intervalStartIndexIndex]);
-    // __PROD__ && console.log('intervaloffset ' + _intervalStartIndexIndex + ' centreNote Index ' + pConfig.rootNote);
-    var finalIndex = pConfig.scaleIntervals[_intervalStartIndexIndex] + pConfig.rootNote;
+    // __PROD__ && console.log('scaleInterval', pConfig.scaleIntervals[_intervalStartIndex]);
+    // __PROD__ && console.log('intervaloffset ' + _intervalStartIndex + ' centreNote Index ' + pConfig.rootNote);
+    var finalIndex = pConfig.scaleIntervals[_intervalStartIndex] + pConfig.rootNote;
     // __PROD__ && console.log('final highest Index', finalIndex);
     _newNote = getSingleFreq({
       startFreq: pConfig.startFreq,
@@ -337,13 +339,13 @@ function getNotesFromIntervals(pConfig) {
     } else if (__PROD__) {
       console.error('undefined or NaN note');
     }
-    _intervalStartIndexIndex += 1;
+    _intervalStartIndex += 1;
   }
   return _scaleArray;
 }
 
 // Accepts only an object
-function getFreqs(msConfig: ConfigObj) {
+function getFreqs(msConfig) {
   var _validConfig;
   // Check config exists
   if (typeof msConfig !== 'object') {
@@ -390,7 +392,7 @@ function getFreqs(msConfig: ConfigObj) {
   // Add missing scale intervals
   var _intervalsFull = addMissingNotesFromInterval({
     amountToAdd: _validConfig.amountToAdd,
-    intervalStartIndexIndex: _validConfig.intervalStartIndex,
+    intervalStartIndex: _validConfig.intervalStartIndex,
     numNotes: _validConfig.numNotes,
     repeatMultiple: _validConfig.repeatMultiple,
     scaleIntervals: _intervals,
