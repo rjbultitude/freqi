@@ -13,11 +13,15 @@
     "eslint-plugin-import": "^2.14.0",
     "mocha": "^3.5.3",
     "npm-run-all": "^4.1.5",
+    "rollup": "^1.27.6",
+    "rollup-plugin-typescript": "^1.0.1",
     "serve-static": "^1.13.2",
+    "tslib": "^1.10.0",
     "typescript": "^3.7.2"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "rollup --config",
+    "build:ts": "tsc",
     "build:demo": "browserify demo/app.js > demo/freqi-demo.js",
     "start": "cross-env NODE_ENV=dev && node server.js",
     "test": "npm-run-all test:unit",
