@@ -30,7 +30,6 @@ var index = 0;
 var context = new (window.AudioContext || window.webkitAudioContext)();
 var oscillator = context.createOscillator();
 var myInterval;
-oscillator.start();
 
 function playSine(freq) {
   oscillator.type = 'sine';
@@ -55,6 +54,7 @@ function stop() {
 }
 
 function play(scale, noteLength) {
+  oscillator.start();
   playSineCb(scale);
   myInterval = setInterval(function() {
     playSineCb(scale);
