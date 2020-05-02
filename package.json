@@ -4,7 +4,7 @@
   "description": "A library that generates musical frequencies for use with the Web Audio API",
   "main": "freqi.js",
   "devDependencies": {
-    "@types/node": "^12.12.14",
+    "@types/node": "^13.13.4",
     "browserify": "^16.5.1",
     "chai": "^4.2.0",
     "connect": "^3.7.0",
@@ -16,8 +16,8 @@
     "rollup": "^2.7.6",
     "rollup-plugin-typescript": "^1.0.1",
     "serve-static": "^1.14.1",
-    "tslib": "^1.10.0",
-    "typescript": "^3.7.2"
+    "tslib": "^1.11.1",
+    "typescript": "^3.8.3"
   },
   "scripts": {
     "build": "rollup --config",
