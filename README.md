@@ -93,6 +93,13 @@ Following on from the above, by using `numNotes`, a larger or smaller number of 
  * amountToAdd : \[number\] // 12 if you want to go up an octave;
  * type : \[string\] // for debugging;
 
+## Development
+
+The library is written in TypeScript. Rollup has been used as the bundler to ensure backwards compatibility - there's an issue with how TS publishes UMD modules.
+
+Mocha is used as the testing framework.
+
+Browserify is used to build the demo.
 
 ## Plans
 
