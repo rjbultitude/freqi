@@ -6,6 +6,9 @@ var __PROD__ = process.env.NODE_ENV !== 'test';
 
 // Constants
 const CHROMATIC_SCALE : Array<string> = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+const PYTHAGOREAN : Array<Array<number>> = [[1,1], [256,243], [9,8], [32,27], [81,64], [4,3], [729,512], [3,2], [128,81], [27,16], [16,9], [243,128], [2,1]];
+const EQTEMP_STR : string = 'eqTemp';
+const JUSTINT_STR : string = 'justInt';
 
 interface UserConfigObj {
   intervals: Array<number>
@@ -16,6 +19,7 @@ interface UserConfigObj {
   amountToAdd?: number,
   intervalStartIndex?: number,
   repeatMultiple?: number,
+  mode?: string,
   type?: string
 }
 
@@ -250,6 +254,8 @@ function GetFreqsConfig(configObj: UserConfigObj) {
   this.intervals = configObj.intervals;
   // The number of times we want to start from the beginning of the intervals arr again
   this.repeatMultiple = configObj.repeatMultiple === undefined ? 0 : configObj.repeatMultiple;
+  // Musical tuning mode
+  this.mode = configObj.mode === undefined ? EQTEMP_STR : configObj.mode;
   // For debugging
   this.type = configObj.type || 'unknown';
 
@@ -268,6 +274,20 @@ function GetFreqsConfig(configObj: UserConfigObj) {
 * Main module functions
 * ------------
 */
+
+function getEqTempNote(eTNoteConfig: ETNoteConfig, _up) {
+  if (_up) {
+    return eTNoteConfig.startFreq * Math.pow(2, eTNoteConfig.interval / eTNoteConfig.numSemitones);
+  }
+  return eTNoteConfig.startFreq / Math.pow(2, Math.abs(eTNoteConfig.interval) / eTNoteConfig.numSemitones);
+}
+
+function getJustIntNote(eTNoteConfig: ETNoteConfig, _up) {
+  if (_up) {
+    return eTNoteConfig.startFreq * PYTHAGOREAN(eTNoteConfig.interval)[0] / PYTHAGOREAN(eTNoteConfig.interval)[1];
+  }
+  return eTNoteConfig.startFreq * PYTHAGOREAN(eTNoteConfig.interval)[1] / PYTHAGOREAN(eTNoteConfig.interval)[0];
+}
 
 function getSingleFreq(eTNoteConfig: ETNoteConfig) {
   try {
@@ -289,10 +309,12 @@ function getSingleFreq(eTNoteConfig: ETNoteConfig) {
   var _intervalIsPos = eTNoteConfig.interval >= 0;
   var _up = eTNoteConfig.upwardsScale === undefined ? _intervalIsPos : eTNoteConfig.upwardsScale;
   var _note = null;
-  if (_up) {
-    _note = eTNoteConfig.startFreq * Math.pow(2, eTNoteConfig.interval / eTNoteConfig.numSemitones);
+  if (mode === EQTEMP_STR) {
+    _note = getEqTempNote(eTNoteConfig, _up);
+  } else if (mode === JUSTINT_STR) {
+    _note = getJustIntNote(eTNoteConfig, _up);
   } else {
-    _note = eTNoteConfig.startFreq / Math.pow(2, Math.abs(eTNoteConfig.interval) / eTNoteConfig.numSemitones);
+    return false;
   }
   return _note;
 }
@@ -317,7 +339,7 @@ function addMissingNotesFromInterval(pConfig: PConfigObj): Array<number> {
   return _intervals;
 }
 
-function getNotesFromIntervals(pConfig) {
+function getNotesFromIntervals(pConfig: PConfigObj): Array<number> {
   var _scaleArray = [];
   // For Inversions or rootless voicings
   var _intervalStartIndex = pConfig.intervalStartIndex;

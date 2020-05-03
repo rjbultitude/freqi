@@ -12,12 +12,22 @@ var scaleConfigAllOpts = {
   type: 'sine'
 };
 
+var scaleConfigJustIntOpts = {
+  startFreq: 440,
+  numSemitones: 12,
+  rootNote: 0,
+  intervals: [-12, -5, -3, 0, 3, 5, 12],
+  mode: 'justInt',
+  type: 'sine'
+};
+
 var scaleConfigMandatoryOpts = {
   intervals: [0, 3, 5]
 };
 
 //var scaleFrequencies = freqi.getFreqs(scaleConfigMandatoryOpts);
-var scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
+// var scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
+var scaleFrequencies = freqi.getFreqs(scaleConfigJustIntOpts);
 console.log('scaleFrequencies', scaleFrequencies);
 
 var playBtn = document.getElementById('play');
