@@ -29,6 +29,7 @@ interface PConfigObj {
   intervalStartIndex: number,
   repeatMultiple: number,
   amountToAdd: number,
+  mode: string,
   type?: string
 }
 
@@ -37,6 +38,7 @@ interface ETNoteConfig {
   startFreq: number,
   upwardsScale?: boolean,
   numSemitones: number,
+  mode: string
 }
 
 interface AugArrConfig {
@@ -164,7 +166,7 @@ function isPropValid(prop, inValidKeys) {
  */
 
 function checkGetSingleFreqConfigForNegs(dataObj) {
-  var invalidKeys = ['interval', 'upwardsScale'];
+  var invalidKeys = ['interval', 'upwardsScale', 'mode'];
   for (var prop in dataObj) {
     if (isPropValid(prop, invalidKeys)) {
       if (dataObj[prop] < 0) {
@@ -174,15 +176,19 @@ function checkGetSingleFreqConfigForNegs(dataObj) {
   }
 }
 
-function checkGetSingleFreqConfigDataTypes(dataObj) {
+function checkGetSingleFreqConfigDataTypes(dataObj: ETNoteConfig): boolean {
   for (var prop in dataObj) {
-    if (prop !== 'upwardsScale') {
+    if (prop !== 'upwardsScale' && prop !== 'mode') {
       if (typeof dataObj[prop] !== 'number' || Number.isNaN(dataObj[prop])) {
-        throw new TypeError('Config property ' + prop + ' is not a number');
+        throw new TypeError(`Config property ${prop} is not a number`);
       }
-    } else {
+    } else if (prop === 'upwardsScale') {
       if (typeof dataObj[prop] !== 'boolean') {
-        throw new TypeError('Config property ' + prop + ' is not a boolean');
+        throw new TypeError(`Config property ${prop} is not a boolean`);
+      }
+    } else if (prop === 'mode') {
+      if (typeof dataObj[prop] !== 'string') {
+        throw new TypeError(`Config property ${prop} is not a string`);
       }
     }
   }
@@ -196,7 +202,7 @@ function checkGetSingleFreqConfigDataTypes(dataObj) {
 */
 
 function checkGetFreqsForZerosNegs(data) {
-  var invalidKeys = ['intervals', 'type', 'rootNote'];
+  var invalidKeys = ['intervals', 'type', 'rootNote', 'mode'];
   Object.keys(data).forEach(function (prop) {
     if (isPropValid(prop, invalidKeys)) {
       if (prop === 'numSemitones' && data[prop] === 0) {
@@ -212,7 +218,7 @@ function checkGetFreqsForZerosNegs(data) {
 function checkGetFreqsNumericDataTypes(dataObj) {
   Object.keys(dataObj).forEach(function (prop) {
     // Check numeric values
-    if (prop !== 'type' && prop !== 'intervals') {
+    if (prop !== 'type' && prop !== 'intervals' && prop !== 'mode') {
       if (typeof dataObj[prop] !== 'number' || Number.isNaN(dataObj[prop])) {
         throw new TypeError('Config property ' + prop + ' is not a number');
       }
@@ -284,9 +290,9 @@ function getEqTempNote(eTNoteConfig: ETNoteConfig, _up) {
 
 function getJustIntNote(eTNoteConfig: ETNoteConfig, _up) {
   if (_up) {
-    return eTNoteConfig.startFreq * PYTHAGOREAN(eTNoteConfig.interval)[0] / PYTHAGOREAN(eTNoteConfig.interval)[1];
+    return eTNoteConfig.startFreq * PYTHAGOREAN[eTNoteConfig.interval][0] / PYTHAGOREAN[eTNoteConfig.interval][1];
   }
-  return eTNoteConfig.startFreq * PYTHAGOREAN(eTNoteConfig.interval)[1] / PYTHAGOREAN(eTNoteConfig.interval)[0];
+  return eTNoteConfig.startFreq * PYTHAGOREAN[eTNoteConfig.interval][1] / PYTHAGOREAN[eTNoteConfig.interval][0];
 }
 
 function getSingleFreq(eTNoteConfig: ETNoteConfig) {
@@ -309,9 +315,9 @@ function getSingleFreq(eTNoteConfig: ETNoteConfig) {
   var _intervalIsPos = eTNoteConfig.interval >= 0;
   var _up = eTNoteConfig.upwardsScale === undefined ? _intervalIsPos : eTNoteConfig.upwardsScale;
   var _note = null;
-  if (mode === EQTEMP_STR) {
+  if (eTNoteConfig.mode === EQTEMP_STR) {
     _note = getEqTempNote(eTNoteConfig, _up);
-  } else if (mode === JUSTINT_STR) {
+  } else if (eTNoteConfig.mode === JUSTINT_STR) {
     _note = getJustIntNote(eTNoteConfig, _up);
   } else {
     return false;
@@ -353,6 +359,7 @@ function getNotesFromIntervals(pConfig: PConfigObj): Array<number> {
     _newNote = getSingleFreq({
       startFreq: pConfig.startFreq,
       numSemitones: pConfig.numSemitones,
+      mode: pConfig.mode,
       interval: finalIndex,
     });
     // Error check
@@ -431,8 +438,10 @@ function getFreqs(msConfig) {
     rootNote: _validConfig.rootNote,
     intervalStartIndex: _validConfig.intervalStartIndex,
     loopLength: _loopLength,
+    mode: _validConfig.mode,
     type: _validConfig.type,
   });
+  console.log('_scaleArray', _scaleArray);
   return _scaleArray;
 }
 
