@@ -23,6 +23,7 @@
     "build": "rollup --config",
     "build:ts": "tsc",
     "build:demo": "browserify demo/app.js > demo/freqi-demo.js",
+    "build:run": "npm run build && npm run build:demo && npm run start",
     "start": "cross-env NODE_ENV=dev && node server.js",
     "test": "npm-run-all test:unit",
     "test:unit": "cross-env NODE_ENV=test mocha --env.dev --opts ./mocha.opts \"./test/unit/**/*.js\"",

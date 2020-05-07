@@ -6,7 +6,8 @@ var __PROD__ = process.env.NODE_ENV !== 'test';
 
 // Constants
 const CHROMATIC_SCALE : Array<string> = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-const PYTHAGOREAN : Array<Array<number>> = [[1,1], [256,243], [9,8], [32,27], [81,64], [4,3], [729,512], [3,2], [128,81], [27,16], [16,9], [243,128], [2,1]];
+const PYTHAGOREAN : Array<Array<number>> = [[1,1], [256,243], [9,8], [32,27], [81,64], [4,3], [729,512], [3,2], [128,81], [27,16], [16,9], [243,128]];
+const TWELVE_TONE: number = 12;
 const EQTEMP_STR : string = 'eqTemp';
 const JUSTINT_STR : string = 'justInt';
 
@@ -281,18 +282,41 @@ function GetFreqsConfig(configObj: UserConfigObj) {
 * ------------
 */
 
-function getEqTempNote(eTNoteConfig: ETNoteConfig, _up) {
+function getOctaveMult(interval: number): object {
+  const _intervalAbs = Math.abs(interval);
+  const _diff = _intervalAbs - TWELVE_TONE;
+  const _mult = Math.floor(_intervalAbs / TWELVE_TONE);
+  const _newInterval = _diff * (_mult * TWELVE_TONE) - 1;
+  if (_diff <= 0) {
+    return {
+      mult: 1,
+      interval: _intervalAbs - 1
+    }
+  }
+  return {
+    mult: _mult,
+    interval: _newInterval
+  }
+}
+
+function getEqTempNote(eTNoteConfig: ETNoteConfig, _up): number {
   if (_up) {
     return eTNoteConfig.startFreq * Math.pow(2, eTNoteConfig.interval / eTNoteConfig.numSemitones);
   }
   return eTNoteConfig.startFreq / Math.pow(2, Math.abs(eTNoteConfig.interval) / eTNoteConfig.numSemitones);
 }
 
-function getJustIntNote(eTNoteConfig: ETNoteConfig, _up) {
-  if (_up) {
-    return eTNoteConfig.startFreq * PYTHAGOREAN[eTNoteConfig.interval][0] / PYTHAGOREAN[eTNoteConfig.interval][1];
+function getJustIntNote(eTNoteConfig: ETNoteConfig, _up): number {
+  const _rangeObj = getOctaveMult(eTNoteConfig.interval);
+  console.log('_rangeObj.interval', _rangeObj.interval);
+  console.log('PYTHAGOREAN[_rangeObj.interval]', PYTHAGOREAN[_rangeObj.interval]);
+  if (_rangeObj.interval > PYTHAGOREAN.length) {
+    console.error('interval out of range');
   }
-  return eTNoteConfig.startFreq * PYTHAGOREAN[eTNoteConfig.interval][1] / PYTHAGOREAN[eTNoteConfig.interval][0];
+  if (_up) {
+    return eTNoteConfig.startFreq * _rangeObj.mult * (PYTHAGOREAN[_rangeObj.interval][0] / PYTHAGOREAN[_rangeObj.interval][1]);
+  }
+  return _rangeObj.startFreq * _rangeObj.mult * (PYTHAGOREAN[_rangeObj.interval][1] / PYTHAGOREAN[eTNoteConfig.interval][0]);
 }
 
 function getSingleFreq(eTNoteConfig: ETNoteConfig) {
