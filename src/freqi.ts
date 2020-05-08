@@ -1,55 +1,54 @@
-var __PROD__ = process.env.NODE_ENV !== 'test';
+const __PROD__ = process.env.NODE_ENV !== 'test';
 /*
     By Richard Bultitude
     github.com/rjbultitude
 */
 
 // Constants
-const CHROMATIC_SCALE : Array<string> = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-const PYTHAGOREAN : Array<Array<number>> = [[1,1], [256,243], [9,8], [32,27], [81,64], [4,3], [729,512], [3,2], [128,81], [27,16], [16,9], [243,128]];
-const TWELVE_TONE: number = 12;
-const EQTEMP_STR : string = 'eqTemp';
-const JUSTINT_STR : string = 'justInt';
+const CHROMATIC_SCALE: Array<string> = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+const PYTHAGOREAN: Array<Array<number>> = [[1,1], [256,243], [9,8], [32,27], [81,64], [4,3], [729,512], [3,2], [128,81], [27,16], [16,9], [243,128]];
+const TWELVE_TONE = 12;
+const EQTEMP_STR = 'eqTemp';
 
 interface UserConfigObj {
-  intervals: Array<number>
-  startFreq?: number,
-  numSemitones?: number,
-  rootNote?: number,
-  numNotes?: number,
-  amountToAdd?: number,
-  intervalStartIndex?: number,
-  repeatMultiple?: number,
-  mode?: string,
-  type?: string
+  intervals: Array<number>;
+  startFreq?: number;
+  numSemitones?: number;
+  rootNote?: number;
+  numNotes?: number;
+  amountToAdd?: number;
+  intervalStartIndex?: number;
+  repeatMultiple?: number;
+  mode?: string;
+  type?: string;
 }
 
 interface PConfigObj {
-  scaleIntervals: Array<number>,
-  numNotes : number,
-  intervalStartIndex: number,
-  repeatMultiple: number,
-  amountToAdd: number,
-  mode: string,
-  type?: string
+  scaleIntervals: Array<number>;
+  numNotes: number;
+  intervalStartIndex: number;
+  repeatMultiple: number;
+  amountToAdd: number;
+  mode: string;
+  type?: string;
 }
 
 interface ETNoteConfig {
-  interval: number,
-  startFreq: number,
-  upwardsScale?: boolean,
-  numSemitones: number,
-  mode: string
+  interval: number;
+  startFreq: number;
+  upwardsScale?: boolean;
+  numSemitones: number;
+  mode: string;
 }
 
 interface AugArrConfig {
-  originalArray: Array<number>,
-  difference: number,
-  repeatMultiple: number,
-  amountToAdd?: number
+  originalArray: Array<number>;
+  difference: number;
+  repeatMultiple: number;
+  amountToAdd?: number;
 }
 
-function reallyIsNaN(x: any) {
+function reallyIsNaN(x: number): boolean {
   return x !== x;
 }
 
@@ -57,7 +56,7 @@ function checkAugmentNumArrayConfigTypes(augArrConfig: AugArrConfig) {
   if (Array.isArray(augArrConfig.originalArray) !== true) {
     throw TypeError('originalArray is not an array');
   } else {
-    for (var i = 0; i < augArrConfig.originalArray.length; i++) {
+    for (let i = 0; i < augArrConfig.originalArray.length; i++) {
       if (reallyIsNaN(augArrConfig.originalArray[i])) {
         throw TypeError('originalArray contains values that are NaN');
       }
@@ -98,7 +97,7 @@ function checkAugmentNumArrayConfigForNegs(augArrConfig: AugArrConfig) {
  * @return {Array}                  [new array]
  */
 function augmentNumArray(augArrConfig: AugArrConfig): Array<number> {
-  var _index = 0;
+  let _index = 0;
   // error check
   try {
     checkAugmentNumArrayConfigTypes(augArrConfig);
@@ -117,17 +116,17 @@ function augmentNumArray(augArrConfig: AugArrConfig): Array<number> {
     return [];
   }
   // begin fn
-  var _newArr = augArrConfig.originalArray.map(function (item) {
+  const _newArr = augArrConfig.originalArray.map(function (item) {
     return item;
   });
-  var _finalArr: Array<number> = [];
-  var _diffArr: Array<number> = [];
-  var _newVal;
-  var _repeatPoint: number = (augArrConfig.originalArray.length * augArrConfig.repeatMultiple) - 1;
+  let _finalArr: Array<number> = [];
+  const _diffArr: Array<number> = [];
+  let _newVal;
+  const _repeatPoint: number = (augArrConfig.originalArray.length * augArrConfig.repeatMultiple) - 1;
   // loop the number of times
   // needed to make the missing items
   addMissingLoop:
-  for (var i = 0; i < augArrConfig.difference; i++) {
+  for (let i = 0; i < augArrConfig.difference; i++) {
     _newVal = _newArr[_index];
     // Add the extra amount
     // if we're dealing with numbers
@@ -151,8 +150,8 @@ function augmentNumArray(augArrConfig: AugArrConfig): Array<number> {
   return _finalArr;
 }
 
-function isPropValid(prop, inValidKeys) {
-  for (var i = 0; i < inValidKeys.length; i++) {
+function isPropValid(prop, inValidKeys): boolean {
+  for (let i = 0; i < inValidKeys.length; i++) {
     if (prop === inValidKeys[i]) {
       return false;
     }
@@ -167,8 +166,8 @@ function isPropValid(prop, inValidKeys) {
  */
 
 function checkGetSingleFreqConfigForNegs(dataObj) {
-  var invalidKeys = ['interval', 'upwardsScale', 'mode'];
-  for (var prop in dataObj) {
+  const invalidKeys = ['interval', 'upwardsScale', 'mode'];
+  for (const prop in dataObj) {
     if (isPropValid(prop, invalidKeys)) {
       if (dataObj[prop] < 0) {
         throw new SyntaxError(prop + ' must be a positive number');
@@ -178,7 +177,7 @@ function checkGetSingleFreqConfigForNegs(dataObj) {
 }
 
 function checkGetSingleFreqConfigDataTypes(dataObj: ETNoteConfig): boolean {
-  for (var prop in dataObj) {
+  for (const prop in dataObj) {
     if (prop !== 'upwardsScale' && prop !== 'mode') {
       if (typeof dataObj[prop] !== 'number' || Number.isNaN(dataObj[prop])) {
         throw new TypeError(`Config property ${prop} is not a number`);
@@ -203,7 +202,7 @@ function checkGetSingleFreqConfigDataTypes(dataObj: ETNoteConfig): boolean {
 */
 
 function checkGetFreqsForZerosNegs(data) {
-  var invalidKeys = ['intervals', 'type', 'rootNote', 'mode'];
+  const invalidKeys = ['intervals', 'type', 'rootNote', 'mode'];
   Object.keys(data).forEach(function (prop) {
     if (isPropValid(prop, invalidKeys)) {
       if (prop === 'numSemitones' && data[prop] === 0) {
@@ -235,7 +234,7 @@ function checkGetFreqsIntervalsProp(intervals: Array<number>) {
   if (intervals.length === 0) {
     throw new TypeError('intervals array is empty');
   }
-  for (var i = 0, length = intervals.length; i < length; i++) {
+  for (let i = 0, length = intervals.length; i < length; i++) {
     if (typeof intervals[i] !== 'number' || Number.isNaN(intervals[i])) {
       throw new TypeError('intervals is not an array of numbers');
     }
@@ -336,9 +335,9 @@ function getSingleFreq(eTNoteConfig: ETNoteConfig) {
     }
     return false;
   }
-  var _intervalIsPos = eTNoteConfig.interval >= 0;
-  var _up = eTNoteConfig.upwardsScale === undefined ? _intervalIsPos : eTNoteConfig.upwardsScale;
-  var _note = null;
+  const _intervalIsPos = eTNoteConfig.interval >= 0;
+  const _up = eTNoteConfig.upwardsScale === undefined ? _intervalIsPos : eTNoteConfig.upwardsScale;
+  let _note = null;
   if (eTNoteConfig.mode === EQTEMP_STR) {
     _note = getEqTempNote(eTNoteConfig, _up);
   } else if (eTNoteConfig.mode === JUSTINT_STR) {
@@ -352,11 +351,11 @@ function getSingleFreq(eTNoteConfig: ETNoteConfig) {
 // Adds new items to the intervals array
 // should it not have enough notes
 function addMissingNotesFromInterval(pConfig: PConfigObj): Array<number> {
-  var _intervals:Array<number> = [];
-  var _highestIndex = pConfig.intervalStartIndex + pConfig.numNotes;
-  var _intervalsLength = pConfig.scaleIntervals.length;
+  let _intervals: Array<number> = [];
+  const _highestIndex = pConfig.intervalStartIndex + pConfig.numNotes;
+  const _intervalsLength = pConfig.scaleIntervals.length;
   if (_highestIndex > _intervalsLength) {
-    var _diff = _highestIndex - _intervalsLength;
+    const _diff = _highestIndex - _intervalsLength;
     _intervals = augmentNumArray({
       originalArray: pConfig.scaleIntervals,
       difference: _diff,
@@ -370,15 +369,15 @@ function addMissingNotesFromInterval(pConfig: PConfigObj): Array<number> {
 }
 
 function getNotesFromIntervals(pConfig: PConfigObj): Array<number> {
-  var _scaleArray = [];
+  const _scaleArray = [];
   // For Inversions or rootless voicings
-  var _intervalStartIndex = pConfig.intervalStartIndex;
-  var _newNote;
-  for (var i = 0; i < pConfig.loopLength; i++) {
+  const _intervalStartIndex = pConfig.intervalStartIndex;
+  let _newNote;
+  for (let i = 0; i < pConfig.loopLength; i++) {
     // __PROD__ && console.log('note ' + i + ' ' + pConfig.type);
     // __PROD__ && console.log('scaleInterval', pConfig.scaleIntervals[_intervalStartIndex]);
     // __PROD__ && console.log('intervaloffset ' + _intervalStartIndex + ' centreNote Index ' + pConfig.rootNote);
-    var finalIndex = pConfig.scaleIntervals[_intervalStartIndex] + pConfig.rootNote;
+    const finalIndex = pConfig.scaleIntervals[_intervalStartIndex] + pConfig.rootNote;
     // __PROD__ && console.log('final highest Index', finalIndex);
     _newNote = getSingleFreq({
       startFreq: pConfig.startFreq,
@@ -398,8 +397,8 @@ function getNotesFromIntervals(pConfig: PConfigObj): Array<number> {
 }
 
 // Accepts only an object
-function getFreqs(msConfig) {
-  var _validConfig;
+function getFreqs(msConfig): Array | boolean {
+  let _validConfig;
   // Check config exists
   if (typeof msConfig !== 'object') {
     if (__PROD__) {
@@ -440,10 +439,10 @@ function getFreqs(msConfig) {
     return false;
   }
   // Set vars
-  var _scaleArray = [];
-  var _intervals = _validConfig.intervals;
+  let _scaleArray = [];
+  const _intervals = _validConfig.intervals;
   // Add missing scale intervals
-  var _intervalsFull = addMissingNotesFromInterval({
+  const _intervalsFull = addMissingNotesFromInterval({
     amountToAdd: _validConfig.amountToAdd,
     intervalStartIndex: _validConfig.intervalStartIndex,
     numNotes: _validConfig.numNotes,
@@ -453,7 +452,7 @@ function getFreqs(msConfig) {
   });
   // Inversions are acheived by
   // selecting an index from within the intervals themselves
-  var _loopLength = _intervalsFull.length - _validConfig.intervalStartIndex;
+  const _loopLength = _intervalsFull.length - _validConfig.intervalStartIndex;
   // Where the magic happens
   _scaleArray = getNotesFromIntervals({
     startFreq: _validConfig.startFreq,

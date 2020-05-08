@@ -5,12 +5,15 @@
   "main": "freqi.js",
   "devDependencies": {
     "@types/node": "^13.13.4",
+    "@typescript-eslint/eslint-plugin": "^2.31.0",
+    "@typescript-eslint/parser": "^2.31.0",
     "browserify": "^16.5.1",
     "chai": "^4.2.0",
     "connect": "^3.7.0",
     "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
     "eslint-plugin-import": "^2.20.2",
+    "husky": "^4.2.5",
     "mocha": "^7.1.2",
     "npm-run-all": "^4.1.5",
     "rollup": "^2.7.6",
@@ -27,8 +30,8 @@
     "start": "cross-env NODE_ENV=dev && node server.js",
     "test": "npm-run-all test:unit",
     "test:unit": "cross-env NODE_ENV=test mocha --env.dev --opts ./mocha.opts \"./test/unit/**/*.js\"",
-    "lint": "eslint lib/*.js",
-    "lint:fix": "eslint --fix lib/*.js"
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint --fix .ts"
   },
   "repository": {
     "type": "git",
@@ -51,7 +54,13 @@
     "node": ">=4.2.4"
   },
   "bugs": {
-    "url": ""
+    "url": "https://github.com/rjbultitude/freqi/issues"
   },
-  "homepage": ""
+  "homepage": "https://github.com/rjbultitude/freqi",
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint",
+      "pre-push": "npm run lint && npm test"
+    }
+  }
 }
