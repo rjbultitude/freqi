@@ -7,8 +7,8 @@ const __PROD__ = process.env.NODE_ENV !== 'test';
 // Constants
 const CHROMATIC_SCALE: Array<string> = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 const PYTHAGOREAN: Array<Array<number>> = [[1,1], [256,243], [9,8], [32,27], [81,64], [4,3], [729,512], [3,2], [128,81], [27,16], [16,9], [243,128]];
-const TWELVE_TONE = 12;
 const EQTEMP_STR = 'eqTemp';
+const JUSTINT_STR = 'justInt';
 
 interface UserConfigObj {
   intervals: Array<number>;
@@ -281,20 +281,14 @@ function GetFreqsConfig(configObj: UserConfigObj) {
 * ------------
 */
 
-function getOctaveMult(interval: number): object {
+function getIntervalAndMult(interval: number): object {
   const _intervalAbs = Math.abs(interval);
-  const _diff = _intervalAbs - TWELVE_TONE;
-  const _mult = Math.floor(_intervalAbs / TWELVE_TONE);
-  const _newInterval = _diff * (_mult * TWELVE_TONE) - 1;
-  if (_diff <= 0) {
-    return {
-      mult: 1,
-      interval: _intervalAbs - 1
-    }
-  }
+  const _diff =  Math.abs(_intervalAbs - PYTHAGOREAN.length);
+  const _mult = Math.floor(_intervalAbs / PYTHAGOREAN.length);
+  const _newInterval = _intervalAbs - (_mult * PYTHAGOREAN.length);
   return {
     mult: _mult,
-    interval: _newInterval
+    rangeInterval: _newInterval
   }
 }
 
@@ -306,16 +300,16 @@ function getEqTempNote(eTNoteConfig: ETNoteConfig, _up): number {
 }
 
 function getJustIntNote(eTNoteConfig: ETNoteConfig, _up): number {
-  const _rangeObj = getOctaveMult(eTNoteConfig.interval);
-  console.log('_rangeObj.interval', _rangeObj.interval);
-  console.log('PYTHAGOREAN[_rangeObj.interval]', PYTHAGOREAN[_rangeObj.interval]);
-  if (_rangeObj.interval > PYTHAGOREAN.length) {
-    console.error('interval out of range');
+  const _rangeObj = getIntervalAndMult(eTNoteConfig.interval);
+  console.log('_rangeObj.interval', _rangeObj.rangeInterval);
+  console.log('PYTHAGOREAN[_rangeObj.rangeInterval]', PYTHAGOREAN[_rangeObj.rangeInterval]);
+  if (_rangeObj.rangeInterval > PYTHAGOREAN.length) {
+    console.error('rangeInterval out of range');
   }
   if (_up) {
-    return eTNoteConfig.startFreq * _rangeObj.mult * (PYTHAGOREAN[_rangeObj.interval][0] / PYTHAGOREAN[_rangeObj.interval][1]);
+    return eTNoteConfig.startFreq * _rangeObj.mult * (PYTHAGOREAN[_rangeObj.rangeInterval][0] / PYTHAGOREAN[_rangeObj.rangeInterval][1]);
   }
-  return _rangeObj.startFreq * _rangeObj.mult * (PYTHAGOREAN[_rangeObj.interval][1] / PYTHAGOREAN[eTNoteConfig.interval][0]);
+  return _rangeObj.startFreq * _rangeObj.mult * (PYTHAGOREAN[_rangeObj.rangeInterval][1] / PYTHAGOREAN[_rangeObj.rangeInterval][0]);
 }
 
 function getSingleFreq(eTNoteConfig: ETNoteConfig) {
@@ -337,12 +331,15 @@ function getSingleFreq(eTNoteConfig: ETNoteConfig) {
   }
   const _intervalIsPos = eTNoteConfig.interval >= 0;
   const _up = eTNoteConfig.upwardsScale === undefined ? _intervalIsPos : eTNoteConfig.upwardsScale;
-  let _note = null;
+  const _note = getEqTempNote(eTNoteConfig, _up);
   if (eTNoteConfig.mode === EQTEMP_STR) {
     _note = getEqTempNote(eTNoteConfig, _up);
   } else if (eTNoteConfig.mode === JUSTINT_STR) {
     _note = getJustIntNote(eTNoteConfig, _up);
   } else {
+    if (__PROD__) {
+      console.warn('No mode set');
+    }
     return false;
   }
   return _note;

@@ -454,31 +454,36 @@ describe('getSingleFreq startFreq argument', function() {
         startFreq: this.randomStartFreq,
         numSemitones: 12,
         interval: 0,
-        upwardsScale: true
+        upwardsScale: true,
+        mode: 'eqTemp'
     };
     this.negConfig = {
         startFreq: this.randomNegStartFreq,
         numSemitones: 12,
         interval: 0,
-        upwardsScale: true
+        upwardsScale: true,
+        mode: 'eqTemp'
     };
     this.nanConfig = {
         startFreq: NaN,
         numSemitones: 12,
         interval: 0,
-        upwardsScale: true
+        upwardsScale: true,
+        mode: 'eqTemp'
     };
     this.badConfig = {
         startFreq: 'bad value',
         numSemitones: 12,
         interval: 0,
-        upwardsScale: true
+        upwardsScale: true,
+        mode: 'eqTemp'
     };
     this.zeroConfig = {
         startFreq: 0,
         numSemitones: 12,
         interval: 0,
-        upwardsScale: true
+        upwardsScale: true,
+        mode: 'eqTemp'
     };
   });
 
@@ -511,25 +516,29 @@ describe('getSingleFreq numSemitones argument', function() {
       startFreq: 400,
       numSemitones: this.randomNumSemitones,
       interval: 0,
-      upwardsScale: true
+      upwardsScale: true,
+      mode: 'eqTemp'
     };
     this.negConfig = {
       startFreq: 440,
       numSemitones: this.randomNegNumSemitones,
       interval: 0,
-      upwardsScale: true
+      upwardsScale: true,
+      mode: 'eqTemp'
     };
     this.nanConfig = {
       startFreq: 440,
       numSemitones: NaN,
       interval: 0,
-      upwardsScale: true
+      upwardsScale: true,
+      mode: 'eqTemp'
     };
     this.badConfig = {
       startFreq: 440,
       numSemitones: 'test',
       interval: 0,
-      upwardsScale: true
+      upwardsScale: true,
+      mode: 'eqTemp'
     };
   });
 
@@ -558,25 +567,29 @@ describe('getSingleFreq interval argument', function() {
       startFreq: 400,
       numSemitones: 12,
       interval: this.randomInterval,
-      upwardsScale: true
+      upwardsScale: true,
+      mode: 'eqTemp'
     };
     this.negConfig = {
       startFreq: 440,
       numSemitones: 12,
       interval: this.randomNegInterval,
-      upwardsScale: true
+      upwardsScale: true,
+      mode: 'eqTemp'
     };
     this.nanConfig = {
       startFreq: 440,
       numSemitones: 12,
       interval: NaN,
-      upwardsScale: true
+      upwardsScale: true,
+      mode: 'eqTemp'
     };
     this.badConfig = {
       startFreq: 440,
       numSemitones: 12,
       interval: 'test',
-      upwardsScale: true
+      upwardsScale: true,
+      mode: 'eqTemp'
     };
   });
 

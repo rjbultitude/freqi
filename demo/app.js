@@ -16,7 +16,7 @@ var scaleConfigJustIntOpts = {
   startFreq: 440,
   numSemitones: 12,
   rootNote: 0,
-  intervals: [-12, -5, -3, 0, 3, 5, 12],
+  intervals: [-12, -5, -3, 1, 3, 5, 12, 25],
   mode: 'justInt',
   type: 'sine'
 };
