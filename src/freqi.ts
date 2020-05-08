@@ -284,10 +284,17 @@ function GetFreqsConfig(configObj: UserConfigObj) {
 function getIntervalAndMult(interval: number): object {
   const _intervalAbs = Math.abs(interval);
   const _diff =  Math.abs(_intervalAbs - PYTHAGOREAN.length);
-  const _mult = Math.floor(_intervalAbs / PYTHAGOREAN.length);
-  const _newInterval = _intervalAbs - (_mult * PYTHAGOREAN.length);
+  const _mult = _intervalAbs / PYTHAGOREAN.length;
+  const _multCeil = Math.ceil(_mult);
+  const _multFloor = Math.floor(_mult);
+  let _newInterval;
+  if (interval >= 0) {
+    _newInterval = interval - (_multFloor * PYTHAGOREAN.length);
+  } else {
+    _newInterval = _diff - (_multFloor * PYTHAGOREAN.length);
+  }
   return {
-    mult: _mult,
+    mult: _multCeil,
     rangeInterval: _newInterval
   }
 }
@@ -301,18 +308,21 @@ function getEqTempNote(eTNoteConfig: ETNoteConfig, _up): number {
 
 function getJustIntNote(eTNoteConfig: ETNoteConfig, _up): number {
   const _rangeObj = getIntervalAndMult(eTNoteConfig.interval);
-  console.log('_rangeObj.interval', _rangeObj.rangeInterval);
+  let _ratioFraction;
+  console.log('_rangeObj.mult', _rangeObj.mult);
   console.log('PYTHAGOREAN[_rangeObj.rangeInterval]', PYTHAGOREAN[_rangeObj.rangeInterval]);
   if (_rangeObj.rangeInterval > PYTHAGOREAN.length) {
     console.error('rangeInterval out of range');
   }
   if (_up) {
-    return eTNoteConfig.startFreq * _rangeObj.mult * (PYTHAGOREAN[_rangeObj.rangeInterval][0] / PYTHAGOREAN[_rangeObj.rangeInterval][1]);
+    _ratioFraction = PYTHAGOREAN[_rangeObj.rangeInterval][0] / PYTHAGOREAN[_rangeObj.rangeInterval][1];
+    return (eTNoteConfig.startFreq * _ratioFraction) * _rangeObj.mult;
   }
-  return _rangeObj.startFreq * _rangeObj.mult * (PYTHAGOREAN[_rangeObj.rangeInterval][1] / PYTHAGOREAN[_rangeObj.rangeInterval][0]);
+  _ratioFraction = PYTHAGOREAN[_rangeObj.rangeInterval][1] / PYTHAGOREAN[_rangeObj.rangeInterval][0];
+  return (eTNoteConfig.startFreq * _ratioFraction) / _rangeObj.mult;
 }
 
-function getSingleFreq(eTNoteConfig: ETNoteConfig) {
+function getSingleFreq(eTNoteConfig: ETNoteConfig): number | boolean {
   try {
     checkGetSingleFreqConfigDataTypes(eTNoteConfig);
   } catch (e) {
