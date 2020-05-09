@@ -281,28 +281,33 @@ function GetFreqsConfig(configObj: UserConfigObj) {
 * ------------
 */
 
+// Handle the Pythagorian array,
+// which has a fixed length
+// indeces are derived by subtracting octaves
 function getIntervalAndMult(interval: number): object {
   const _intervalAbs = Math.abs(interval);
-  const _diff =  Math.abs(_intervalAbs - PYTHAGOREAN.length);
   const _mult = _intervalAbs / PYTHAGOREAN.length;
+  const _multFloor = Math.floor(_mult);
+  const _inRangeIndex = _intervalAbs - (_multFloor * PYTHAGOREAN.length);
+  const _negIndex = PYTHAGOREAN.length - _inRangeIndex;
+  let _multF;
   if (_intervalAbs % PYTHAGOREAN.length === 0) {
     return {
       mult: _mult,
       rangeInterval: 0
     }
   }
-  // const _multCeil = Math.ceil(_mult);
-  const _multFloor = Math.floor(_mult);
   let _newInterval;
   if (interval >= 0) {
     _newInterval = interval - (_multFloor * PYTHAGOREAN.length);
+    _multF = _multFloor;
   } else {
-    _newInterval = _diff - (_multFloor * PYTHAGOREAN.length);
-    _multFloor += 1;
+    _newInterval = _negIndex;
+    _multF = _multFloor + 1;
 
   }
   return {
-    mult: _multFloor,
+    mult: _multF,
     rangeInterval: _newInterval
   }
 }
