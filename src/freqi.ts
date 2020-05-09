@@ -287,20 +287,22 @@ function getIntervalAndMult(interval: number): object {
   const _mult = _intervalAbs / PYTHAGOREAN.length;
   if (_intervalAbs % PYTHAGOREAN.length === 0) {
     return {
-      mult: _mult + 1,
+      mult: _mult,
       rangeInterval: 0
     }
   }
-  const _multCeil = Math.ceil(_mult);
+  // const _multCeil = Math.ceil(_mult);
   const _multFloor = Math.floor(_mult);
   let _newInterval;
   if (interval >= 0) {
     _newInterval = interval - (_multFloor * PYTHAGOREAN.length);
   } else {
     _newInterval = _diff - (_multFloor * PYTHAGOREAN.length);
+    _multFloor += 1;
+
   }
   return {
-    mult: _multCeil,
+    mult: _multFloor,
     rangeInterval: _newInterval
   }
 }
@@ -315,14 +317,16 @@ function getEqTempNote(eTNoteConfig: ETNoteConfig, _up): number {
 function getJustIntNote(eTNoteConfig: ETNoteConfig, _up): number {
   const _rangeObj = getIntervalAndMult(eTNoteConfig.interval);
   const _ratioFraction = PYTHAGOREAN[_rangeObj.rangeInterval][0] / PYTHAGOREAN[_rangeObj.rangeInterval][1];
+  const _multiplier = Math.pow(2, _rangeObj.mult);
+  const _noteVal = eTNoteConfig.startFreq * _ratioFraction;
   console.log('PYTHAGOREAN[_rangeObj.rangeInterval]', PYTHAGOREAN[_rangeObj.rangeInterval]);
   if (_rangeObj.rangeInterval > PYTHAGOREAN.length) {
     console.error('rangeInterval out of range');
   }
   if (_up) {
-    return (eTNoteConfig.startFreq * _ratioFraction) * _rangeObj.mult;
+    return _noteVal * _multiplier;
   }
-  return (eTNoteConfig.startFreq * _ratioFraction) / (2 * _rangeObj.mult);
+  return _noteVal / _multiplier;
 }
 
 function getSingleFreq(eTNoteConfig: ETNoteConfig): number | boolean {
