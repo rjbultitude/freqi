@@ -611,21 +611,59 @@ describe('getSingleFreq interval argument', function() {
   });
 });
 
-describe('getAllOctaveJustIntervals', function() {
+describe('getJustIntNote interval argument', function() {
+  beforeEach(function() {
+    this.config = {
+      interval: 2,
+      mode: 'pythagorean'
+    };
+  });
+
+  it('should return a number when ETNoteConfig arg object contains valid interval and mode', function() {
+    expect(freqi.getSingleFreq(this.config)).to.be.a('number');
+  });
+});
+
+describe('getAllOctaveJustIntervals mult return value', function() {
   beforeEach(function() {
     this.justIntArr = [[1,1],[3,2],[4,3],[5,4],[16,9]];
   });
 
-  it('should return mult 0 when interval argument is within the range of array indeces', function() {
+  it('should return mult 0 when interval argument is within the array argument length', function() {
     expect(freqi.getAllOctaveJustIntervals(2, this.justIntArr).mult).to.equal(0);
   });
-  it('should return mult 1 when interval argument is within the next multiple of the array length', function() {
+  it('should return mult 1 when interval argument is within the next multiple of the array argument length', function() {
     expect(freqi.getAllOctaveJustIntervals(6, this.justIntArr).mult).to.equal(1);
   });
-  it('should return mult 2 when interval argument is double the array length', function() {
+  it('should return mult 2 when interval argument is double the array argument length', function() {
     expect(freqi.getAllOctaveJustIntervals(10, this.justIntArr).mult).to.equal(2);
   });
-  it('should return mult 2 when interval argument is between double and treble the array length', function() {
+  it('should return mult 2 when interval argument is between double and treble the array argument length', function() {
     expect(freqi.getAllOctaveJustIntervals(13, this.justIntArr).mult).to.equal(2);
+  });
+  it('should return mult 1 when interval argument is within the array argument length but negative', function() {
+    expect(freqi.getAllOctaveJustIntervals(-2, this.justIntArr).mult).to.equal(1);
+  });
+  it('should return mult 2 when interval argument is double the array argument length but negative', function() {
+    expect(freqi.getAllOctaveJustIntervals(-10, this.justIntArr).mult).to.equal(2);
+  });
+  it('should return mult 2 when interval argument is between double and treble the array argument length but negative', function() {
+    expect(freqi.getAllOctaveJustIntervals(-13, this.justIntArr).mult).to.equal(3);
+  });
+});
+
+describe('getAllOctaveJustIntervals rangeInterval return value', function() {
+  beforeEach(function() {
+    this.justIntArr = [[1,1],[3,2],[4,3],[5,4],[16,9]];
+  });
+
+  it('should return rangeInterval 3 when interval argument is 3', function() {
+    expect(freqi.getAllOctaveJustIntervals(3, this.justIntArr).rangeInterval).to.equal(3);
+  });
+  it('should return rangeInterval 3 when interval argument is greater than the array argument length by three items', function() {
+    expect(freqi.getAllOctaveJustIntervals(8, this.justIntArr).rangeInterval).to.equal(3);
+  });
+  it('should return rangeInterval 4 when interval argument is greater than the array argument length and negative', function() {
+    expect(freqi.getAllOctaveJustIntervals(-6, this.justIntArr).rangeInterval).to.equal(4);
   });
 });

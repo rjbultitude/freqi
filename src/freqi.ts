@@ -101,9 +101,8 @@ function checkAugmentNumArrayConfigForNegs(augArrConfig: AugArrConfig) {
  * Duplicates items 'difference' number of times
  * Can add a given amount to each duplicated item if desired
  * Can start from beginning of array
- * after repeatMultiple number of times
- * @param  {Object} augArrConfig    [config object]
- * @return {Array}                  [new array]
+ * after repeatMultiple number of times.
+ * Is public
  */
 function augmentNumArray(augArrConfig: AugArrConfig): Array<number> {
   let _index = 0;
@@ -293,9 +292,11 @@ function GetFreqsConfig(configObj: UserConfigObj) {
 * ------------
 */
 
-// Handle the Pythagorian array,
-// which has a fixed length
-// indeces are derived by subtracting octaves
+/**
+ * Takes a number to be used as an index for a musical tuning system array,
+ * which may be out of range, and returns a valid (in-range) index
+ * plus the number of times needed to multiply the array
+ */
 function getAllOctaveJustIntervals(interval: number, justIntervalsArr: Array): object {
   const _intervalAbs = Math.abs(interval);
   const _mult = _intervalAbs / justIntervalsArr.length;
@@ -349,6 +350,11 @@ function getJustIntervalsType(mode: string): Array {
   }
 }
 
+/**
+ * Takes the note index from the eTNoteConfig obj
+ * and calculates the frequency in Hz
+ * using one of the tuning systems specified
+ */
 function getJustIntNote(eTNoteConfig: ETNoteConfig, _up): number {
   const _justIntervalsArr = getJustIntervalsType(eTNoteConfig.mode);
   const _rangeObj = getAllOctaveJustIntervals(eTNoteConfig.interval, _justIntervalsArr);
@@ -356,7 +362,7 @@ function getJustIntNote(eTNoteConfig: ETNoteConfig, _up): number {
   const _multiplier = Math.pow(2, _rangeObj.mult);
   const _noteVal = eTNoteConfig.startFreq * _ratioFraction;
   if (_rangeObj.rangeInterval > _justIntervalsArr.length) {
-    console.error('rangeInterval out of range');
+    throw new SyntaxError('rangeInterval larger than just intervals array');
   }
   if (_up) {
     return _noteVal * _multiplier;
@@ -364,6 +370,7 @@ function getJustIntNote(eTNoteConfig: ETNoteConfig, _up): number {
   return _noteVal / _multiplier;
 }
 
+// public
 function getSingleFreq(eTNoteConfig: ETNoteConfig): number | boolean {
   try {
     checkGetSingleFreqConfigDataTypes(eTNoteConfig);
@@ -440,8 +447,13 @@ function getNotesFromIntervals(pConfig: PConfigObj): Array<number> {
   return _scaleArray;
 }
 
-// Accepts only an object
-function getFreqs(msConfig): Array | boolean {
+/**
+ * Accepts only an object
+ * No TS interface is provided
+ * as this is the entry point
+ * Is public
+ * */
+function getFreqs(msConfig: object): Array | boolean {
   let _validConfig;
   // Check config exists
   if (typeof msConfig !== 'object') {
@@ -508,7 +520,6 @@ function getFreqs(msConfig): Array | boolean {
     mode: _validConfig.mode,
     type: _validConfig.type,
   });
-  console.log('_scaleArray', _scaleArray);
   return _scaleArray;
 }
 

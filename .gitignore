@@ -25,9 +25,11 @@
 *.publishsettings
 
 # Front-end
-.sass-cache/
 node_modules/
 demo/freqi-demo.js
+
+# Reports
+coverage/
 
 # JavaScript
 dist/
