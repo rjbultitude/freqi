@@ -1,4 +1,3 @@
 {
-  "reporter": ["lcov", "text"],
-  "include": ["./test/unit/**.js"]
+  "reporter": ["lcov", "text"]
 }

@@ -1,11 +1,7 @@
-'use strict'
-
-//import { describe, it } from 'mocha';
-//import { expect } from 'chai';
+'use strict';
 var mocha = require('mocha');
 var expect = require('chai').expect;
 var freqi = require('../../lib/freqi');
-var getAllOctaveJustIntervals = require('../../lib/freqi').getAllOctaveJustIntervals;
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
