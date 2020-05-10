@@ -1,23 +1,16 @@
 const __PROD__ = process.env.NODE_ENV !== 'test';
 /*
-    By Richard Bultitude
-    github.com/rjbultitude
+  By Richard Bultitude
+  github.com/rjbultitude
 */
 
-// Constants
-const CHROMATIC_SCALE: Array<string> = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-const HEPTATONIC_SCALE: Array<string> = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
-const PYTHAGOREAN_RATIOS: Array<Array<number>> = [[1,1], [256,243], [9,8], [32,27], [81,64], [4,3], [729,512], [3,2], [128,81], [27,16], [16,9], [243,128]];
-const FIVE_LIMIT_RATIOS: Array<Array<number>> = [[1,1], [16,15], [9,8], [6,5], [5,4], [4,3], [64,45], [3,2], [8,5], [5,3], [9,5], [15,8]];
-const DIATONIC_RATIOS: Array<Array<number>> = [[1,1], [9,8], [5,4], [4,3], [3,2], [5,3], [15,8]];
-const DIATONIC_INDIAN_RATIOS: Array<Array<number>> = [[1,1], [9,8], [5,4], [4,3], [3,2], [27,16], [15,8]];
-const TWENTY_TWO_SHRUTI_RATIOS: Array<Array<number>> = [[1,1], [256,243], [16,15], [10,9], [9,8], [32,27], [6,5], [5,4], [81,64], [4,3], [27,20], [45,32], [729,512], [3,2], [128,81], [8,5], [5,3], [27,16], [16,9], [9,5], [15,8], [243,128]];
-const EQ_TEMP_STR = 'eqTemp';
-const PYTHAGOREAN_STR = 'pythagorean';
-const FIVE_LIMIT_STR = 'fiveLimit';
-const DIATONIC_STR = 'diatonic';
-const DIATONIC_INDIAN_STR = 'diatonicIndian';
-const TWENTY_TWO_SHRUTI_STR = '22Shrutis';
+interface JustTuningSystems {
+  pythagorean: Array<Array<number>>;
+  fiveLimit: Array<Array<number>>;
+  diatonic: Array<Array<number>>;
+  diatonicIndian: Array<Array<number>>;
+  twentyTwoShrutis: Array<Array<number>>;
+}
 
 interface UserConfigObj {
   intervals: Array<number>;
@@ -56,6 +49,22 @@ interface AugArrConfig {
   repeatMultiple: number;
   amountToAdd?: number;
 }
+
+// Constants
+const EQ_TEMP_STR = 'eqTemp';
+const CHROMATIC_SCALE: Array<string> = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+const HEPTATONIC_SCALE: Array<string> = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+const justTuningSystems: JustTuningSystems = {
+  pythagorean: [[1,1], [256,243], [9,8], [32,27], [81,64], [4,3], [729,512], [3,2], [128,81], [27,16], [16,9], [243,128]],
+  fiveLimit: [[1,1], [16,15], [9,8], [6,5], [5,4], [4,3], [64,45], [3,2], [8,5], [5,3], [9,5], [15,8]],
+  diatonic: [[1,1], [9,8], [5,4], [4,3], [3,2], [5,3], [15,8]],
+  diatonicIndian: [[1,1], [9,8], [5,4], [4,3], [3,2], [27,16], [15,8]],
+  twentyTwoShrutis: [[1,1], [256,243], [16,15], [10,9], [9,8], [32,27], [6,5], [5,4], [81,64], [4,3], [27,20], [45,32], [729,512], [3,2], [128,81], [8,5], [5,3], [27,16], [16,9], [9,5], [15,8], [243,128]]
+};
+
+/**
+ * Error checking FNs
+ */
 
 function reallyIsNaN(x: number): boolean {
   return x !== x;
@@ -333,30 +342,17 @@ function getEqTempNote(eTNoteConfig: ETNoteConfig, _up): number {
   return eTNoteConfig.startFreq / Math.pow(2, Math.abs(eTNoteConfig.interval) / eTNoteConfig.numSemitones);
 }
 
-function getJustIntervalsType(mode: string): Array {
-  switch (mode) {
-  case PYTHAGOREAN_STR:
-    return PYTHAGOREAN_RATIOS;
-  case DIATONIC_STR:
-    return DIATONIC_RATIOS;
-  case FIVE_LIMIT_STR:
-    return FIVE_LIMIT_RATIOS;
-  case DIATONIC_INDIAN_STR:
-    return DIATONIC_INDIAN_RATIOS;
-  case TWENTY_TWO_SHRUTI_STR:
-    return TWENTY_TWO_SHRUTI_RATIOS;
-  default:
-    console.warn('No mode received');
-  }
-}
-
 /**
  * Takes the note index from the eTNoteConfig obj
  * and calculates the frequency in Hz
  * using one of the tuning systems specified
  */
-function getJustIntNote(eTNoteConfig: ETNoteConfig, _up): number {
-  const _justIntervalsArr = getJustIntervalsType(eTNoteConfig.mode);
+function getJustIntNote(eTNoteConfig: ETNoteConfig, _up: boolean, justTuningSystems: JustTuningSystems): number {
+  if (Object.prototype.hasOwnProperty.call(justTuningSystems, eTNoteConfig.mode) === false) {
+    console.error(eTNoteConfig.mode, 'is not a supported tuning system. Please set a valid mode');
+    return false;
+  }
+  const _justIntervalsArr = justTuningSystems[eTNoteConfig.mode];
   const _rangeObj = getAllOctaveJustIntervals(eTNoteConfig.interval, _justIntervalsArr);
   const _ratioFraction = _justIntervalsArr[_rangeObj.rangeInterval][0] / _justIntervalsArr[_rangeObj.rangeInterval][1];
   const _multiplier = Math.pow(2, _rangeObj.mult);
@@ -394,7 +390,7 @@ function getSingleFreq(eTNoteConfig: ETNoteConfig): number | boolean {
   if (eTNoteConfig.mode === EQ_TEMP_STR) {
     _note = getEqTempNote(eTNoteConfig, _up);
   } else {
-    _note = getJustIntNote(eTNoteConfig, _up);
+    _note = getJustIntNote(eTNoteConfig, _up, justTuningSystems);
   }
   return _note;
 }
@@ -425,11 +421,7 @@ function getNotesFromIntervals(pConfig: PConfigObj): Array<number> {
   const _intervalStartIndex = pConfig.intervalStartIndex;
   let _newNote;
   for (let i = 0; i < pConfig.loopLength; i++) {
-    // __PROD__ && console.log('note ' + i + ' ' + pConfig.type);
-    // __PROD__ && console.log('scaleInterval', pConfig.scaleIntervals[_intervalStartIndex]);
-    // __PROD__ && console.log('intervaloffset ' + _intervalStartIndex + ' centreNote Index ' + pConfig.rootNote);
     const finalIndex = pConfig.scaleIntervals[_intervalStartIndex] + pConfig.rootNote;
-    // __PROD__ && console.log('final highest Index', finalIndex);
     _newNote = getSingleFreq({
       startFreq: pConfig.startFreq,
       numSemitones: pConfig.numSemitones,
@@ -524,10 +516,11 @@ function getFreqs(msConfig: object): Array | boolean {
 }
 
 export default {
-  getFreqs: getFreqs,
-  augmentNumArray: augmentNumArray,
-  getSingleFreq: getSingleFreq,
-  getJustIntNote: getJustIntNote,
-  getAllOctaveJustIntervals: getAllOctaveJustIntervals,
-  CHROMATIC_SCALE: CHROMATIC_SCALE,
+  getFreqs,
+  augmentNumArray,
+  getSingleFreq,
+  getJustIntNote,
+  getAllOctaveJustIntervals,
+  justTuningSystems,
+  CHROMATIC_SCALE,
 };

@@ -16,7 +16,7 @@ var scaleConfigJustIntOpts = {
   startFreq: 440,
   numSemitones: 12,
   rootNote: 0,
-  intervals: [16],
+  intervals: [-23, -17, 0, 1, 2, 3],
   mode: 'diatonic',
   type: 'sine'
 };

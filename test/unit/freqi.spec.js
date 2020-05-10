@@ -613,10 +613,17 @@ describe('getJustIntNote interval argument', function() {
       interval: 2,
       mode: 'pythagorean'
     };
+    this.badConfig = {
+      interval: 2,
+      mode: 'pythagorean typo'
+    };
   });
 
   it('should return a number when ETNoteConfig arg object contains valid interval and mode', function() {
-    expect(freqi.getSingleFreq(this.config)).to.be.a('number');
+    expect(freqi.getJustIntNote(this.config, false, freqi.justTuningSystems)).to.be.a('number');
+  });
+  it('should return false when ETNoteConfig arg object contains an invalid mode string', function() {
+    expect(freqi.getJustIntNote(this.badConfig, false, freqi.justTuningSystems)).to.be.false;
   });
 });
 
