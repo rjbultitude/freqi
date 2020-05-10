@@ -6,9 +6,19 @@ const __PROD__ = process.env.NODE_ENV !== 'test';
 
 // Constants
 const CHROMATIC_SCALE: Array<string> = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-const PYTHAGOREAN: Array<Array<number>> = [[1,1], [256,243], [9,8], [32,27], [81,64], [4,3], [729,512], [3,2], [128,81], [27,16], [16,9], [243,128]];
-const EQTEMP_STR = 'eqTemp';
-const JUSTINT_STR = 'justInt';
+const HEPTATONIC_SCALE: Array<string> = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+const PYTHAGOREAN_RATIOS: Array<Array<number>> = [[1,1], [256,243], [9,8], [32,27], [81,64], [4,3], [729,512], [3,2], [128,81], [27,16], [16,9], [243,128]];
+const FIVE_LIMIT_RATIOS: Array<Array<number>> = [[1,1], [16,15], [9,8], [6,5], [5,4], [4,3], [64,45], [3,2], [8,5], [5,3], [9,5], [15,8]];
+const DIATONIC_RATIOS: Array<Array<number>> = [[1,1], [9,8], [5,4], [4,3], [3,2], [5,3], [15,8]];
+const DIATONIC_INDIAN_RATIOS: Array<Array<number>> = [[1,1], [9,8], [5,4], [4,3], [3,2], [27,16], [15,8]];
+const TWENTY_TWO_SHRUTI_RATIOS: Array<Array<number>> = [[1,1], [256,243], [16,15], [10,9], [9,8], [32,27], [6,5], [5,4], [81,64], [4,3], [27,20], [45,32], [729,512], [3,2], [128,81], [8,5], [5,3], [27,16], [16,9], [9,5], [15,8], [243,128]];
+const EQ_TEMP_STR = 'eqTemp';
+const JUST_INT_STR = 'justInt';
+const PYTHAGOREAN_STR = 'pythagorean';
+const FIVE_LIMIT_STR = 'fiveLimit';
+const DIATONIC_STR = 'diatonic';
+const DIATONIC_INDIAN_STR = 'diatonicIndian';
+const TWENTY_TWO_SHRUTI_STR = '22Shrutis';
 
 interface UserConfigObj {
   intervals: Array<number>;
@@ -261,7 +271,7 @@ function GetFreqsConfig(configObj: UserConfigObj) {
   // The number of times we want to start from the beginning of the intervals arr again
   this.repeatMultiple = configObj.repeatMultiple === undefined ? 0 : configObj.repeatMultiple;
   // Musical tuning mode
-  this.mode = configObj.mode === undefined ? EQTEMP_STR : configObj.mode;
+  this.mode = configObj.mode === undefined ? EQ_TEMP_STR : configObj.mode;
   // For debugging
   this.type = configObj.type || 'unknown';
 
@@ -284,14 +294,14 @@ function GetFreqsConfig(configObj: UserConfigObj) {
 // Handle the Pythagorian array,
 // which has a fixed length
 // indeces are derived by subtracting octaves
-function getIntervalAndMult(interval: number): object {
+function getAllOctaveJustIntervals(interval: number, justIntervalsArr): object {
   const _intervalAbs = Math.abs(interval);
-  const _mult = _intervalAbs / PYTHAGOREAN.length;
+  const _mult = _intervalAbs / justIntervalsArr.length;
   const _multFloor = Math.floor(_mult);
-  const _inRangeIndex = _intervalAbs - (_multFloor * PYTHAGOREAN.length);
-  const _negIndex = PYTHAGOREAN.length - _inRangeIndex;
+  const _inRangeIndex = _intervalAbs - (_multFloor * justIntervalsArr.length);
+  const _negIndex = justIntervalsArr.length - _inRangeIndex;
   let _multF;
-  if (_intervalAbs % PYTHAGOREAN.length === 0) {
+  if (_intervalAbs % justIntervalsArr.length === 0) {
     return {
       mult: _mult,
       rangeInterval: 0
@@ -299,7 +309,7 @@ function getIntervalAndMult(interval: number): object {
   }
   let _newInterval;
   if (interval >= 0) {
-    _newInterval = interval - (_multFloor * PYTHAGOREAN.length);
+    _newInterval = interval - (_multFloor * justIntervalsArr.length);
     _multF = _multFloor;
   } else {
     _newInterval = _negIndex;
@@ -319,13 +329,30 @@ function getEqTempNote(eTNoteConfig: ETNoteConfig, _up): number {
   return eTNoteConfig.startFreq / Math.pow(2, Math.abs(eTNoteConfig.interval) / eTNoteConfig.numSemitones);
 }
 
+function getJustIntervalsType(mode: string): Array {
+  switch (mode) {
+  case PYTHAGOREAN_STR:
+    return PYTHAGOREAN_RATIOS;
+  case DIATONIC_STR:
+    return DIATONIC_RATIOS;
+  case FIVE_LIMIT_STR:
+    return FIVE_LIMIT_RATIOS;
+  case DIATONIC_INDIAN_STR:
+    return DIATONIC_INDIAN_RATIOS;
+  case TWENTY_TWO_SHRUTI_STR:
+    return TWENTY_TWO_SHRUTI_RATIOS;
+  default:
+    console.warn('No mode received');
+  }
+}
+
 function getJustIntNote(eTNoteConfig: ETNoteConfig, _up): number {
-  const _rangeObj = getIntervalAndMult(eTNoteConfig.interval);
-  const _ratioFraction = PYTHAGOREAN[_rangeObj.rangeInterval][0] / PYTHAGOREAN[_rangeObj.rangeInterval][1];
+  const _justIntervalsArr = getJustIntervalsType(eTNoteConfig.mode);
+  const _rangeObj = getAllOctaveJustIntervals(eTNoteConfig.interval, _justIntervalsArr);
+  const _ratioFraction = _justIntervalsArr[_rangeObj.rangeInterval][0] / _justIntervalsArr[_rangeObj.rangeInterval][1];
   const _multiplier = Math.pow(2, _rangeObj.mult);
   const _noteVal = eTNoteConfig.startFreq * _ratioFraction;
-  console.log('PYTHAGOREAN[_rangeObj.rangeInterval]', PYTHAGOREAN[_rangeObj.rangeInterval]);
-  if (_rangeObj.rangeInterval > PYTHAGOREAN.length) {
+  if (_rangeObj.rangeInterval > _justIntervalsArr.length) {
     console.error('rangeInterval out of range');
   }
   if (_up) {
@@ -353,16 +380,11 @@ function getSingleFreq(eTNoteConfig: ETNoteConfig): number | boolean {
   }
   const _intervalIsPos = eTNoteConfig.interval >= 0;
   const _up = eTNoteConfig.upwardsScale === undefined ? _intervalIsPos : eTNoteConfig.upwardsScale;
-  const _note = getEqTempNote(eTNoteConfig, _up);
-  if (eTNoteConfig.mode === EQTEMP_STR) {
+  let _note;
+  if (eTNoteConfig.mode === EQ_TEMP_STR) {
     _note = getEqTempNote(eTNoteConfig, _up);
-  } else if (eTNoteConfig.mode === JUSTINT_STR) {
-    _note = getJustIntNote(eTNoteConfig, _up);
   } else {
-    if (__PROD__) {
-      console.warn('No mode set');
-    }
-    return false;
+    _note = getJustIntNote(eTNoteConfig, _up);
   }
   return _note;
 }
