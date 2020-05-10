@@ -92,15 +92,15 @@ describe('getFreqs return array length', function() {
 
 describe('getFreqs startFreq argument', function() {
   beforeEach(function() {
-    this.randomStartFreq = getRandomInt(0, 10000);
-    this.randomNegStartFreq = -Math.abs(getRandomInt(0, 180));
+    this.startFreq = 480;
+    this.negStartFreq = -220;
     this.posConfig = {
-      startFreq: this.randomStartFreq,
+      startFreq: this.startFreq,
       numSemitones: 12,
       intervals: [-5, 0, 7]
     };
     this.negConfig = {
-      startFreq: this.randomNegStartFreq,
+      startFreq: this.negStartFreq,
       numSemitones: 12,
       intervals: [-5, 0, 7]
     };
@@ -135,16 +135,16 @@ describe('getFreqs startFreq argument', function() {
 
 describe('getFreqs numSemitones argument', function() {
   beforeEach(function() {
-      this.randomNumSemitones = getRandomInt(1, 100);
-      this.randomNegNumSemitones = -Math.abs(getRandomInt(1, 100));
+      this.numSemitones = 40;
+      this.negNumSemitones = -20;
       this.posConfig = {
         startFreq: 440,
-        numSemitones: this.randomNumSemitones,
+        numSemitones: this.numSemitones,
         intervals: [-5, 0, 7]
       };
       this.negConfig = {
         startFreq: 440,
-        numSemitones: this.randomNegNumSemitones,
+        numSemitones: this.negNumSemitones,
         intervals: [-5, 0, 7]
       };
       this.nanConfig = {
@@ -187,9 +187,9 @@ describe('getFreqs numSemitones argument', function() {
 
 describe('getFreqs intervals argument', function() {
   beforeEach(function() {
-    this.randomInterval = getRandomInt(0, 100);
-    this.randomNegInterval = -Math.abs(getRandomInt(0, 100));
-    this.intervals = [this.randomInterval, this.randomNegInterval];
+    this.interval = 40;
+    this.negInterval = -20;
+    this.intervals = [this.interval, this.negInterval];
     this.config = {
       startFreq: 440,
       numSemitones: 12,
@@ -439,23 +439,56 @@ describe('augmentNumArray repeatMultiple argument', function() {
 
 /**
  * ---------------------
+ * addMissingNotesFromInterval tests
+ * ---------------------
+ */
+
+describe('addMissingNotesFromInterval', function() {
+  beforeEach(function() {
+    this.largeConfig = {
+      intervalStartIndex: 2,
+      numNotes: 5,
+      scaleIntervals: [3, 5, 12],
+      amountToAdd: 0,
+      repeatMultiple: 1
+    };
+    this.smallConfig = {
+      intervalStartIndex: 0,
+      numNotes: 1,
+      scaleIntervals: [3, 5, 12],
+      amountToAdd: 0,
+      repeatMultiple: 1
+    };
+  });
+  it('should return scaleIntervals array if numNotes is smaller than scaleIntervals length plus intervalStartIndex', function() {
+    expect(freqi.addMissingNotesFromInterval(this.smallConfig)).to.deep.equal([3, 5, 12]);
+  });
+  it('should return array twice the length of scaleIntervals plus one if numNotes is larger than scaleIntervals length plus intervalStartIndex', function() {
+    expect(freqi.addMissingNotesFromInterval(this.largeConfig).length).to.equal(7);
+  });
+});
+
+
+
+/**
+ * ---------------------
  * getSingleFreq tests
  * ---------------------
  */
 
 describe('getSingleFreq startFreq argument', function() {
   beforeEach(function() {
-    this.randomStartFreq = getRandomInt(0, 10000);
-    this.randomNegStartFreq = -Math.abs(getRandomInt(0, 180));
+    this.startFreq = 440;
+    this.negStartFreq = -220;
     this.posConfig = {
-        startFreq: this.randomStartFreq,
+        startFreq: this.startFreq,
         numSemitones: 12,
         interval: 0,
         upwardsScale: true,
         mode: 'eqTemp'
     };
     this.negConfig = {
-        startFreq: this.randomNegStartFreq,
+        startFreq: this.negStartFreq,
         numSemitones: 12,
         interval: 0,
         upwardsScale: true,
@@ -507,18 +540,18 @@ describe('getSingleFreq startFreq argument', function() {
 
 describe('getSingleFreq numSemitones argument', function() {
   beforeEach(function() {
-    this.randomNumSemitones = getRandomInt(1, 100);
-    this.randomNegNumSemitones = -Math.abs(getRandomInt(1, 100));
+    this.numSemitones = 40;
+    this.negNumSemitones = -20;
     this.posConfig = {
       startFreq: 400,
-      numSemitones: this.randomNumSemitones,
+      numSemitones: this.numSemitones,
       interval: 0,
       upwardsScale: true,
       mode: 'eqTemp'
     };
     this.negConfig = {
       startFreq: 440,
-      numSemitones: this.randomNegNumSemitones,
+      numSemitones: this.negNumSemitones,
       interval: 0,
       upwardsScale: true,
       mode: 'eqTemp'
@@ -558,19 +591,19 @@ describe('getSingleFreq numSemitones argument', function() {
 
 describe('getSingleFreq interval argument', function() {
   beforeEach(function() {
-    this.randomInterval = getRandomInt(0, 100);
-    this.randomNegInterval = -Math.abs(getRandomInt(0, 100));
+    this.interval = 40;
+    this.negInterval = -20;
     this.posConfig = {
       startFreq: 400,
       numSemitones: 12,
-      interval: this.randomInterval,
+      interval: this.interval,
       upwardsScale: true,
       mode: 'eqTemp'
     };
     this.negConfig = {
       startFreq: 440,
       numSemitones: 12,
-      interval: this.randomNegInterval,
+      interval: this.negInterval,
       upwardsScale: true,
       mode: 'eqTemp'
     };
@@ -607,6 +640,12 @@ describe('getSingleFreq interval argument', function() {
   });
 });
 
+/**
+ * ---------------------
+ * getJustIntNote tests
+ * ---------------------
+ */
+
 describe('getJustIntNote interval argument', function() {
   beforeEach(function() {
     this.config = {
@@ -626,6 +665,12 @@ describe('getJustIntNote interval argument', function() {
     expect(freqi.getJustIntNote(this.badConfig, false, freqi.justTuningSystems)).to.be.false;
   });
 });
+
+/**
+ * ---------------------
+ * getAllOctaveJustIntervals tests
+ * ---------------------
+ */
 
 describe('getAllOctaveJustIntervals mult return value', function() {
   beforeEach(function() {

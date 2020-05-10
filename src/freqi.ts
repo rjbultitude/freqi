@@ -1,4 +1,3 @@
-const __PROD__ = process.env.NODE_ENV !== 'test';
 /*
   By Richard Bultitude
   github.com/rjbultitude
@@ -119,17 +118,13 @@ function augmentNumArray(augArrConfig: AugArrConfig): Array<number> {
   try {
     checkAugmentNumArrayConfigTypes(augArrConfig);
   } catch (e) {
-    if (__PROD__) {
-      console.error(e);
-    }
+    console.error(e);
     return [];
   }
   try {
     checkAugmentNumArrayConfigForNegs(augArrConfig);
   } catch (e) {
-    if (__PROD__) {
-      console.error(e);
-    }
+    console.error(e);
     return [];
   }
   // begin fn
@@ -371,17 +366,13 @@ function getSingleFreq(eTNoteConfig: ETNoteConfig): number | boolean {
   try {
     checkGetSingleFreqConfigDataTypes(eTNoteConfig);
   } catch (e) {
-    if (__PROD__) {
-      console.error(e);
-    }
+    console.error(e);
     return false;
   }
   try {
     checkGetSingleFreqConfigForNegs(eTNoteConfig);
   } catch (e) {
-    if (__PROD__) {
-      console.error(e);
-    }
+    console.error(e);
     return false;
   }
   const _intervalIsPos = eTNoteConfig.interval >= 0;
@@ -431,7 +422,7 @@ function getNotesFromIntervals(pConfig: PConfigObj): Array<number> {
     // Error check
     if (_newNote !== undefined || Number.isNaN(_newNote) === false) {
       _scaleArray.push(_newNote);
-    } else if (__PROD__) {
+    } else {
       console.error('undefined or NaN note');
     }
     _intervalStartIndex += 1;
@@ -449,9 +440,7 @@ function getFreqs(msConfig: object): Array | boolean {
   let _validConfig;
   // Check config exists
   if (typeof msConfig !== 'object') {
-    if (__PROD__) {
-      console.error('Musical Scale Config should be an object');
-    }
+    console.error('Musical Scale Config should be an object');
   // Check and fix undefined
   } else {
     _validConfig = new GetFreqsConfig(msConfig);
@@ -459,9 +448,7 @@ function getFreqs(msConfig: object): Array | boolean {
   try {
     checkGetFreqsIntervalsProp(_validConfig.intervals);
   } catch (e) {
-    if (__PROD__) {
-      console.error(e);
-    }
+    console.error(e);
     return false;
   }
   // Ensure numNotes is set
@@ -472,18 +459,14 @@ function getFreqs(msConfig: object): Array | boolean {
   try {
     checkGetFreqsNumericDataTypes(msConfig);
   } catch (e) {
-    if (__PROD__) {
-      console.error('Check your config values are valid', e);
-    }
+    console.error('Check your config values are valid', e);
     return false;
   }
   // Check for negative numbers
   try {
     checkGetFreqsForZerosNegs(msConfig);
   } catch (e) {
-    if (__PROD__) {
-      console.error('Check your config values are valid', e);
-    }
+    console.error('Check your config values are valid', e);
     return false;
   }
   // Set vars
@@ -518,6 +501,7 @@ function getFreqs(msConfig: object): Array | boolean {
 export default {
   getFreqs,
   augmentNumArray,
+  addMissingNotesFromInterval,
   getSingleFreq,
   getJustIntNote,
   getAllOctaveJustIntervals,
