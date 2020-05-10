@@ -31,7 +31,7 @@
     "start": "cross-env NODE_ENV=dev && node server.js",
     "test": "npm-run-all test:unit",
     "test:unit": "cross-env NODE_ENV=test mocha --env.dev",
-    "test:coverage": "nyc --reporter=lcov --reporter=text --all --exclude \"./demo\" npm run test",
+    "test:coverage": "nyc npm run test",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint --fix .ts"
   },

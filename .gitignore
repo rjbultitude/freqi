@@ -30,6 +30,7 @@ demo/freqi-demo.js
 
 # Reports
 coverage/
+.nyc_output
 
 # JavaScript
 dist/
