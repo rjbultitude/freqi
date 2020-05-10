@@ -5,6 +5,7 @@
 var mocha = require('mocha');
 var expect = require('chai').expect;
 var freqi = require('../../lib/freqi');
+var getAllOctaveJustIntervals = require('../../lib/freqi').getAllOctaveJustIntervals;
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -607,5 +608,24 @@ describe('getSingleFreq interval argument', function() {
 
   it('should return false when NaN is generated', function() {
     expect(freqi.getSingleFreq(this.nanConfig)).to.be.false;
+  });
+});
+
+describe('getAllOctaveJustIntervals', function() {
+  beforeEach(function() {
+    this.justIntArr = [[1,1],[3,2],[4,3],[5,4],[16,9]];
+  });
+
+  it('should return mult 0 when interval argument is within the range of array indeces', function() {
+    expect(freqi.getAllOctaveJustIntervals(2, this.justIntArr).mult).to.equal(0);
+  });
+  it('should return mult 1 when interval argument is within the next multiple of the array length', function() {
+    expect(freqi.getAllOctaveJustIntervals(6, this.justIntArr).mult).to.equal(1);
+  });
+  it('should return mult 2 when interval argument is double the array length', function() {
+    expect(freqi.getAllOctaveJustIntervals(10, this.justIntArr).mult).to.equal(2);
+  });
+  it('should return mult 2 when interval argument is between double and treble the array length', function() {
+    expect(freqi.getAllOctaveJustIntervals(13, this.justIntArr).mult).to.equal(2);
   });
 });

@@ -13,7 +13,6 @@ const DIATONIC_RATIOS: Array<Array<number>> = [[1,1], [9,8], [5,4], [4,3], [3,2]
 const DIATONIC_INDIAN_RATIOS: Array<Array<number>> = [[1,1], [9,8], [5,4], [4,3], [3,2], [27,16], [15,8]];
 const TWENTY_TWO_SHRUTI_RATIOS: Array<Array<number>> = [[1,1], [256,243], [16,15], [10,9], [9,8], [32,27], [6,5], [5,4], [81,64], [4,3], [27,20], [45,32], [729,512], [3,2], [128,81], [8,5], [5,3], [27,16], [16,9], [9,5], [15,8], [243,128]];
 const EQ_TEMP_STR = 'eqTemp';
-const JUST_INT_STR = 'justInt';
 const PYTHAGOREAN_STR = 'pythagorean';
 const FIVE_LIMIT_STR = 'fiveLimit';
 const DIATONIC_STR = 'diatonic';
@@ -175,7 +174,7 @@ function isPropValid(prop, inValidKeys): boolean {
  * ------------
  */
 
-function checkGetSingleFreqConfigForNegs(dataObj) {
+function checkGetSingleFreqConfigForNegs(dataObj): boolean {
   const invalidKeys = ['interval', 'upwardsScale', 'mode'];
   for (const prop in dataObj) {
     if (isPropValid(prop, invalidKeys)) {
@@ -184,6 +183,7 @@ function checkGetSingleFreqConfigForNegs(dataObj) {
       }
     }
   }
+  return true;
 }
 
 function checkGetSingleFreqConfigDataTypes(dataObj: ETNoteConfig): boolean {
@@ -211,7 +211,7 @@ function checkGetSingleFreqConfigDataTypes(dataObj: ETNoteConfig): boolean {
 * ------------
 */
 
-function checkGetFreqsForZerosNegs(data) {
+function checkGetFreqsForZerosNegs(data): boolean {
   const invalidKeys = ['intervals', 'type', 'rootNote', 'mode'];
   Object.keys(data).forEach(function (prop) {
     if (isPropValid(prop, invalidKeys)) {
@@ -223,9 +223,10 @@ function checkGetFreqsForZerosNegs(data) {
       }
     }
   });
+  return true;
 }
 
-function checkGetFreqsNumericDataTypes(dataObj) {
+function checkGetFreqsNumericDataTypes(dataObj): boolean {
   Object.keys(dataObj).forEach(function (prop) {
     // Check numeric values
     if (prop !== 'type' && prop !== 'intervals' && prop !== 'mode') {
@@ -237,7 +238,7 @@ function checkGetFreqsNumericDataTypes(dataObj) {
   return true;
 }
 
-function checkGetFreqsIntervalsProp(intervals: Array<number>) {
+function checkGetFreqsIntervalsProp(intervals: Array<number>): boolean {
   if (Array.isArray(intervals) !== true) {
     throw new TypeError('intervals is not an array');
   }
@@ -249,6 +250,7 @@ function checkGetFreqsIntervalsProp(intervals: Array<number>) {
       throw new TypeError('intervals is not an array of numbers');
     }
   }
+  return true;
 }
 
 /**
@@ -294,7 +296,7 @@ function GetFreqsConfig(configObj: UserConfigObj) {
 // Handle the Pythagorian array,
 // which has a fixed length
 // indeces are derived by subtracting octaves
-function getAllOctaveJustIntervals(interval: number, justIntervalsArr): object {
+function getAllOctaveJustIntervals(interval: number, justIntervalsArr: Array): object {
   const _intervalAbs = Math.abs(interval);
   const _mult = _intervalAbs / justIntervalsArr.length;
   const _multFloor = Math.floor(_mult);
@@ -308,7 +310,8 @@ function getAllOctaveJustIntervals(interval: number, justIntervalsArr): object {
     }
   }
   let _newInterval;
-  if (interval >= 0) {
+  const _isPos = interval >= 0;
+  if (_isPos) {
     _newInterval = interval - (_multFloor * justIntervalsArr.length);
     _multF = _multFloor;
   } else {
@@ -513,5 +516,7 @@ export default {
   getFreqs: getFreqs,
   augmentNumArray: augmentNumArray,
   getSingleFreq: getSingleFreq,
+  getJustIntNote: getJustIntNote,
+  getAllOctaveJustIntervals: getAllOctaveJustIntervals,
   CHROMATIC_SCALE: CHROMATIC_SCALE,
 };
