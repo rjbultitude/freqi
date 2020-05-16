@@ -9,10 +9,11 @@ A javascript api for generating frequencies for use with the web audio API
 
 This package aims to:
 
-* Provide a simple API for creating sets of frequencies from intervals
+* Provide a simple API for creating sets of frequencies from numeric intervals
 * Return actual sonic frequencies in Hz or relative frequencies for use with audio files
-* Return a set of frequencies of any length
-* Allow for any number of semitones per octave
+* NEW: Return frequencies from different tuning systems
+* Allow for any number of semitones per octave - Equal Temperament mode only
+* Return an array of frequencies of any length
 * Provide a way of creating frequencies from within the intervals
 * Handle bad data
 
@@ -20,14 +21,12 @@ What it doesn't do:
 
 * Does not allow for input of notes as letters
 * Does not allow for input of chords by name
+* It is not a sequencer or audio processor
 
 ## Dependencies
 
-This module has _no_ dependencies, though dependencies for the demo were mistakenly listed in pre 1.0.1 versions.
-
-## Release notes
-
-The first major release (version 1.0.0) included one breaking change whereby `inversionStartNote` was changed to `intervalStartIndex` to better express its purpose. If you're not explicitly using this property in your app you should be able to safely upgrade to the latest version.
+This module has _no_ dependencies. 
+Please note that dependencies for the demo were mistakenly listed in pre-1.0.1 versions.
 
 ## Demo
 
@@ -68,7 +67,17 @@ or for CommonJS loaders (such as [Browserify](http://browserify.org/)) use
 
 `startFreq` can be a frequency in Hz, such as `440` (for the note A) or a relative frequency such `1` which is useful for playing back audio files, such as MP3s or OGGs, where `1` is the original playback rate. 440 is the default value.
 
-Optionally, you can pass in a custom number of semitones. The default is `12`, a western chromatic scale, but you could pass in 19 for a non-western scale - this can produce very interesting results!
+**NEW**
+Freqi now supports Just Intonation tuning systems. By default it will use equal temperament, but to use a Just tuning system set the `mode` to one of the following:
+* `pythagorean`
+* `fiveLimit`
+* `diatonic`
+* `diatonicIndian`
+* `twentyTwoShrutis`
+Once in one of these modes most other conig params will have no effect as they are fixed scale systems.
+
+**Optional Params**
+You can pass in a custom number of semitones. The default is `12`, a western chromatic scale, but you could pass in 19 for a non-western scale - this can produce very interesting results!
 
 If you are using **Freqi** to generate multiple sequences of notes you can offset the root note using the `rootNote` property. A value of `2` for example will pitch the provided intervals up by two semitones.
 
@@ -78,12 +87,13 @@ Following on from the above, by using `numNotes`, a larger or smaller number of 
 
 ### Mandatory properties:
 
- * startFreq : \[number\]
  * intervals : \[array\] // e.g. [0, 3, 5]
 
 ### Optional properties
 
- * numSemitones : \[number\]
+ * startFreq : \[number\] // e.g. 440
+ * numSemitones : \[number\] // e.g. 19
+ * mode: \[string\] // `justInt`, `pythagorean`, `diatonic`, `fiveLimit`, `diatonicIndian`, `twentyTwoShrutis`
  * rootNote : \[number\]
  * intervalStartIndex : \[number\]
 
@@ -93,6 +103,12 @@ Following on from the above, by using `numNotes`, a larger or smaller number of 
  * amountToAdd : \[number\] // 12 if you want to go up an octave;
  * type : \[string\] // for debugging;
 
+## Release notes
+
+1.1.0 As described above, 1.1.0 supports mutliple tuning systems. The source has been refactored to TypeScript and test coverage has been improved.
+
+1.0.0 included one breaking change whereby `inversionStartNote` was changed to `intervalStartIndex` to better express its purpose. If you're not explicitly using this property in your app you should be able to safely upgrade to the latest version.
+
 ## Development
 
 The library is written in TypeScript. Rollup has been used as the bundler to ensure backwards compatibility - there's an issue with how TS publishes UMD modules.
@@ -101,10 +117,3 @@ Mocha is used as the testing framework.
 
 Browserify is used to build the demo.
 
-## Plans
-
-In a later version it will be possible to generate musical scales that use just intonation rather than only equal temperament.
-
-Also, it will be possible to pass in note letters, such as `C#`.
-
-Likes, shares, comments, suggestions and collaborators welcome.
