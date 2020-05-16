@@ -7,9 +7,9 @@ var scaleConfigAllOpts = {
   numNotes: 8,
   inversionStartNote: 0,
   rootNote: 0,
-  intervals: [-12, 0, 12, 7],
+  intervals: [-3, 0, 5, 7],
   amountToAdd: 12,
-  type: 'sine'
+  type: 'some useful description'
 };
 
 var scaleConfigJustIntOpts = {
@@ -17,17 +17,16 @@ var scaleConfigJustIntOpts = {
   numSemitones: 12,
   rootNote: 0,
   intervals: [-23, -17, 0, 1, 2, 3],
-  mode: 'diatonic',
-  type: 'sine'
+  mode: 'diatonic'
 };
 
 var scaleConfigMandatoryOpts = {
-  intervals: [0, 3, 5]
+  intervals: [-3, 0, 5, 7]
 };
 
-//var scaleFrequencies = freqi.getFreqs(scaleConfigMandatoryOpts);
-// var scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
-var scaleFrequencies = freqi.getFreqs(scaleConfigJustIntOpts);
+var scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
+// var scaleFrequencies = freqi.getFreqs(scaleConfigMandatoryOpts);
+// var scaleFrequencies = freqi.getFreqs(scaleConfigJustIntOpts);
 console.log('scaleFrequencies', scaleFrequencies);
 
 var playBtn = document.getElementById('play');
@@ -39,6 +38,7 @@ var index = 0;
 // define audio context
 var context = new (window.AudioContext || window.webkitAudioContext)();
 var oscillator = context.createOscillator();
+oscillator.start();
 var myInterval;
 
 function playSine(freq) {
@@ -64,7 +64,6 @@ function stop() {
 }
 
 function play(scale, noteLength) {
-  oscillator.start();
   playSineCb(scale);
   myInterval = setInterval(function() {
     playSineCb(scale);
@@ -74,9 +73,9 @@ function play(scale, noteLength) {
 playBtn.addEventListener('click', function(e) {
   e.preventDefault();
   if (!connected) {
-    //play(myScale.scale, 1000);
     play(scaleFrequencies, 1000);
   }
+  console.log('connected', connected);
 });
 
 stopBtn.addEventListener('click', function(e) {
@@ -84,4 +83,5 @@ stopBtn.addEventListener('click', function(e) {
   if (connected) {
     stop();
   }
+  console.log('connected', connected);
 });
