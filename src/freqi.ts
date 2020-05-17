@@ -52,7 +52,6 @@ interface AugArrConfig {
 // Constants
 const EQ_TEMP_STR = 'eqTemp';
 const CHROMATIC_SCALE: Array<string> = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-const HEPTATONIC_SCALE: Array<string> = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
 const justTuningSystems: JustTuningSystems = {
   pythagorean: [[1,1], [256,243], [9,8], [32,27], [81,64], [4,3], [729,512], [3,2], [128,81], [27,16], [16,9], [243,128]],
   fiveLimit: [[1,1], [16,15], [9,8], [6,5], [5,4], [4,3], [64,45], [3,2], [8,5], [5,3], [9,5], [15,8]],
