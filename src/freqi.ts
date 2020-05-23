@@ -290,6 +290,23 @@ function GetFreqsConfig(configObj: UserConfigObj) {
 }
 
 /**
+ * ------------
+ * Housekeeping
+ * ------------
+ */
+
+function getModes(): array {
+  const modes = [];
+  modes.push(EQ_TEMP_STR);
+  for (const key in justTuningSystems) {
+    if (Object.prototype.hasOwnProperty.call(justTuningSystems, key)) {
+      modes.push(key);
+    }
+  }
+  return modes;
+}
+
+/**
 * ------------
 * Main module functions
 * ------------
@@ -504,6 +521,7 @@ export default {
   getSingleFreq,
   getJustIntNote,
   getAllOctaveJustIntervals,
+  getModes,
   justTuningSystems,
   CHROMATIC_SCALE,
 };

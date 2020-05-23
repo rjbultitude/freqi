@@ -715,3 +715,10 @@ describe('getAllOctaveJustIntervals rangeInterval return value', function() {
     expect(freqi.getAllOctaveJustIntervals(-6, this.justIntArr).rangeInterval).to.equal(4);
   });
 });
+
+describe('getModes', function() {
+  it('should return an array the length of justTuningSystems plus the default (eqTemp)', function() {
+    const justTuningSystemsLength = Object.keys(freqi.justTuningSystems).length;
+    expect(freqi.getModes().length).to.equal(justTuningSystemsLength + 1);
+  });
+});
