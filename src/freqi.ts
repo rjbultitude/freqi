@@ -349,10 +349,16 @@ function getAllOctaveJustIntervals(interval: number, justIntervalsArr: Array): o
 }
 
 function getHSeriesNote(eTNoteConfig: ETNoteConfig, _up): number {
-  if (_up) {
-    return eTNoteConfig.startFreq * 1 / eTNoteConfig.interval;
+  let interval;
+  if (eTNoteConfig.interval === 0) {
+    interval = 1;
+  } else {
+    interval = eTNoteConfig.interval;
   }
-  return eTNoteConfig.startFreq / 1 / Math.abs(eTNoteConfig.interval);
+  if (_up) {
+    return eTNoteConfig.startFreq * interval;
+  }
+  return eTNoteConfig.startFreq / Math.abs(interval);
 }
 
 function getEqTempNote(eTNoteConfig: ETNoteConfig, _up): number {

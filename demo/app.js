@@ -1,7 +1,7 @@
 'use strict';
-var freqi = require('../lib/freqi');
+const freqi = require('../lib/freqi');
 
-var scaleConfigAllOpts = {
+const scaleConfigAllOpts = {
   startFreq: 440,
   numSemitones: 12,
   numNotes: 8,
@@ -12,7 +12,7 @@ var scaleConfigAllOpts = {
   type: 'some useful description'
 };
 
-var scaleConfigJustIntOpts = {
+const scaleConfigJustIntOpts = {
   startFreq: 440,
   numSemitones: 12,
   rootNote: 0,
@@ -20,26 +20,33 @@ var scaleConfigJustIntOpts = {
   mode: 'diatonic'
 };
 
-var scaleConfigMandatoryOpts = {
+const scaleConfigMandatoryOpts = {
   intervals: [-3, 0, 5, 7]
 };
 
-var scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
-// var scaleFrequencies = freqi.getFreqs(scaleConfigMandatoryOpts);
-// var scaleFrequencies = freqi.getFreqs(scaleConfigJustIntOpts);
+const scaleConfigHSeriesOpts = {
+  startFreq: 440,
+  intervals: [0, 1, 2, 3],
+  mode: 'hSeries'
+};
+
+// const scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigMandatoryOpts);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigJustIntOpts);
+const scaleFrequencies = freqi.getFreqs(scaleConfigHSeriesOpts);
 console.log('scaleFrequencies', scaleFrequencies);
 
-var playBtn = document.getElementById('play');
-var stopBtn = document.getElementById('stop');
-var connected = false;
+const playBtn = document.getElementById('play');
+const stopBtn = document.getElementById('stop');
+let connected = false;
 
-var index = 0;
+let index = 0;
 
 // define audio context
-var context = new (window.AudioContext || window.webkitAudioContext)();
-var oscillator = context.createOscillator();
+const context = new (window.AudioContext || window.webkitAudioContext)();
+const oscillator = context.createOscillator();
 oscillator.start();
-var myInterval;
+let myInterval;
 
 function playSine(freq) {
   oscillator.type = 'sine';

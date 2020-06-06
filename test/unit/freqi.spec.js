@@ -668,10 +668,26 @@ describe('getHSeriesNote', function() {
       interval: -2,
       mode: 'hSeries'
     };
+    this.configZero = {
+      startFreq: 440,
+      interval: 0,
+      mode: 'hSeries'
+    };
+    this.configOne = {
+      startFreq: 440,
+      interval: 1,
+      mode: 'hSeries'
+    };
   });
 
   it('should return a number half of the start freq when interval is -2', function() {
     expect(freqi.getHSeriesNote(this.config, false)).to.equal(220);
+  });
+  it('should return the start freq if passed zero as the interval', function() {
+    expect(freqi.getHSeriesNote(this.configZero, false)).to.equal(this.configZero.startFreq);
+  });
+  it('should return the start freq if passed one as the interval', function() {
+    expect(freqi.getHSeriesNote(this.configOne, false)).to.equal(this.configOne.startFreq);
   });
 });
 
