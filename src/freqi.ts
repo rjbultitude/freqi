@@ -51,6 +51,7 @@ interface AugArrConfig {
 
 // Constants
 const EQ_TEMP_STR = 'eqTemp';
+const H_SERIES_STR = 'hSeries';
 const CHROMATIC_SCALE: Array<string> = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 const justTuningSystems: JustTuningSystems = {
   pythagorean: [[1,1], [256,243], [9,8], [32,27], [81,64], [4,3], [729,512], [3,2], [128,81], [27,16], [16,9], [243,128]],
@@ -58,7 +59,7 @@ const justTuningSystems: JustTuningSystems = {
   diatonic: [[1,1], [9,8], [5,4], [4,3], [3,2], [5,3], [15,8]],
   diatonicIndian: [[1,1], [9,8], [5,4], [4,3], [3,2], [27,16], [15,8]],
   twentyTwoShrutis: [[1,1], [256,243], [16,15], [10,9], [9,8], [32,27], [6,5], [5,4], [81,64], [4,3], [27,20], [45,32], [729,512], [3,2], [128,81], [8,5], [5,3], [27,16], [16,9], [9,5], [15,8], [243,128]],
-  gioseffoZarlino: [[1,1], [25/24], [10,9], [9,8], [32,27], [6,5], [5,4], [4,3], [25,18], [45,32], [3,2], [25,16], [5,3], [16,9], [9,5], [15,8]]
+  gioseffoZarlino: [[1,1], [25,24], [10,9], [9,8], [32,27], [6,5], [5,4], [4,3], [25,18], [45,32], [3,2], [25,16], [5,3], [16,9], [9,5], [15,8]]
 };
 
 /**
@@ -330,6 +331,13 @@ function getAllOctaveJustIntervals(interval: number, justIntervalsArr: Array): o
   }
 }
 
+function getHSeriesNote(eTNoteConfig: ETNoteConfig, _up): number {
+  if (_up) {
+    return eTNoteConfig.startFreq * 1 / eTNoteConfig.interval;
+  }
+  return eTNoteConfig.startFreq / 1 / Math.abs(eTNoteConfig.interval);
+}
+
 function getEqTempNote(eTNoteConfig: ETNoteConfig, _up): number {
   if (_up) {
     return eTNoteConfig.startFreq * Math.pow(2, eTNoteConfig.interval / eTNoteConfig.numSemitones);
@@ -380,6 +388,8 @@ function getSingleFreq(eTNoteConfig: ETNoteConfig): number | boolean {
   let _note;
   if (eTNoteConfig.mode === EQ_TEMP_STR) {
     _note = getEqTempNote(eTNoteConfig, _up);
+  } else if (eTNoteConfig.mode === H_SERIES_STR) {
+    _note = getHSeriesNote(eTNoteConfig, _up);
   } else {
     _note = getJustIntNote(eTNoteConfig, _up, justTuningSystems);
   }
