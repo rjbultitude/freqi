@@ -531,6 +531,7 @@ export default {
   addMissingNotesFromInterval,
   getSingleFreq,
   getJustIntNote,
+  getHSeriesNote,
   getAllOctaveJustIntervals,
   getModes,
   justTuningSystems,

@@ -3,10 +3,6 @@ var mocha = require('mocha');
 var expect = require('chai').expect;
 var freqi = require('../../lib/freqi');
 
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 /**
  * ---------------------
  * getFreqs tests
@@ -239,10 +235,9 @@ describe('getFreqs intervals argument', function() {
 
 describe('augmentNumArray return value', function() {
   beforeEach(function() {
-    this.randomDifference = getRandomInt(1, 30);
     this.config = {
       originalArray: [0, 1, 2],
-      difference: this.randomDifference,
+      difference: 2,
       amountToAdd: 12,
       repeatMultiple: 0
     };
@@ -663,6 +658,20 @@ describe('getJustIntNote interval argument', function() {
   });
   it('should return false when ETNoteConfig arg object contains an invalid mode string', function() {
     expect(freqi.getJustIntNote(this.badConfig, false, freqi.justTuningSystems)).to.be.false;
+  });
+});
+
+describe('getHSeriesNote', function() {
+  beforeEach(function() {
+    this.config = {
+      startFreq: 440,
+      interval: -2,
+      mode: 'hSeries'
+    };
+  });
+
+  it('should return a number half of the start freq when interval is -2', function() {
+    expect(freqi.getHSeriesNote(this.config, false)).to.equal(220);
   });
 });
 
