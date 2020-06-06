@@ -25,8 +25,8 @@ const scaleConfigMandatoryOpts = {
 };
 
 const scaleConfigHSeriesOpts = {
-  startFreq: 440,
-  intervals: [0, 1, 2, 3],
+  startFreq: 1960,
+  intervals: [1, -2, -3, -4, -5],
   mode: 'hSeries'
 };
 

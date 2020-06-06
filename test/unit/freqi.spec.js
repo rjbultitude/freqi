@@ -643,9 +643,29 @@ describe('getSingleFreq interval argument', function() {
 
 describe('getJustIntNote interval argument', function() {
   beforeEach(function() {
-    this.config = {
+    this.configPythag = {
       interval: 2,
       mode: 'pythagorean'
+    };
+    this.configDiatonic = {
+      interval: 2,
+      mode: 'diatonic'
+    };
+    this.configFiveLimit = {
+      interval: 2,
+      mode: 'fiveLimit'
+    };
+    this.configIndDiatonic = {
+      interval: 2,
+      mode: 'diatonicIndian'
+    };
+    this.configIndTwentyTwo = {
+      interval: 2,
+      mode: 'twentyTwoShrutis'
+    };
+    this.configZarlino = {
+      interval: 2,
+      mode: 'gioseffoZarlino'
     };
     this.badConfig = {
       interval: 2,
@@ -654,7 +674,22 @@ describe('getJustIntNote interval argument', function() {
   });
 
   it('should return a number when ETNoteConfig arg object contains valid interval and mode', function() {
-    expect(freqi.getJustIntNote(this.config, false, freqi.justTuningSystems)).to.be.a('number');
+    expect(freqi.getJustIntNote(this.configPythag, false, freqi.justTuningSystems)).to.be.a('number');
+  });
+  it('should return a number when ETNoteConfig arg object contains mode: diatonic', function() {
+    expect(freqi.getJustIntNote(this.configDiatonic, false, freqi.justTuningSystems)).to.be.a('number');
+  });
+  it('should return a number when ETNoteConfig arg object contains mode: fiveLimit', function() {
+    expect(freqi.getJustIntNote(this.configFiveLimit, false, freqi.justTuningSystems)).to.be.a('number');
+  });
+  it('should return a number when ETNoteConfig arg object contains mode: diatonicIndian', function() {
+    expect(freqi.getJustIntNote(this.configIndDiatonic, false, freqi.justTuningSystems)).to.be.a('number');
+  });
+  it('should return a number when ETNoteConfig arg object contains mode: twentyTwoShrutis', function() {
+    expect(freqi.getJustIntNote(this.configIndTwentyTwo, false, freqi.justTuningSystems)).to.be.a('number');
+  });
+  it('should return a number when ETNoteConfig arg object contains mode: gioseffoZarlino', function() {
+    expect(freqi.getJustIntNote(this.configZarlino, false, freqi.justTuningSystems)).to.be.a('number');
   });
   it('should return false when ETNoteConfig arg object contains an invalid mode string', function() {
     expect(freqi.getJustIntNote(this.badConfig, false, freqi.justTuningSystems)).to.be.false;
