@@ -33,10 +33,10 @@ const scaleConfigHSeriesOpts = {
   mode: 'hSeries'
 };
 
-// const scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
+const scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigMandatoryOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigJustIntOpts);
-const scaleFrequencies = freqi.getFreqs(scaleConfigHSeriesOpts);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigHSeriesOpts);
 console.log('scaleFrequencies', scaleFrequencies);
 
 const playBtn = document.getElementById('play');
