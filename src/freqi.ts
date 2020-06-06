@@ -52,6 +52,7 @@ interface AugArrConfig {
 // Constants
 const EQ_TEMP_STR = 'eqTemp';
 const H_SERIES_STR = 'hSeries';
+const TRUE_PYTHAG = 'truePythag';
 const CHROMATIC_SCALE: Array<string> = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 const justTuningSystems: JustTuningSystems = {
   pythagorean: [[1,1], [256,243], [9,8], [32,27], [81,64], [4,3], [729,512], [3,2], [128,81], [27,16], [16,9], [243,128]],
@@ -349,6 +350,47 @@ function getAllOctaveJustIntervals(interval: number, justIntervalsArr: Array): o
   }
 }
 
+function multByFifth(number): number {
+  const upperFifthRatio = 3/2;
+  return number * upperFifthRatio;
+}
+
+function divByFifth(number): number {
+  const lowerFifthRatio = 2/3;
+  return number * lowerFifthRatio;
+}
+
+// TODO output correct order
+function getTruePythagNote(eTNoteConfig: ETNoteConfig, _up): number {
+  if (eTNoteConfig.interval === 0) {
+    return eTNoteConfig.startFreq;
+  }
+  if (_up) {
+    let noteFreq = multByFifth(eTNoteConfig.startFreq);
+    let prevNote = noteFreq;
+    for (let index = 1; index < eTNoteConfig.interval; index++) {
+      noteFreq = multByFifth(prevNote);
+      prevNote = noteFreq;
+      if (index % 2 !== 0) {
+        noteFreq = prevNote / 2;
+        prevNote = noteFreq;
+      }
+    }
+    return noteFreq;
+  }
+  let noteFreq = divByFifth(eTNoteConfig.startFreq);
+  let prevNote = noteFreq;
+  for (let index = 1; index < eTNoteConfig.interval; index++) {
+    noteFreq = divByFifth(prevNote);
+    prevNote = noteFreq;
+    if (index % 2 !== 0) {
+      noteFreq = prevNote * 2;
+      prevNote = noteFreq;
+    }
+  }
+  return noteFreq;
+}
+
 function getHSeriesNote(eTNoteConfig: ETNoteConfig, _up): number {
   let interval;
   if (eTNoteConfig.interval === 0) {
@@ -414,7 +456,10 @@ function getSingleFreq(eTNoteConfig: ETNoteConfig): number | boolean {
     _note = getEqTempNote(eTNoteConfig, _up);
   } else if (eTNoteConfig.mode === H_SERIES_STR) {
     _note = getHSeriesNote(eTNoteConfig, _up);
-  } else {
+  } else if (eTNoteConfig.mode === TRUE_PYTHAG) {
+    _note = getTruePythagNote(eTNoteConfig, _up);
+  }
+  else {
     _note = getJustIntNote(eTNoteConfig, _up, justTuningSystems);
   }
   return _note;
