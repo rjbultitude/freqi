@@ -300,6 +300,7 @@ function GetFreqsConfig(configObj: UserConfigObj) {
 function getModes(): array {
   const modes = [];
   modes.push(EQ_TEMP_STR);
+  modes.push(H_SERIES_STR);
   for (const key in justTuningSystems) {
     if (Object.prototype.hasOwnProperty.call(justTuningSystems, key)) {
       modes.push(key);

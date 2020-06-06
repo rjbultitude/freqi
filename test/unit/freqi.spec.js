@@ -777,8 +777,8 @@ describe('getAllOctaveJustIntervals rangeInterval return value', function() {
 });
 
 describe('getModes', function() {
-  it('should return an array the length of justTuningSystems plus the default (eqTemp)', function() {
+  it('should return an array the length of justTuningSystems plus the default (eqTemp) and the harmonic series', function() {
     const justTuningSystemsLength = Object.keys(freqi.justTuningSystems).length;
-    expect(freqi.getModes().length).to.equal(justTuningSystemsLength + 1);
+    expect(freqi.getModes().length).to.equal(justTuningSystemsLength + 2);
   });
 });

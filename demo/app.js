@@ -1,23 +1,26 @@
 'use strict';
 const freqi = require('../lib/freqi');
 
+const cNoteFreq =  261.6;
+const cMajorScale = [0, 2, 4, 5, 7, 9, 11];
+
 const scaleConfigAllOpts = {
-  startFreq: 440,
+  startFreq: cNoteFreq,
   numSemitones: 12,
   numNotes: 8,
   inversionStartNote: 0,
   rootNote: 0,
-  intervals: [-3, 0, 5, 7],
+  intervals: cMajorScale,
   amountToAdd: 12,
   type: 'some useful description'
 };
 
 const scaleConfigJustIntOpts = {
-  startFreq: 440,
+  startFreq: cNoteFreq,
   numSemitones: 12,
   rootNote: 0,
-  intervals: [-23, -17, 0, 1, 2, 3],
-  mode: 'diatonic'
+  intervals: cMajorScale,
+  mode: 'pythagorean'
 };
 
 const scaleConfigMandatoryOpts = {

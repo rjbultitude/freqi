@@ -74,9 +74,12 @@ Freqi now supports Just Intonation tuning systems. By default it will use equal 
 * `diatonic`
 * `diatonicIndian`
 * `twentyTwoShrutis`
+* `gioseffoZarlino`
 Once in one of these modes other config params, such as `numNotes`, will have no effect as they are fixed scale systems. 
 
-Technically speaking, these Just tuning systems are actually tempered as upper and lower octaves are acheived by increasing or decreasing their frequencies by a power of 2. However, the notes in the first octave of each tuning system use the correct ratios. The object containing the ratios for each system is exported as `justTuningSystems` should you need to view it.
+Technically speaking, these Just tuning systems are actually tempered as upper and lower octaves are acheived by increasing or decreasing their frequencies by a power of 2. However, the notes in the first octave of each tuning system use the correct ratios. The object containing the ratios for each system is exported as `justTuningSystems` should you need to view it. If you want to list all the keys use the method `getModes`.
+
+There is also a mode for the harmonic series `hSeries`, though in its raw state it's not particularly useful for making music, but may be of interest to music theorists.
 
 **Optional Params**
 You can pass in a custom number of semitones. The default is `12`, a western chromatic scale, but you could pass in 19 for a non-western scale - this can produce very interesting results!
