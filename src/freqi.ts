@@ -350,14 +350,27 @@ function getAllOctaveJustIntervals(interval: number, justIntervalsArr: Array): o
   }
 }
 
-function multByFifth(number): number {
+function raiseOrReduceByFifth(number: number, _up: boolean): number {
   const upperFifthRatio = 3/2;
-  return number * upperFifthRatio;
+  const lowerFifthRatio = 2/3;
+  if (_up) {
+    return number * upperFifthRatio;
+  }
+  return number * lowerFifthRatio;
 }
 
-function divByFifth(number): number {
-  const lowerFifthRatio = 2/3;
-  return number * lowerFifthRatio;
+function multOrDivide(_number: number, _mult: number, _up: boolean): number {
+  if (_up) {
+    return _number * _mult;
+  }
+  return _number / _mult;
+}
+
+function sortAscOrDesc(_arr: Array, _up: boolean): Array {
+  if (_up) {
+    return _arr.sort();
+  }
+  return _arr.sort();
 }
 
 // TODO output correct order
@@ -365,30 +378,21 @@ function getTruePythagNote(eTNoteConfig: ETNoteConfig, _up): number {
   if (eTNoteConfig.interval === 0) {
     return eTNoteConfig.startFreq;
   }
-  if (_up) {
-    let noteFreq = multByFifth(eTNoteConfig.startFreq);
-    let prevNote = noteFreq;
-    for (let index = 1; index < eTNoteConfig.interval; index++) {
-      noteFreq = multByFifth(prevNote);
-      prevNote = noteFreq;
-      if (index % 2 !== 0) {
-        noteFreq = prevNote / 2;
-        prevNote = noteFreq;
-      }
-    }
-    return noteFreq;
-  }
-  let noteFreq = divByFifth(eTNoteConfig.startFreq);
+  let noteFreq = raiseOrReduceByFifth(eTNoteConfig.startFreq, _up);
   let prevNote = noteFreq;
+  const noteArr = [];
   for (let index = 1; index < eTNoteConfig.interval; index++) {
-    noteFreq = divByFifth(prevNote);
+    noteFreq = raiseOrReduceByFifth(prevNote, _up);
     prevNote = noteFreq;
     if (index % 2 !== 0) {
-      noteFreq = prevNote * 2;
+      noteFreq = multOrDivide(prevNote, 2, _up);
       prevNote = noteFreq;
     }
+    noteArr.push(prevNote);
   }
-  return noteFreq;
+  noteArr = sortAscOrDesc(noteArr, _up);
+  const requiredNote = noteArr[noteArr.length - 1];
+  return requiredNote;
 }
 
 function getHSeriesNote(eTNoteConfig: ETNoteConfig, _up): number {
