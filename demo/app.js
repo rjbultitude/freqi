@@ -35,7 +35,7 @@ const scaleConfigHSeriesOpts = {
 
 const scaleConfigTruePythagOpts = {
   startFreq: cNoteFreq,
-  intervals: [0, -1, -2, -3, -4, -5],
+  intervals: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
   mode: 'truePythag'
 };
 
@@ -66,6 +66,7 @@ function playSine(freq) {
 }
 
 function playSineCb(scale) {
+  console.log(scale[index]);
   playSine(scale[index]);
   if (index >= scale.length - 1) {
     index = 0;
@@ -90,7 +91,7 @@ function play(scale, noteLength) {
 playBtn.addEventListener('click', function(e) {
   e.preventDefault();
   if (!connected) {
-    play(scaleFrequencies, 1000);
+    play(scaleFrequencies, 2000);
   }
   console.log('connected', connected);
 });

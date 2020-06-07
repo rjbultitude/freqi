@@ -321,14 +321,14 @@ function getModes(): array {
  * which may be out of range, and returns a valid (in-range) index
  * plus the number of times needed to multiply the array
  */
-function getAllOctaveJustIntervals(interval: number, justIntervalsArr: Array): object {
+function getAllOctaveJustIntervals(interval: number, justIntervalsArrLength: number): object {
   const _intervalAbs = Math.abs(interval);
-  const _mult = _intervalAbs / justIntervalsArr.length;
+  const _mult = _intervalAbs / justIntervalsArrLength;
   const _multFloor = Math.floor(_mult);
-  const _inRangeIndex = _intervalAbs - (_multFloor * justIntervalsArr.length);
-  const _negIndex = justIntervalsArr.length - _inRangeIndex;
+  const _inRangeIndex = _intervalAbs - (_multFloor * justIntervalsArrLength);
+  const _negIndex = justIntervalsArrLength - _inRangeIndex;
   let _multF;
-  if (_intervalAbs % justIntervalsArr.length === 0) {
+  if (_intervalAbs % justIntervalsArrLength === 0) {
     return {
       mult: _mult,
       rangeInterval: 0
@@ -337,7 +337,7 @@ function getAllOctaveJustIntervals(interval: number, justIntervalsArr: Array): o
   let _newInterval;
   const _isPos = interval >= 0;
   if (_isPos) {
-    _newInterval = interval - (_multFloor * justIntervalsArr.length);
+    _newInterval = interval - (_multFloor * justIntervalsArrLength);
     _multF = _multFloor;
   } else {
     _newInterval = _negIndex;
@@ -361,16 +361,20 @@ function raiseOrReduceByFifth(number: number, _up: boolean): number {
 
 function multOrDivide(_number: number, _mult: number, _up: boolean): number {
   if (_up) {
-    return _number * _mult;
+    return _number / _mult;
   }
-  return _number / _mult;
+  return _number * _mult;
 }
 
-function sortAscOrDesc(_arr: Array, _up: boolean): Array {
+function getCorrectIndex(interval: number, _up: boolean): Array {
   if (_up) {
-    return _arr.sort();
+    if (interval <= 3) {
+      return interval * 2;
+    } else if (interval <= 6) {
+      return;
+    }
   }
-  return _arr.sort();
+  return;
 }
 
 // TODO output correct order
@@ -381,18 +385,20 @@ function getTruePythagNote(eTNoteConfig: ETNoteConfig, _up): number {
   let noteFreq = raiseOrReduceByFifth(eTNoteConfig.startFreq, _up);
   let prevNote = noteFreq;
   const noteArr = [];
+  noteArr.push(noteFreq);
   for (let index = 1; index < eTNoteConfig.interval; index++) {
+    const inRangeInterval = getAllOctaveJustIntervals(index, 12).rangeInterval;
     noteFreq = raiseOrReduceByFifth(prevNote, _up);
     prevNote = noteFreq;
-    if (index % 2 !== 0) {
+    if (inRangeInterval < 6 && index % 2 !== 0 || inRangeInterval >= 6 && index % 2 === 0) {
       noteFreq = multOrDivide(prevNote, 2, _up);
       prevNote = noteFreq;
     }
-    noteArr.push(prevNote);
+    noteArr.push(noteFreq);
   }
-  noteArr = sortAscOrDesc(noteArr, _up);
-  const requiredNote = noteArr[noteArr.length - 1];
-  return requiredNote;
+  // noteArr = getCorrectIndex(eTNoteConfig.interval, _up);
+  // const requiredNote = noteArr[noteArr.length - 1];
+  return noteFreq;
 }
 
 function getHSeriesNote(eTNoteConfig: ETNoteConfig, _up): number {
@@ -426,7 +432,7 @@ function getJustIntNote(eTNoteConfig: ETNoteConfig, _up: boolean, justTuningSyst
     return false;
   }
   const _justIntervalsArr = justTuningSystems[eTNoteConfig.mode];
-  const _rangeObj = getAllOctaveJustIntervals(eTNoteConfig.interval, _justIntervalsArr);
+  const _rangeObj = getAllOctaveJustIntervals(eTNoteConfig.interval, _justIntervalsArr.length);
   const _ratioFraction = _justIntervalsArr[_rangeObj.rangeInterval][0] / _justIntervalsArr[_rangeObj.rangeInterval][1];
   const _multiplier = Math.pow(2, _rangeObj.mult);
   const _noteVal = eTNoteConfig.startFreq * _ratioFraction;
