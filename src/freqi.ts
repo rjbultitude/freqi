@@ -604,6 +604,7 @@ export default {
   getSingleFreq,
   getJustIntNote,
   getHSeriesNote,
+  getTruePythagNote,
   getAllOctaveJustIntervals,
   getModes,
   justTuningSystems,

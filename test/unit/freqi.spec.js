@@ -789,6 +789,32 @@ describe('getCorrectIndex', function() {
   });
 });
 
+describe('getTruePythagNote', function() {
+  beforeEach(function() {
+    this.config = {
+      startFreq: 261.6,
+      interval: 0
+    };
+    this.configGNote = {
+      startFreq: 261.6,
+      interval: 7
+    };
+    this.configLowerFNote = {
+      startFreq: 261.6,
+      interval: -7
+    };
+  });
+  it('should return the start freq if interval is zero', function() {
+    expect(freqi.getTruePythagNote(this.config, true)).to.equal(261.6);
+  });
+  it('should return the start freq * 1.5 if interval is seven', function() {
+    expect(freqi.getTruePythagNote(this.configGNote, true)).to.equal(261.6 * 1.5);
+  });
+  it('should return the start freq / 1.5 if interval is minus seven', function() {
+    expect(freqi.getTruePythagNote(this.configLowerFNote, false)).to.equal(261.6 / 1.5);
+  });
+});
+
 describe('getModes', function() {
   it('should return an array the length of justTuningSystems plus the default (eqTemp) and the harmonic series', function() {
     const justTuningSystemsLength = Object.keys(freqi.justTuningSystems).length;
