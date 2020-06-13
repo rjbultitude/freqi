@@ -49,6 +49,11 @@ interface AugArrConfig {
   amountToAdd?: number;
 }
 
+interface AllOctaveJustIntervals {
+  mult: number;
+  rangeInterval: number;
+}
+
 // Constants
 const EQ_TEMP_STR = 'eqTemp';
 const H_SERIES_STR = 'hSeries';
@@ -321,7 +326,7 @@ function getModes(): array {
  * which may be out of range, and returns a valid (in-range) index
  * plus the number of times needed to multiply the array
  */
-function getAllOctaveJustIntervals(interval: number, justIntervalsArrLength: number): object {
+function getAllOctaveJustIntervals(interval: number, justIntervalsArrLength: number): AllOctaveJustIntervals {
   const _intervalAbs = Math.abs(interval);
   const _mult = _intervalAbs / justIntervalsArrLength;
   const _multFloor = Math.floor(_mult);
@@ -366,38 +371,43 @@ function multOrDivide(_number: number, _mult: number, _up: boolean): number {
   return _number * _mult;
 }
 
-function getCorrectIndex(interval: number, _up: boolean): Array {
-  if (_up) {
-    if (interval <= 3) {
-      return interval * 2;
-    } else if (interval <= 6) {
-      return;
+function getCorrectIndex(interval: number, _up: boolean, notesInOctave: number, mult: number): number {
+  const step = 5;
+  const multOffset = _up ? mult : mult - 1;
+  const oct = multOffset * notesInOctave;
+  let result = notesInOctave;
+  let prevNum = result;
+  const actInterval = Math.abs(interval);
+  for (let index = 0; index < actInterval; index++) {
+    result = prevNum - step;
+    prevNum = result;
+    if (result < 0) {
+      result = notesInOctave - Math.abs(result);
+      prevNum = result;
     }
   }
-  return;
+  return result + oct;
 }
 
-// TODO output correct order
 function getTruePythagNote(eTNoteConfig: ETNoteConfig, _up): number {
   if (eTNoteConfig.interval === 0) {
     return eTNoteConfig.startFreq;
   }
-  let noteFreq = raiseOrReduceByFifth(eTNoteConfig.startFreq, _up);
+  const notesInOctave = 12;
+  const { mult } = getAllOctaveJustIntervals(eTNoteConfig.interval, notesInOctave);
+  const correctIndex = getCorrectIndex(eTNoteConfig.interval, _up, notesInOctave, mult);
+  console.log('correctIndex', correctIndex);
+  let noteFreq = eTNoteConfig.startFreq;
   let prevNote = noteFreq;
-  const noteArr = [];
-  noteArr.push(noteFreq);
-  for (let index = 1; index < eTNoteConfig.interval; index++) {
-    const inRangeInterval = getAllOctaveJustIntervals(index, 12).rangeInterval;
+  for (let index = 0; index < correctIndex; index++) {
     noteFreq = raiseOrReduceByFifth(prevNote, _up);
+    const { rangeInterval } = getAllOctaveJustIntervals(index, notesInOctave);
     prevNote = noteFreq;
-    if (inRangeInterval < 6 && index % 2 !== 0 || inRangeInterval >= 6 && index % 2 === 0) {
+    if (rangeInterval < 6 && index % 2 !== 0 || rangeInterval >= 6 && index % 2 === 0) {
       noteFreq = multOrDivide(prevNote, 2, _up);
       prevNote = noteFreq;
     }
-    noteArr.push(noteFreq);
   }
-  // noteArr = getCorrectIndex(eTNoteConfig.interval, _up);
-  // const requiredNote = noteArr[noteArr.length - 1];
   return noteFreq;
 }
 
