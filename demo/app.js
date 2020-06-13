@@ -35,7 +35,7 @@ const scaleConfigHSeriesOpts = {
 
 const scaleConfigTruePythagOpts = {
   startFreq: cNoteFreq,
-  intervals: [0, 1, 12, 13, 24, 25, 36, 37],
+  intervals: [0, -1, 0, 1, 0, -7, 0, 7],
   mode: 'truePythag'
 };
 

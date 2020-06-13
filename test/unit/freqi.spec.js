@@ -807,6 +807,21 @@ describe('multOrDivide', function() {
   });
 });
 
+describe('getPythagNoteWithinOct', function() {
+  it('should divide freq arg by 2 arg if interval arg is odd and less than half of notesInOct and _up arg is true', function() {
+    expect(freqi.getPythagNoteWithinOct(3, 12, 440, true)).to.equal(220);
+  });
+  it('should multiply freq arg by 2 arg if interval arg is odd and less than half of notesInOct and _up arg is false', function() {
+    expect(freqi.getPythagNoteWithinOct(3, 12, 440, false)).to.equal(880);
+  });
+  it('should divide freq arg by 2 arg if interval arg is even and greater than half of notesInOct and _up arg is true', function() {
+    expect(freqi.getPythagNoteWithinOct(8, 12, 440, true)).to.equal(220);
+  });
+  it('should multiply freq arg by 2 arg if interval arg is even and greater than half of notesInOct and _up arg is false', function() {
+    expect(freqi.getPythagNoteWithinOct(8, 12, 440, false)).to.equal(880);
+  });
+});
+
 describe('getTruePythagNote', function() {
   beforeEach(function() {
     this.config = {

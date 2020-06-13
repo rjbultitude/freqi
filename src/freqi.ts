@@ -389,6 +389,15 @@ function getCorrectIndex(interval: number, _up: boolean, notesInOctave: number, 
   return result + oct;
 }
 
+function getPythagNoteWithinOct(index, notesInOctave, noteFreq, _up): number {
+  const halfOctave = notesInOctave / 2;
+  const { rangeInterval } = getAllOctaveJustIntervals(index, notesInOctave);
+  if (rangeInterval < halfOctave && index % 2 !== 0 || rangeInterval >= halfOctave && index % 2 === 0) {
+    return multOrDivide(noteFreq, 2, _up);
+  }
+  return noteFreq;
+}
+
 function getTruePythagNote(eTNoteConfig: ETNoteConfig, _up): number {
   if (eTNoteConfig.interval === 0) {
     return eTNoteConfig.startFreq;
@@ -400,12 +409,8 @@ function getTruePythagNote(eTNoteConfig: ETNoteConfig, _up): number {
   let prevNote = noteFreq;
   for (let index = 0; index < correctIndex; index++) {
     noteFreq = raiseOrReduceByFifth(prevNote, _up);
-    const { rangeInterval } = getAllOctaveJustIntervals(index, notesInOctave);
+    noteFreq = getPythagNoteWithinOct(index, notesInOctave, noteFreq, _up);
     prevNote = noteFreq;
-    if (rangeInterval < 6 && index % 2 !== 0 || rangeInterval >= 6 && index % 2 === 0) {
-      noteFreq = multOrDivide(prevNote, 2, _up);
-      prevNote = noteFreq;
-    }
   }
   return noteFreq;
 }
@@ -607,6 +612,7 @@ export default {
   getJustIntNote,
   getHSeriesNote,
   getTruePythagNote,
+  getPythagNoteWithinOct,
   getAllOctaveJustIntervals,
   getModes,
   justTuningSystems,
