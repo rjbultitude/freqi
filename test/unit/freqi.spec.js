@@ -789,6 +789,24 @@ describe('getCorrectIndex', function() {
   });
 });
 
+describe('raiseOrReduceByFifth', function() {
+  it('should return number times 1.5 if _up arg is true', function() {
+    expect(freqi.raiseOrReduceByFifth(1, true)).to.equal(1.5);
+  });
+  it('should return number divided 1.5 if _up arg is false', function() {
+    expect(freqi.raiseOrReduceByFifth(3, false)).to.equal(2);
+  });
+});
+
+describe('multOrDivide', function() {
+  it('should divide num arg by mult arg if _up arg is true', function() {
+    expect(freqi.multOrDivide(2, 2, true)).to.equal(1);
+  });
+  it('should multiply num arg by mult arg if _up arg is false', function() {
+    expect(freqi.multOrDivide(2, 2, false)).to.equal(4);
+  });
+});
+
 describe('getTruePythagNote', function() {
   beforeEach(function() {
     this.config = {

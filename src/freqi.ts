@@ -601,6 +601,8 @@ export default {
   augmentNumArray,
   addMissingNotesFromInterval,
   getCorrectIndex,
+  raiseOrReduceByFifth,
+  multOrDivide,
   getSingleFreq,
   getJustIntNote,
   getHSeriesNote,
