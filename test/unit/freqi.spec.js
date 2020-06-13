@@ -776,6 +776,19 @@ describe('getAllOctaveJustIntervals rangeInterval return value', function() {
   });
 });
 
+describe('getCorrectIndex', function() {
+  beforeEach(function() {
+    this.notesInOct = 12;
+    this.circleOfFifths = [7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5];
+  });
+  it('should return 7 when interval argument is 1', function() {
+    expect(freqi.getCorrectIndex(1, true, this.notesInOct, 0)).to.equal(7);
+  });
+  it('should return 7 + notesInOct when interval argument is 13', function() {
+    expect(freqi.getCorrectIndex(13, true, this.notesInOct, 1)).to.equal(19);
+  });
+});
+
 describe('getModes', function() {
   it('should return an array the length of justTuningSystems plus the default (eqTemp) and the harmonic series', function() {
     const justTuningSystemsLength = Object.keys(freqi.justTuningSystems).length;

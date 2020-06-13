@@ -396,7 +396,6 @@ function getTruePythagNote(eTNoteConfig: ETNoteConfig, _up): number {
   const notesInOctave = 12;
   const { mult } = getAllOctaveJustIntervals(eTNoteConfig.interval, notesInOctave);
   const correctIndex = getCorrectIndex(eTNoteConfig.interval, _up, notesInOctave, mult);
-  console.log('correctIndex', correctIndex);
   let noteFreq = eTNoteConfig.startFreq;
   let prevNote = noteFreq;
   for (let index = 0; index < correctIndex; index++) {
@@ -601,6 +600,7 @@ export default {
   getFreqs,
   augmentNumArray,
   addMissingNotesFromInterval,
+  getCorrectIndex,
   getSingleFreq,
   getJustIntNote,
   getHSeriesNote,
