@@ -35,15 +35,15 @@ const scaleConfigHSeriesOpts = {
 
 const scaleConfigTruePythagOpts = {
   startFreq: cNoteFreq,
-  intervals: [0, -1, 0, 1, 0, -7, 0, 7],
+  intervals: [0, 12, 24, 36, 48],
   mode: 'truePythag'
 };
 
-// const scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
+const scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigMandatoryOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigJustIntOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigHSeriesOpts);
-const scaleFrequencies = freqi.getFreqs(scaleConfigTruePythagOpts);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigTruePythagOpts);
 console.log('scaleFrequencies', scaleFrequencies);
 
 const playBtn = document.getElementById('play');
