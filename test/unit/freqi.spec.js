@@ -713,6 +713,11 @@ describe('getHSeriesNote', function() {
       interval: 1,
       mode: 'hSeries'
     };
+    this.configUp = {
+      startFreq: 440,
+      interval: 2,
+      mode: 'hSeries'
+    }
   });
 
   it('should return a number half of the start freq when interval is -2', function() {
@@ -723,6 +728,9 @@ describe('getHSeriesNote', function() {
   });
   it('should return the start freq if passed one as the interval', function() {
     expect(freqi.getHSeriesNote(this.configOne, false)).to.equal(this.configOne.startFreq);
+  });
+  it('should return the start freq times the interval if _up arg is true', function() {
+    expect(freqi.getHSeriesNote(this.configUp, true)).to.equal(880);
   });
 });
 
