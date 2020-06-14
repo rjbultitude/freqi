@@ -857,8 +857,8 @@ describe('getTruePythagNote', function() {
 });
 
 describe('getModes', function() {
-  it('should return an array the length of justTuningSystems plus the default (eqTemp) and the harmonic series', function() {
+  it('should return an array the length of justTuningSystems plus the default (eqTemp), the harmonic series and true pythag', function() {
     const justTuningSystemsLength = Object.keys(freqi.justTuningSystems).length;
-    expect(freqi.getModes().length).to.equal(justTuningSystemsLength + 2);
+    expect(freqi.getModes().length).to.equal(justTuningSystemsLength + 3);
   });
 });

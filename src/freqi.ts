@@ -307,6 +307,7 @@ function getModes(): array {
   const modes = [];
   modes.push(EQ_TEMP_STR);
   modes.push(H_SERIES_STR);
+  modes.push(TRUE_PYTHAG);
   for (const key in justTuningSystems) {
     if (Object.prototype.hasOwnProperty.call(justTuningSystems, key)) {
       modes.push(key);
