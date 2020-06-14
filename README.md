@@ -64,7 +64,7 @@ or for CommonJS loaders (such as [Browserify](http://browserify.org/)) use
 Freqi now supports just intonation tuning systems. By default it will use equal temperament, but to use a Just tuning system set the `mode` to one of the following:
 * `pythagorean` - tempered pythagorean
 
-* `truePythagorean` - all notes are calculated using fifths (3/2), which introduces the [pyhthagorean comma](https://en.wikipedia.org/wiki/Pythagorean_comma)
+* `truePythag` - all notes are calculated using fifths (3/2), which introduces the [pyhthagorean comma](https://en.wikipedia.org/wiki/Pythagorean_comma)
 
 * `fiveLimit`
 
@@ -99,7 +99,7 @@ Following on from the above, by using `numNotes`, a larger or smaller number of 
 
  * startFreq : \[number\] // e.g. 440
  * numSemitones : \[number\] // e.g. 19
- * mode: \[string\] // `justInt`, `pythagorean`, `diatonic`, `fiveLimit`, `diatonicIndian`, `twentyTwoShrutis`
+ * mode: \[string\] // `justInt`, `pythagorean`, `truePythag`, `diatonic`, `fiveLimit`, `diatonicIndian`, `twentyTwoShrutis`
  * rootNote : \[number\]
  * intervalStartIndex : \[number\]
 
