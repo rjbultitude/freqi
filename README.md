@@ -11,10 +11,10 @@ This package aims to:
 
 * Provide a simple API for creating sets of frequencies from numeric intervals
 * Return actual sonic frequencies in Hz or relative frequencies for use with audio files
-* NEW: Return frequencies from different tuning systems
-* Allow for any number of semitones per octave - Equal Temperament mode only
+* NEW: Support multiple tuning systems, in particular equal temperament and just intonation
+* Allow for any number of semitones per octave - equal temperament mode only
 * Return an array of frequencies of any length
-* Provide a way of creating frequencies from within the intervals
+* Provide a way of creating frequencies from within the intervals themselves
 * Handle bad data
 
 What it doesn't do:
@@ -27,13 +27,6 @@ What it doesn't do:
 
 This module has _no_ dependencies. 
 Please note that dependencies for the demo were mistakenly listed in pre-1.0.1 versions.
-
-## Demo
-
-[View the online demo on GitHub here](https://rjbultitude.github.io/freqi/demo/index.html)
-
-Or download/clone it and run `npm install` which will install any dependencies, `npm run build` to create the demo bundle and `npm run start` which will start a new server at localhost:8080.
-Then, be sure to navigate to the demo folder in order to see the page i.e. localhost:8080/demo
 
 ## Getting Started
 
@@ -63,21 +56,29 @@ or for CommonJS loaders (such as [Browserify](http://browserify.org/)) use
 
 **Freqi** provides a pure function, `getFreqs`, which accepts a config object and returns an array of frequencies. There is one mandatory property: `intervals`, though it is recommended that `startFreq` be set too.
 
-`intervals` is the set of notes you want to generate frequencies from. These intervals can be any integer, positive or negative e.g. `[-5, 0, 7]`.
+`intervals` is the set of notes you want to generate frequencies from. These intervals can be any integer, positive or negative e.g. `[-5, 0, 7]` where `0` is the start frequency.
 
-`startFreq` can be a frequency in Hz, such as `440` (for the note A) or a relative frequency such `1` which is useful for playing back audio files, such as MP3s or OGGs, where `1` is the original playback rate. 440 is the default value.
+`startFreq` can be a frequency in Hz, such as `440` (for the note A) or a relative frequency such `1` which is useful for playing back audio files, such as MP3s or OGGs, where `1` is the original playback rate. `440` is the default value.
 
-**NEW**
-Freqi now supports Just Intonation tuning systems. By default it will use equal temperament, but to use a Just tuning system set the `mode` to one of the following:
-* `pythagorean`
+**NEW | Tuning Systems**
+Freqi now supports just intonation tuning systems. By default it will use equal temperament, but to use a Just tuning system set the `mode` to one of the following:
+* `pythagorean` - tempered pythagorean
+
+* `truePythagorean` - all notes are calculated using fifths (3/2), which introduces the [pyhthagorean comma](https://en.wikipedia.org/wiki/Pythagorean_comma)
+
 * `fiveLimit`
-* `diatonic`
-* `diatonicIndian`
-* `twentyTwoShrutis`
-* `gioseffoZarlino`
-Once in one of these modes other config params, such as `numNotes`, will have no effect as they are fixed scale systems. 
 
-Technically speaking, these Just tuning systems are actually tempered as upper and lower octaves are acheived by increasing or decreasing their frequencies by a power of 2. However, the notes in the first octave of each tuning system use the correct ratios. The object containing the ratios for each system is exported as `justTuningSystems` should you need to view it. If you want to list all the keys use the method `getModes`.
+* `diatonic` - this system has only 7 notes per octave
+
+* `diatonicIndian`
+
+* `twentyTwoShrutis` - as the name suggests, there are 22 notes per octave
+
+* `gioseffoZarlino` - there are 16 notes per octave 
+
+Once in one of these modes, other config params, such as `numNotes`, will have no effect as they are fixed scale systems.
+
+Technically speaking, most of the just tuning systems are actually tempered in that the upper and lower octaves are acheived by increasing or decreasing their frequencies by a power of 2. The object containing the ratios for each system is exported as `justTuningSystems` should you need to view it. If you want to list all the tuning system keys, use the method `getModes`.
 
 There is also a mode for the harmonic series `hSeries`, though in its raw state it's not particularly useful for making music, but may be of interest to music theorists.
 
@@ -108,7 +109,18 @@ Following on from the above, by using `numNotes`, a larger or smaller number of 
  * amountToAdd : \[number\] // 12 if you want to go up an octave;
  * type : \[string\] // for debugging;
 
+## Demo
+
+[View the online demo on GitHub here](https://rjbultitude.github.io/freqi/demo/index.html)
+
+Or download/clone it and run `npm install` which will install any dependencies, `npm run build` to create the demo bundle and `npm run start` which will start a new server at localhost:8080.
+Then, be sure to navigate to the demo folder in order to see the page i.e. localhost:8080/demo
+
 ## Release notes
+
+1.3.0 Support for true pythagorean scale added.
+
+1.2.0 Support for Gioseffo Zarlino's 16 note scale added.
 
 1.1.0 As described above, 1.1.0 supports mutliple tuning systems. The source has been refactored to TypeScript and test coverage has been improved.
 
