@@ -787,6 +787,7 @@ describe('getAllOctaveJustIntervals rangeInterval return value', function() {
 describe('getCorrectIndex', function() {
   beforeEach(function() {
     this.notesInOct = 12;
+    // for reference
     this.circleOfFifths = [7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5];
   });
   it('should return 7 when interval argument is 1', function() {
@@ -794,6 +795,9 @@ describe('getCorrectIndex', function() {
   });
   it('should return 7 + notesInOct when interval argument is 13', function() {
     expect(freqi.getCorrectIndex(13, true, this.notesInOct, 1)).to.equal(19);
+  });
+  it('should return 7 when interval argument is -12', function() {
+    expect(freqi.getCorrectIndex(-12, false, this.notesInOct, 1)).to.equal(12);
   });
 });
 

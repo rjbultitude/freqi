@@ -374,8 +374,7 @@ function multOrDivide(_number: number, _mult: number, _up: boolean): number {
 
 function getCorrectIndex(interval: number, _up: boolean, notesInOctave: number, mult: number): number {
   const step = 5;
-  const multOffset = _up ? mult : mult - 1;
-  const oct = multOffset * notesInOctave;
+  const oct = mult * notesInOctave;
   let result = notesInOctave;
   let prevNum = result;
   const actInterval = Math.abs(interval);
@@ -404,7 +403,11 @@ function getTruePythagNote(eTNoteConfig: ETNoteConfig, _up): number {
     return eTNoteConfig.startFreq;
   }
   const notesInOctave = 12;
-  const { mult } = getAllOctaveJustIntervals(eTNoteConfig.interval, notesInOctave);
+  // Get number of octave note is in
+  const intervalAbs = Math.abs(eTNoteConfig.interval);
+  const { mult } = getAllOctaveJustIntervals(intervalAbs, notesInOctave);
+  // Get number of times to loop
+  // to reach note via circle of fifths
   const correctIndex = getCorrectIndex(eTNoteConfig.interval, _up, notesInOctave, mult);
   let noteFreq = eTNoteConfig.startFreq;
   let prevNote = noteFreq;

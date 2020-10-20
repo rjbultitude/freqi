@@ -34,8 +34,8 @@ const scaleConfigHSeriesOpts = {
 };
 
 const scaleConfigTruePythagOpts = {
-  startFreq: cNoteFreq,
-  intervals: [0, 12, 24, 36, 48],
+  startFreq: 880,
+  intervals: [-24, -7, 0, 7, 12],
   mode: 'truePythag'
 };
 
@@ -55,7 +55,6 @@ let index = 0;
 // define audio context
 const context = new (window.AudioContext || window.webkitAudioContext)();
 const oscillator = context.createOscillator();
-oscillator.start();
 let myInterval;
 
 function playSine(freq) {
@@ -91,6 +90,7 @@ function play(scale, noteLength) {
 playBtn.addEventListener('click', function(e) {
   e.preventDefault();
   if (!connected) {
+    oscillator.start();
     play(scaleFrequencies, 2000);
   }
   console.log('connected', connected);
