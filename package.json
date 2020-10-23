@@ -2,7 +2,8 @@
   "name": "freqi",
   "version": "1.4.0",
   "description": "A library that generates musical frequencies for use with the Web Audio API",
-  "main": "freqi.js",
+  "main": "./lib/freqi.js",
+  "module": "./lib/freqi.mjs",
   "devDependencies": {
     "@types/node": "^13.13.4",
     "@typescript-eslint/eslint-plugin": "^2.31.0",
