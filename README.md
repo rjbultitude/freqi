@@ -120,7 +120,9 @@ Then, be sure to navigate to the demo folder in order to see the page i.e. local
 
 1.5.2 TypeScript definitions added
 
-1.5.0 Native EcmaScript module support added
+1.5.2 Native EcmaScript module support added
+
+1.4.0 Bug fix for True Pythagorean
 
 1.3.0 Support for true pythagorean scale added.
 
