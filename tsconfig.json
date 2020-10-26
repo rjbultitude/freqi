@@ -3,7 +3,8 @@
     "target": "es5",
     "module": "umd",
     "allowSyntheticDefaultImports": true,
-    "declaration": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
     "noImplicitAny": false,
     "removeComments": false,
     "experimentalDecorators": true,
@@ -12,7 +13,7 @@
     "allowJs": true,
   },
   "include" : [
-      "src/freqi.ts"
+      "./src/freqi.ts"
     ],
   "exclude": [
     "dist",

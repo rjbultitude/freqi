@@ -691,8 +691,8 @@ describe('getJustIntNote interval argument', function() {
   it('should return a number when ETNoteConfig arg object contains mode: gioseffoZarlino', function() {
     expect(freqi.getJustIntNote(this.configZarlino, false, freqi.justTuningSystems)).to.be.a('number');
   });
-  it('should return false when ETNoteConfig arg object contains an invalid mode string', function() {
-    expect(freqi.getJustIntNote(this.badConfig, false, freqi.justTuningSystems)).to.be.false;
+  it('should return 0 when ETNoteConfig arg object contains an invalid mode string', function() {
+    expect(freqi.getJustIntNote(this.badConfig, false, freqi.justTuningSystems)).to.equal(0);
   });
 });
 

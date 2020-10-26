@@ -9,6 +9,7 @@ interface JustTuningSystems {
   diatonic: Array<Array<number>>;
   diatonicIndian: Array<Array<number>>;
   twentyTwoShrutis: Array<Array<number>>;
+  gioseffoZarlino: Array<Array<number>>;
 }
 
 interface UserConfigObj {
@@ -27,11 +28,35 @@ interface UserConfigObj {
 interface PConfigObj {
   scaleIntervals: Array<number>;
   numNotes: number;
+  rootNote: number;
+  startFreq: number;
+  numSemitones: number;
   intervalStartIndex: number;
+  loopLength: number;
   repeatMultiple: number;
   amountToAdd: number;
   mode: string;
   type?: string;
+}
+
+interface MNoteConfig {
+  amountToAdd: number;
+  intervalStartIndex: number;
+  numNotes: number;
+  repeatMultiple: number;
+  scaleIntervals: Array<number>;
+  type: string;
+}
+
+interface GetNoteConfig {
+  startFreq: number;
+  scaleIntervals: Array<number>;
+  numSemitones: number;
+  rootNote: number;
+  intervalStartIndex: number;
+  loopLength: number;
+  mode: string;
+  type: string;
 }
 
 interface ETNoteConfig {
@@ -303,7 +328,7 @@ function GetFreqsConfig(configObj: UserConfigObj) {
  * ------------
  */
 
-function getModes(): array {
+function getModes(): Array<string> {
   const modes = [];
   modes.push(EQ_TEMP_STR);
   modes.push(H_SERIES_STR);
@@ -447,7 +472,7 @@ function getEqTempNote(eTNoteConfig: ETNoteConfig, _up): number {
 function getJustIntNote(eTNoteConfig: ETNoteConfig, _up: boolean, justTuningSystems: JustTuningSystems): number {
   if (Object.prototype.hasOwnProperty.call(justTuningSystems, eTNoteConfig.mode) === false) {
     console.error(eTNoteConfig.mode, 'is not a supported tuning system. Please set a valid mode');
-    return false;
+    return 0;
   }
   const _justIntervalsArr = justTuningSystems[eTNoteConfig.mode];
   const _rangeObj = getAllOctaveJustIntervals(eTNoteConfig.interval, _justIntervalsArr.length);
@@ -495,7 +520,7 @@ function getSingleFreq(eTNoteConfig: ETNoteConfig): number | boolean {
 
 // Adds new items to the intervals array
 // should it not have enough notes
-function addMissingNotesFromInterval(pConfig: PConfigObj): Array<number> {
+function addMissingNotesFromInterval(pConfig: MNoteConfig): Array<number> {
   let _intervals: Array<number> = [];
   const _highestIndex = pConfig.intervalStartIndex + pConfig.numNotes;
   const _intervalsLength = pConfig.scaleIntervals.length;
@@ -513,10 +538,10 @@ function addMissingNotesFromInterval(pConfig: PConfigObj): Array<number> {
   return _intervals;
 }
 
-function getNotesFromIntervals(pConfig: PConfigObj): Array<number> {
+function getNotesFromIntervals(pConfig: GetNoteConfig): Array<number> {
   const _scaleArray = [];
   // For Inversions or rootless voicings
-  const _intervalStartIndex = pConfig.intervalStartIndex;
+  let _intervalStartIndex = pConfig.intervalStartIndex;
   let _newNote;
   for (let i = 0; i < pConfig.loopLength; i++) {
     const finalIndex = pConfig.scaleIntervals[_intervalStartIndex] + pConfig.rootNote;
@@ -543,7 +568,7 @@ function getNotesFromIntervals(pConfig: PConfigObj): Array<number> {
  * as this is the entry point
  * Is public
  * */
-function getFreqs(msConfig: object): Array | boolean {
+function getFreqs(msConfig: UserConfigObj): Array<number> | boolean {
   let _validConfig;
   // Check config exists
   if (typeof msConfig !== 'object') {
