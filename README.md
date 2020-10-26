@@ -10,9 +10,9 @@ A javascript api for generating frequencies for use with the web audio API
 This package aims to:
 
 * Provide a simple API for creating sets of frequencies from numeric intervals
-* Return actual sonic frequencies in Hz or relative frequencies for use with audio files
-* NEW: Support multiple tuning systems, in particular equal temperament and just intonation
-* Allow for any number of semitones per octave - equal temperament mode only
+* Return actual sonic frequencies in Hz or _relative_ frequencies for use with audio file playback
+* Supports multiple tuning systems both tempered and just
+* Allow for any number of semitones per octave(equal temperament mode only)
 * Return an array of frequencies of any length
 * Provide a way of creating frequencies from within the intervals themselves
 * Handle bad data
@@ -40,7 +40,7 @@ or
 
 `npm install freqi`
 
-Freqi is configured to work with both [AMD](https://en.wikipedia.org/wiki/Asynchronous_module_definition) and [CJS](https://en.wikipedia.org/wiki/CommonJS) applications.
+Freqi is configured to work with [ESM](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules), [AMD](https://en.wikipedia.org/wiki/Asynchronous_module_definition) and [CJS](https://en.wikipedia.org/wiki/CommonJS) applications.
 
 If you're using [Webpack](http://webpack.github.io/) or some other CJS module loader
 
@@ -117,6 +117,10 @@ Or download/clone it and run `npm install` which will install any dependencies, 
 Then, be sure to navigate to the demo folder in order to see the page i.e. localhost:8080/demo
 
 ## Release notes
+
+1.5.2 TypeScript definitions added
+
+1.5.0 Native EcmaScript module support added
 
 1.3.0 Support for true pythagorean scale added.
 
