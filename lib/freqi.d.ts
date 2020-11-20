@@ -1,3 +1,15 @@
+interface MetaDataTuningSys {
+    "name": string;
+    "shortName": string;
+    "longName": string;
+    "intervalsInOctave": number;
+    "type": string;
+    "scaleType": string;
+    "notes": string;
+}
+interface MetaData {
+    [key: string]: MetaDataTuningSys;
+}
 interface JustTuningSystems {
     pythagorean: Array<Array<number>>;
     fiveLimit: Array<Array<number>>;
@@ -57,6 +69,7 @@ declare function augmentNumArray(augArrConfig: AugArrConfig): Array<number>;
  * ------------
  */
 declare function getModes(): Array<string>;
+declare function getMetaData(): MetaData;
 /**
 * ------------
 * Main module functions
@@ -103,6 +116,7 @@ declare const _default: {
     getPythagNoteWithinOct: typeof getPythagNoteWithinOct;
     getAllOctaveJustIntervals: typeof getAllOctaveJustIntervals;
     getModes: typeof getModes;
+    getMetaData: typeof getMetaData;
     justTuningSystems: JustTuningSystems;
     CHROMATIC_SCALE: string[];
 };

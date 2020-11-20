@@ -866,3 +866,14 @@ describe('getModes', function() {
     expect(freqi.getModes().length).to.equal(justTuningSystemsLength + 3);
   });
 });
+
+describe('getMetaData', function() {
+  it('should return an object', function() {
+    const metaData = freqi.getMetaData();
+    expect(metaData).to.be.an('object');
+  });
+  it('should return an object with a key named eqTemp', function() {
+    const metaData = freqi.getMetaData();
+    expect(metaData).to.include.keys('eqTemp');
+  });
+});

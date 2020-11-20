@@ -1,9 +1,11 @@
 import typescript from 'rollup-plugin-typescript';
+import json from '@rollup/plugin-json';
 
 export default {
   input: './src/freqi.ts',
   plugins: [
-    typescript()
+    typescript(),
+    json(),
   ],
   output: [{
     file: './lib/freqi.js',

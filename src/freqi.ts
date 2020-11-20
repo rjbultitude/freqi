@@ -3,6 +3,22 @@
   github.com/rjbultitude
 */
 
+import tuningSystemsMeta from './tuning-systems.json';
+
+interface MetaDataTuningSys {
+  "name": string;
+  "shortName": string;
+  "longName": string;
+  "intervalsInOctave": number;
+  "type": string;
+  "scaleType": string;
+  "notes": string;
+}
+
+interface MetaData {
+  [key: string]: MetaDataTuningSys;
+}
+
 interface JustTuningSystems {
   pythagorean: Array<Array<number>>;
   fiveLimit: Array<Array<number>>;
@@ -341,6 +357,10 @@ function getModes(): Array<string> {
   return modes;
 }
 
+function getMetaData(): MetaData {
+  return tuningSystemsMeta;
+}
+
 /**
 * ------------
 * Main module functions
@@ -644,6 +664,7 @@ export default {
   getPythagNoteWithinOct,
   getAllOctaveJustIntervals,
   getModes,
+  getMetaData,
   justTuningSystems,
   CHROMATIC_SCALE,
 };
