@@ -1,0 +1,128 @@
+{
+  "eqTemp": {
+    "name": "eqTemp",
+    "shortName": "12TET",
+    "longName": "12 Tone Equal Temperament",
+    "intervalsInOctave": 12,
+    "type": "tempered",
+    "scaleType": "",
+    "notes": "An arbritray scale widely used in western music"
+  },
+  "hSeries": {
+    "name": "hSeries",
+    "shortName": "Harmonic Series",
+    "longName": "Harmonic Series",
+    "intervalsInOctave": null,
+    "type": "just",
+    "scaleType": "",
+    "notes": "A set of whole number ratios representing how sound works in nature"
+  },
+  "truePythag": {
+    "name": "truePythag",
+    "shortName": "True Pythagorean",
+    "longName": "Pythagorean just intaonation including the syntonic comma",
+    "intervalsInOctave": 12,
+    "type": "just",
+    "scaleType": "",
+    "notes": "A set of whole number ratios using only fifths e.g. 3/2"
+  },
+  "pythagorean": {
+    "name": "pythagorean",
+    "shortName": "Pythagorean",
+    "longName": "Pythagorean just intonation excluding the syntonic comma",
+    "intervalsInOctave": 12,
+    "type": "just",
+    "scaleType": "",
+    "notes": "A set of whole number ratios using only fifths (3/2) except for the octave (2/1)"
+  },
+  "fiveLimit": {
+    "name": "fiveLimit",
+    "shortName": "Five limit just intonation",
+    "longName": "Five limit just intonation",
+    "intervalsInOctave": 12,
+    "type": "just",
+    "scaleType": "",
+    "notes": "A set of whole number ratios using only powers of 2, 3, or 5"
+  },
+  "diatonic": {
+    "name": "diatonic",
+    "shortName": "Five limit diatonic",
+    "longName": "Five limit diatonic / Ptolemy's intense diatonic",
+    "intervalsInOctave": 7,
+    "type": "just",
+    "scaleType": "heptatonic",
+    "notes": "A justly-tuned major diatonic scale that uses the 5-limit system devised by Ptolemy"
+  },
+  "diatonicIndian": {
+    "name": "diatonicIndian",
+    "shortName": "Five limit diatonic Indian",
+    "longName": "Five limit diatonic Indian",
+    "intervalsInOctave": 7,
+    "type": "just",
+    "scaleType": "heptatonic",
+    "notes": "A justly-tuned diatonic scale that uses 27/16 for Dha"
+  },
+  "twentyTwoShrutis": {
+    "name": "twentyTwoShrutis",
+    "shortName": "Twenty Two Shrutis",
+    "longName": "Twenty Two Shrutis",
+    "intervalsInOctave": 22,
+    "type": "just",
+    "scaleType": "",
+    "notes": "A justly-tuned Indian scale described by the Bharata and Dattilam"
+  },
+  "gioseffoZarlino": {
+    "name": "gioseffoZarlino",
+    "shortName": "Gioseffo Zarlino just",
+    "longName": "Gioseffo Zarlino just intonation",
+    "intervalsInOctave": 19,
+    "type": "just",
+    "scaleType": "",
+    "notes": "TBC"
+  },
+  "majorPentatonic": {
+    "name": "majorPentatonic",
+    "shortName": "Major pentatonic",
+    "longName": "Major pentatonic",
+    "intervalsInOctave": 5,
+    "type": "just",
+    "scaleType": "pentatonic",
+    "notes": "TBC"
+  },
+  "egyptianSuspended": {
+    "name": "egyptianSuspended",
+    "shortName": "Egyptian, suspended",
+    "longName": "Egyptian, suspended",
+    "intervalsInOctave": 5,
+    "type": "just",
+    "scaleType": "pentatonic",
+    "notes": "TBC"
+  },
+  "bluesMinorManGong": {
+    "name": "bluesMinorManGong",
+    "shortName": "Blues minor, Man Gong",
+    "longName": "Blues minor, Man Gong",
+    "intervalsInOctave": 5,
+    "type": "just",
+    "scaleType": "pentatonic",
+    "notes": "TBC"
+  },
+  "bluesMajorRitsusenYo": {
+    "name": "bluesMajorRitsusenYo",
+    "shortName": "Blues major, Ritsusen (律旋), yo scale",
+    "longName": "Blues major, Ritsusen (律旋), yo scale",
+    "intervalsInOctave": 5,
+    "type": "just",
+    "scaleType": "pentatonic",
+    "notes": "TBC"
+  },
+  "minorPentatonic": {
+    "name": "minorPentatonic",
+    "shortName": "Minor pentatonic",
+    "longName": "Minor pentatonic",
+    "intervalsInOctave": 5,
+    "type": "just",
+    "scaleType": "pentatonic",
+    "notes": "TBC"
+  }
+}
