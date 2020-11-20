@@ -364,12 +364,12 @@ function getModes(): Array<string> {
 function getMetaData(): MetaData {
   const newMetaDataObj = {};
   const modes = getModes();
-  modes.array.forEach((mode) => {
+  modes.forEach((mode) => {
     Object.defineProperty(
       newMetaDataObj,
       mode,
       {
-        value: tuningSystemsMeta[value],
+        value: tuningSystemsMeta[mode],
         writable: false,
         enumerable: true
       }
