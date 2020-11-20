@@ -62,25 +62,25 @@ or for CommonJS loaders (such as [Browserify](http://browserify.org/)) use
 
 **NEW | Tuning Systems**
 Freqi now supports just intonation tuning systems. By default it will use equal temperament, but to use a Just tuning system set the `mode` to one of the following:
-* `pythagorean` - tempered pythagorean
+* `pythagorean` - Pythagorean just intonation excluding the syntonic comma
 
-* `truePythag` - all notes are calculated using fifths (3/2), which introduces the [pyhthagorean comma](https://en.wikipedia.org/wiki/Pythagorean_comma)
+* `truePythag` - Pythagorean just intonation that _includes_ the syntonic/[pyhthagorean comma](https://en.wikipedia.org/wiki/Pythagorean_comma)
 
-* `fiveLimit`
+* `fiveLimit` - A set of whole number ratios using only powers of 2, 3, or 5
 
-* `diatonic` - this system has only 7 notes per octave
+* `diatonic` - A justly-tuned major diatonic scale that uses the 5-limit system devised by Ptolemy
 
-* `diatonicIndian`
+* `diatonicIndian` - A justly-tuned diatonic scale that uses 27/16 for Dha
 
-* `twentyTwoShrutis` - as the name suggests, there are 22 notes per octave
+* `twentyTwoShrutis` - A justly-tuned 22 note Indian scale described by the Bharata and Dattilam
 
-* `gioseffoZarlino` - there are 16 notes per octave 
+* `gioseffoZarlino` - An early just tuning system of 16 notes per octave 
 
-Once in one of these modes, other config params, such as `numNotes`, will have no effect as they are fixed scale systems.
+Please note, once in one of these modes, other config params, such as `numNotes`, will have no effect as they are fixed scale systems.
 
-Technically speaking, most of the just tuning systems are actually tempered in that the upper and lower octaves are acheived by increasing or decreasing their frequencies by a power of 2. The object containing the ratios for each system is exported as `justTuningSystems` should you need to view it. If you want to list all the tuning system keys, use the method `getModes`.
+The object containing the ratios for each _just_ system is exported as `justTuningSystems` should you need to view it. If you want to list all the tuning system keys, use the method `getModes`. Furthermore, an object containing meta data about all the tuning systems can be obtained by calling `getMetaData` where each key is the same as above and `getModes`.
 
-There is also a mode for the harmonic series `hSeries`, though in its raw state it's not particularly useful for making music, but may be of interest to music theorists.
+There is also a mode for the harmonic series called `hSeries`. In its raw state it may not particularly useful for making music, but may be of interest to music theorists.
 
 **Optional Params**
 You can pass in a custom number of semitones. The default is `12`, a western chromatic scale, but you could pass in 19 for a non-western scale - this can produce very interesting results!
@@ -117,6 +117,8 @@ Or download/clone it and run `npm install` which will install any dependencies, 
 Then, be sure to navigate to the demo folder in order to see the page i.e. localhost:8080/demo
 
 ## Release notes
+
+1.5.3 Addition of meta data for each tuning system and `getMetaData` method
 
 1.5.2 TypeScript definitions added
 

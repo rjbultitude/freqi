@@ -357,8 +357,25 @@ function getModes(): Array<string> {
   return modes;
 }
 
+/*
+  Modes stores available tuning systems
+  tuningSystemsMeta may contain objects not needed
+*/
 function getMetaData(): MetaData {
-  return tuningSystemsMeta;
+  const newMetaDataObj = {};
+  const modes = getModes();
+  modes.array.forEach((mode) => {
+    Object.defineProperty(
+      newMetaDataObj,
+      mode,
+      {
+        value: tuningSystemsMeta[value],
+        writable: false,
+        enumerable: true
+      }
+    );
+  });
+  return newMetaDataObj;
 }
 
 /**
