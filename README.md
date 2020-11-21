@@ -136,7 +136,11 @@ Then, be sure to navigate to the demo folder in order to see the page i.e. local
 
 ## Development
 
-The library is written in TypeScript. Rollup has been used as the bundler to ensure backwards compatibility - there's an issue with how TS publishes UMD modules.
+The library is written in TypeScript. Rollup has been used as the bundler for two reaons:
+1. To ensure backwards compatibility - there's an issue with how TS publishes modules defined using the UMD IIFE
+2. The TypeScript compiler (still) doesn't support `.mjs` files as a target
+
+The `build` script first runs the TS compiler to produce the type definitions, then the Rollup compiler to produce the library artefacts.
 
 Mocha is used as the testing framework.
 
