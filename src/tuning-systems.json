@@ -4,8 +4,10 @@
     "shortName": "12TET",
     "longName": "12 Tone Equal Temperament",
     "intervalsInOctave": 12,
+    "intervalRatios": null,
     "type": "tempered",
     "scaleType": "",
+    "includesComma": false,
     "notes": "An arbritray scale widely used in western music"
   },
   "hSeries": {
@@ -13,8 +15,10 @@
     "shortName": "Harmonic Series",
     "longName": "Harmonic Series",
     "intervalsInOctave": null,
+    "intervalRatios": null,
     "type": "just",
     "scaleType": "",
+    "includesComma": false,
     "notes": "A set of whole number ratios representing how sound works in nature"
   },
   "truePythag": {
@@ -22,8 +26,10 @@
     "shortName": "True Pythagorean",
     "longName": "Pythagorean just intaonation including the syntonic comma",
     "intervalsInOctave": 12,
+    "intervalRatios": [[3,2]],
     "type": "just",
     "scaleType": "",
+    "includesComma": true,
     "notes": "A set of whole number ratios using only fifths e.g. 3/2"
   },
   "pythagorean": {
@@ -31,8 +37,10 @@
     "shortName": "Pythagorean",
     "longName": "Pythagorean just intonation excluding the syntonic comma",
     "intervalsInOctave": 12,
+    "intervalRatios": [[1,1], [256,243], [9,8], [32,27], [81,64], [4,3], [729,512], [3,2], [128,81], [27,16], [16,9], [243,128]],
     "type": "just",
     "scaleType": "",
+    "includesComma": false,
     "notes": "A set of whole number ratios using only fifths (3/2) except for the octave (2/1)"
   },
   "fiveLimit": {
@@ -40,8 +48,10 @@
     "shortName": "Five limit just intonation",
     "longName": "Five limit just intonation",
     "intervalsInOctave": 12,
+    "intervalRatios": [[1,1], [16,15], [9,8], [6,5], [5,4], [4,3], [64,45], [3,2], [8,5], [5,3], [9,5], [15,8]],
     "type": "just",
     "scaleType": "",
+    "includesComma": false,
     "notes": "A set of whole number ratios using only powers of 2, 3, or 5"
   },
   "diatonic": {
@@ -49,8 +59,10 @@
     "shortName": "Five limit diatonic",
     "longName": "Five limit diatonic / Ptolemy's intense diatonic",
     "intervalsInOctave": 7,
+    "intervalRatios": [[1,1], [9,8], [5,4], [4,3], [3,2], [5,3], [15,8]],
     "type": "just",
     "scaleType": "heptatonic",
+    "includesComma": false,
     "notes": "A justly-tuned major diatonic scale that uses the 5-limit system devised by Ptolemy"
   },
   "diatonicIndian": {
@@ -58,8 +70,10 @@
     "shortName": "Five limit diatonic Indian",
     "longName": "Five limit diatonic Indian",
     "intervalsInOctave": 7,
+    "intervalRatios": [[1,1], [9,8], [5,4], [4,3], [3,2], [27,16], [15,8]],
     "type": "just",
     "scaleType": "heptatonic",
+    "includesComma": false,
     "notes": "A justly-tuned diatonic scale that uses 27/16 for Dha"
   },
   "twentyTwoShrutis": {
@@ -67,17 +81,21 @@
     "shortName": "Twenty Two Shrutis",
     "longName": "Twenty Two Shrutis",
     "intervalsInOctave": 22,
+    "intervalRatios": [[1,1], [256,243], [16,15], [10,9], [9,8], [32,27], [6,5], [5,4], [81,64], [4,3], [27,20], [45,32], [729,512], [3,2], [128,81], [8,5], [5,3], [27,16], [16,9], [9,5], [15,8], [243,128]],
     "type": "just",
     "scaleType": "",
+    "includesComma": false,
     "notes": "A justly-tuned Indian scale described by the Bharata and Dattilam"
   },
   "gioseffoZarlino": {
     "name": "gioseffoZarlino",
-    "shortName": "Gioseffo Zarlino just",
-    "longName": "Gioseffo Zarlino just intonation",
-    "intervalsInOctave": 19,
+    "shortName": "Gioseffo Zarlino 16",
+    "longName": "Gioseffo Zarlino 16 note just intonation",
+    "intervalsInOctave": 16,
+    "intervalRatios": null,
     "type": "just",
-    "scaleType": "",
+    "scaleType": [[1,1], [25,24], [10,9], [9,8], [32,27], [6,5], [5,4], [4,3], [25,18], [45,32], [3,2], [25,16], [5,3], [16,9], [9,5], [15,8]],
+    "includesComma": false,
     "notes": "TBC"
   },
   "majorPentatonic": {
@@ -85,8 +103,10 @@
     "shortName": "Major pentatonic",
     "longName": "Major pentatonic",
     "intervalsInOctave": 5,
+    "intervalRatios": [[24, 24], [27, 24], [30, 24], [36, 24], [40, 24]],
     "type": "just",
     "scaleType": "pentatonic",
+    "includesComma": false,
     "notes": "TBC"
   },
   "egyptianSuspended": {
@@ -94,8 +114,10 @@
     "shortName": "Egyptian, suspended",
     "longName": "Egyptian, suspended",
     "intervalsInOctave": 5,
+    "intervalRatios": [[24, 24], [27, 24], [32, 24], [36, 24], [42, 24]],
     "type": "just",
-    "scaleType": "pentatonic",
+    "scaleType": "pe,ntatonic",
+    "includesComma": false,
     "notes": "TBC"
   },
   "bluesMinorManGong": {
@@ -103,8 +125,10 @@
     "shortName": "Blues minor, Man Gong",
     "longName": "Blues minor, Man Gong",
     "intervalsInOctave": 5,
+    "intervalRatios": [[15, 15], [18, 15], [20, 15], [24, 15], [27, 15]],
     "type": "just",
     "scaleType": "pentatonic",
+    "includesComma": false,
     "notes": "TBC"
   },
   "bluesMajorRitsusenYo": {
@@ -112,8 +136,10 @@
     "shortName": "Blues major, Ritsusen (律旋), yo scale",
     "longName": "Blues major, Ritsusen (律旋), yo scale",
     "intervalsInOctave": 5,
+    "intervalRatios": [[24, 24], [27, 24], [32, 24], [36, 24], [40, 24]],
     "type": "just",
     "scaleType": "pentatonic",
+    "includesComma": false,
     "notes": "TBC"
   },
   "minorPentatonic": {
@@ -121,8 +147,10 @@
     "shortName": "Minor pentatonic",
     "longName": "Minor pentatonic",
     "intervalsInOctave": 5,
+    "intervalRatios": [[30, 30], [36, 30], [40, 30], [45, 30], [54, 30]],
     "type": "just",
     "scaleType": "pentatonic",
+    "includesComma": false,
     "notes": "TBC"
   }
 }
