@@ -20,12 +20,7 @@ interface MetaData {
 }
 
 interface JustTuningSystems {
-  pythagorean: Array<Array<number>>;
-  fiveLimit: Array<Array<number>>;
-  diatonic: Array<Array<number>>;
-  diatonicIndian: Array<Array<number>>;
-  twentyTwoShrutis: Array<Array<number>>;
-  gioseffoZarlino: Array<Array<number>>;
+  [key: string]: Array<Array<number>>;
 }
 
 interface UserConfigObj {
@@ -98,16 +93,10 @@ interface AllOctaveJustIntervals {
 // Constants
 const EQ_TEMP_STR = 'eqTemp';
 const H_SERIES_STR = 'hSeries';
-const TRUE_PYTHAG = 'truePythag';
+const JUST_STR = 'just';
+const JUST_COMMA_STR = 'justComma';
+const JUST_NO_COMMA_STR = 'justNoComma';
 const CHROMATIC_SCALE: Array<string> = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-const justTuningSystems: JustTuningSystems = {
-  pythagorean: [[1,1], [256,243], [9,8], [32,27], [81,64], [4,3], [729,512], [3,2], [128,81], [27,16], [16,9], [243,128]],
-  fiveLimit: [[1,1], [16,15], [9,8], [6,5], [5,4], [4,3], [64,45], [3,2], [8,5], [5,3], [9,5], [15,8]],
-  diatonic: [[1,1], [9,8], [5,4], [4,3], [3,2], [5,3], [15,8]],
-  diatonicIndian: [[1,1], [9,8], [5,4], [4,3], [3,2], [27,16], [15,8]],
-  twentyTwoShrutis: [[1,1], [256,243], [16,15], [10,9], [9,8], [32,27], [6,5], [5,4], [81,64], [4,3], [27,20], [45,32], [729,512], [3,2], [128,81], [8,5], [5,3], [27,16], [16,9], [9,5], [15,8], [243,128]],
-  gioseffoZarlino: [[1,1], [25,24], [10,9], [9,8], [32,27], [6,5], [5,4], [4,3], [25,18], [45,32], [3,2], [25,16], [5,3], [16,9], [9,5], [15,8]]
-};
 
 /**
  * Error checking FNs
@@ -262,14 +251,25 @@ function checkGetSingleFreqConfigDataTypes(dataObj: ETNoteConfig): boolean {
 * ------------
 */
 
-function checkGetFreqsForZerosNegs(data): boolean {
-  const invalidKeys = ['intervals', 'type', 'rootNote', 'mode'];
-  Object.keys(data).forEach(function (prop) {
-    if (isPropValid(prop, invalidKeys)) {
-      if (prop === 'numSemitones' && data[prop] === 0) {
+// Check numeric values
+function checkGetFreqsNumericDataTypes(msConfig: UserConfigObj): boolean {
+  // Create list of props here
+  // then loop through only them
+  const invalidKeysAnyNum = ['intervals', 'type', 'mode'];
+  const invalidKeysNegNum = ['intervals', 'type', 'rootNote', 'mode'];
+  Object.keys(msConfig).forEach(function (prop) {
+    if (isPropValid(prop, invalidKeysAnyNum)) {
+      if (typeof msConfig[prop] !== 'number' || Number.isNaN(msConfig[prop])) {
+        throw new TypeError('Config property ' + prop + ' is not a number');
+      }
+    }
+  });
+  Object.keys(msConfig).forEach(function (prop) {
+    if (isPropValid(prop, invalidKeysNegNum)) {
+      if (prop === 'numSemitones' && msConfig[prop] <= 0) {
         throw new SyntaxError('numSemitones must be a positive number');
       }
-      if (data[prop] < 0) {
+      if (msConfig[prop] < 0) {
         throw new SyntaxError(prop + ' must be zero or a positive number');
       }
     }
@@ -277,27 +277,19 @@ function checkGetFreqsForZerosNegs(data): boolean {
   return true;
 }
 
-function checkGetFreqsNumericDataTypes(dataObj): boolean {
-  Object.keys(dataObj).forEach(function (prop) {
-    // Check numeric values
-    if (prop !== 'type' && prop !== 'intervals' && prop !== 'mode') {
-      if (typeof dataObj[prop] !== 'number' || Number.isNaN(dataObj[prop])) {
-        throw new TypeError('Config property ' + prop + ' is not a number');
-      }
-    }
-  });
-  return true;
-}
-
-function checkGetFreqsIntervalsProp(intervals: Array<number>): boolean {
-  if (Array.isArray(intervals) !== true) {
+function checkUsersConfig(msConfig: UserConfigObj): boolean {
+  if (typeof msConfig !== 'object') {
+    throw new TypeError('Musical Scale Config should be an object');
+  }
+  // Handle bad intervals array cases from user
+  if (Array.isArray(msConfig.intervals) !== true) {
     throw new TypeError('intervals is not an array');
   }
-  if (intervals.length === 0) {
+  if (msConfig.intervals.length === 0) {
     throw new TypeError('intervals array is empty');
   }
-  for (let i = 0, length = intervals.length; i < length; i++) {
-    if (typeof intervals[i] !== 'number' || Number.isNaN(intervals[i])) {
+  for (let i = 0, length = msConfig.intervals.length; i < length; i++) {
+    if (typeof msConfig.intervals[i] !== 'number' || Number.isNaN(msConfig.intervals[i])) {
       throw new TypeError('intervals is not an array of numbers');
     }
   }
@@ -344,38 +336,14 @@ function GetFreqsConfig(configObj: UserConfigObj) {
  * ------------
  */
 
-function getModes(): Array<string> {
+function getModes(tuningSystemsData): Array<string> {
   const modes = [];
-  modes.push(EQ_TEMP_STR);
-  modes.push(H_SERIES_STR);
-  modes.push(TRUE_PYTHAG);
-  for (const key in justTuningSystems) {
-    if (Object.prototype.hasOwnProperty.call(justTuningSystems, key)) {
+  for (const key in tuningSystemsData) {
+    if (Object.prototype.hasOwnProperty.call(tuningSystemsData, key)) {
       modes.push(key);
     }
   }
   return modes;
-}
-
-/*
-  Modes stores available tuning systems
-  tuningSystemsData may contain objects not needed
-*/
-function getMetaData(): MetaData {
-  const newMetaDataObj = {};
-  const modes = getModes();
-  modes.forEach((mode) => {
-    Object.defineProperty(
-      newMetaDataObj,
-      mode,
-      {
-        value: tuningSystemsData[mode],
-        writable: false,
-        enumerable: true
-      }
-    );
-  });
-  return newMetaDataObj;
 }
 
 /**
@@ -528,14 +496,32 @@ function getJustIntNote(eTNoteConfig: ETNoteConfig, _up: boolean, justTuningSyst
   return _noteVal / _multiplier;
 }
 
-function getTuningSystemType(mode) {
+function getJustTuningSystems(tuningSystemsData) {
+  const justTuningSystems = {};
+  Object.keys(justTuningSystems).forEach((key) => {
+    if (tuningSystemsData[key].type === JUST_STR) {
+      Object.defineProperty(
+        justTuningSystems,
+        key,
+        {
+          value: tuningSystemsData[key].intervalRatios,
+          enumerable: true,
+          writable: false,
+        }
+      );
+    }
+  });
+  return justTuningSystems;
+}
+
+function getTuningSystemType(mode: string): string {
   if (mode === EQ_TEMP_STR || mode === H_SERIES_STR) {
     return mode;
   }
   if (tuningSystemsData[mode].includesComma) {
-    return 'JustComma';
+    return JUST_COMMA_STR;
   } else {
-    return 'JustNoComma';
+    return JUST_NO_COMMA_STR;
   }
 }
 
@@ -555,23 +541,19 @@ function getSingleFreq(eTNoteConfig: ETNoteConfig): number | boolean {
   }
   const _intervalIsPos = eTNoteConfig.interval >= 0;
   const _up = eTNoteConfig.upwardsScale === undefined ? _intervalIsPos : eTNoteConfig.upwardsScale;
-  // TODO determine which cases require which logic
-  // match eTNoteConfig.mode with object
-  // and query whether it's just or tempered
-  // if just, does it include or exclude syntonic comma
-  // const tuningSysType = getTuningSystemType(eTNoteConfig.mode)
+  const justTuningSystems = getJustTuningSystems(tuningSystemsData);
+  const tuningSysType = getTuningSystemType(eTNoteConfig.mode);
   switch (tuningSysType) {
   case EQ_TEMP_STR:
     return getEqTempNote(eTNoteConfig, _up);
   case H_SERIES_STR:
     return getHSeriesNote(eTNoteConfig, _up);
   case 'JustComma':
-    // TODO broaden remit of fn
     return getJustIntCommaNote(eTNoteConfig, _up);
   case 'JustNoComma':
     return getJustIntNote(eTNoteConfig, _up, justTuningSystems);
   default:
-    throw 'no such type';
+    return false;
   }
 }
 
@@ -621,39 +603,26 @@ function getNotesFromIntervals(pConfig: GetNoteConfig): Array<number> {
 
 /**
  * Accepts only an object
- * No TS interface is provided
- * as this is the entry point
  * Is public
  * */
 function getFreqs(msConfig: UserConfigObj): Array<number> | boolean {
-  let _validConfig;
-  // Check config exists
-  if (typeof msConfig !== 'object') {
-    console.error('Musical Scale Config should be an object');
-  // Check and fix undefined
-  } else {
-    _validConfig = new GetFreqsConfig(msConfig);
-  }
+  // Check config for mandatory prop
   try {
-    checkGetFreqsIntervalsProp(_validConfig.intervals);
+    checkUsersConfig(msConfig);
   } catch (e) {
-    console.error(e);
+    console.log(e);
     return false;
   }
-  // Ensure numNotes is set
+  // Create valid config by adding any undefined values
+  const _validConfig = new GetFreqsConfig(msConfig);
+  // If the user hasn't set the number of desired notes per octave
+  // derive it from the intervals array
   if (_validConfig.numNotes === undefined) {
     _validConfig.numNotes = _validConfig.intervals.length;
   }
-  // Check all data types
+  // Check numeric data types
   try {
     checkGetFreqsNumericDataTypes(msConfig);
-  } catch (e) {
-    console.error('Check your config values are valid', e);
-    return false;
-  }
-  // Check for negative numbers
-  try {
-    checkGetFreqsForZerosNegs(msConfig);
   } catch (e) {
     console.error('Check your config values are valid', e);
     return false;
@@ -661,6 +630,7 @@ function getFreqs(msConfig: UserConfigObj): Array<number> | boolean {
   // Set vars
   let _scaleArray = [];
   const _intervals = _validConfig.intervals;
+  // TODO is this needed for Just tunings?
   // Add missing scale intervals
   const _intervalsFull = addMissingNotesFromInterval({
     amountToAdd: _validConfig.amountToAdd,
@@ -701,7 +671,6 @@ export default {
   getPythagNoteWithinOct,
   getAllOctaveJustIntervals,
   getModes,
-  getMetaData,
-  justTuningSystems,
+  tuningSystemsData,
   CHROMATIC_SCALE,
 };

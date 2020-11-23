@@ -1,22 +1,5 @@
-interface MetaDataTuningSys {
-    "name": string;
-    "shortName": string;
-    "longName": string;
-    "intervalsInOctave": number;
-    "type": string;
-    "scaleType": string;
-    "notes": string;
-}
-interface MetaData {
-    [key: string]: MetaDataTuningSys;
-}
 interface JustTuningSystems {
-    pythagorean: Array<Array<number>>;
-    fiveLimit: Array<Array<number>>;
-    diatonic: Array<Array<number>>;
-    diatonicIndian: Array<Array<number>>;
-    twentyTwoShrutis: Array<Array<number>>;
-    gioseffoZarlino: Array<Array<number>>;
+    [key: string]: Array<Array<number>>;
 }
 interface UserConfigObj {
     intervals: Array<number>;
@@ -68,8 +51,7 @@ declare function augmentNumArray(augArrConfig: AugArrConfig): Array<number>;
  * Housekeeping
  * ------------
  */
-declare function getModes(): Array<string>;
-declare function getMetaData(): MetaData;
+declare function getModes(tuningSystemsData: any): Array<string>;
 /**
 * ------------
 * Main module functions
@@ -81,11 +63,11 @@ declare function getMetaData(): MetaData;
  * plus the number of times needed to multiply the array
  */
 declare function getAllOctaveJustIntervals(interval: number, justIntervalsArrLength: number): AllOctaveJustIntervals;
-declare function raiseOrReduceByFifth(number: number, _up: boolean): number;
+declare function raiseOrReduceByRatio(number: number, _up: boolean, ratio: any): number;
 declare function multOrDivide(_number: number, _mult: number, _up: boolean): number;
 declare function getCorrectIndex(interval: number, _up: boolean, notesInOctave: number, mult: number): number;
 declare function getPythagNoteWithinOct(index: any, notesInOctave: any, noteFreq: any, _up: any): number;
-declare function getTruePythagNote(eTNoteConfig: ETNoteConfig, _up: any): number;
+declare function getJustIntCommaNote(eTNoteConfig: ETNoteConfig, _up: any): number;
 declare function getHSeriesNote(eTNoteConfig: ETNoteConfig, _up: any): number;
 /**
  * Takes the note index from the eTNoteConfig obj
@@ -97,8 +79,6 @@ declare function getSingleFreq(eTNoteConfig: ETNoteConfig): number | boolean;
 declare function addMissingNotesFromInterval(pConfig: MNoteConfig): Array<number>;
 /**
  * Accepts only an object
- * No TS interface is provided
- * as this is the entry point
  * Is public
  * */
 declare function getFreqs(msConfig: UserConfigObj): Array<number> | boolean;
@@ -107,17 +87,178 @@ declare const _default: {
     augmentNumArray: typeof augmentNumArray;
     addMissingNotesFromInterval: typeof addMissingNotesFromInterval;
     getCorrectIndex: typeof getCorrectIndex;
-    raiseOrReduceByFifth: typeof raiseOrReduceByFifth;
+    raiseOrReduceByRatio: typeof raiseOrReduceByRatio;
     multOrDivide: typeof multOrDivide;
     getSingleFreq: typeof getSingleFreq;
     getJustIntNote: typeof getJustIntNote;
     getHSeriesNote: typeof getHSeriesNote;
-    getTruePythagNote: typeof getTruePythagNote;
+    getJustIntCommaNote: typeof getJustIntCommaNote;
     getPythagNoteWithinOct: typeof getPythagNoteWithinOct;
     getAllOctaveJustIntervals: typeof getAllOctaveJustIntervals;
     getModes: typeof getModes;
-    getMetaData: typeof getMetaData;
-    justTuningSystems: JustTuningSystems;
+    tuningSystemsData: {
+        eqTemp: {
+            name: string;
+            shortName: string;
+            longName: string;
+            intervalsInOctave: number;
+            intervalRatios: any;
+            type: string;
+            scaleType: string;
+            includesComma: boolean;
+            notes: string;
+        };
+        hSeries: {
+            name: string;
+            shortName: string;
+            longName: string;
+            intervalsInOctave: any;
+            intervalRatios: any;
+            type: string;
+            scaleType: string;
+            includesComma: boolean;
+            notes: string;
+        };
+        truePythag: {
+            name: string;
+            shortName: string;
+            longName: string;
+            intervalsInOctave: number;
+            intervalRatios: number[][];
+            type: string;
+            scaleType: string;
+            includesComma: boolean;
+            notes: string;
+        };
+        pythagorean: {
+            name: string;
+            shortName: string;
+            longName: string;
+            intervalsInOctave: number;
+            intervalRatios: number[][];
+            type: string;
+            scaleType: string;
+            includesComma: boolean;
+            notes: string;
+        };
+        fiveLimit: {
+            name: string;
+            shortName: string;
+            longName: string;
+            intervalsInOctave: number;
+            intervalRatios: number[][];
+            type: string;
+            scaleType: string;
+            includesComma: boolean;
+            notes: string;
+        };
+        diatonic: {
+            name: string;
+            shortName: string;
+            longName: string;
+            intervalsInOctave: number;
+            intervalRatios: number[][];
+            type: string;
+            scaleType: string;
+            includesComma: boolean;
+            notes: string;
+        };
+        diatonicIndian: {
+            name: string;
+            shortName: string;
+            longName: string;
+            intervalsInOctave: number;
+            intervalRatios: number[][];
+            type: string;
+            scaleType: string;
+            includesComma: boolean;
+            notes: string;
+        };
+        twentyTwoShrutis: {
+            name: string;
+            shortName: string;
+            longName: string;
+            intervalsInOctave: number;
+            intervalRatios: number[][];
+            type: string;
+            scaleType: string;
+            includesComma: boolean;
+            notes: string;
+        };
+        gioseffoZarlino: {
+            name: string;
+            shortName: string;
+            longName: string;
+            intervalsInOctave: number;
+            /**
+             * Duplicates items 'difference' number of times
+             * Can add a given amount to each duplicated item if desired
+             * Can start from beginning of array
+             * after repeatMultiple number of times.
+             * Is public
+             */
+            intervalRatios: number[][];
+            type: string;
+            scaleType: string;
+            includesComma: boolean;
+            notes: string;
+        };
+        majorPentatonic: {
+            name: string;
+            shortName: string;
+            longName: string;
+            intervalsInOctave: number;
+            intervalRatios: number[][];
+            type: string;
+            scaleType: string;
+            includesComma: boolean;
+            notes: string;
+        };
+        egyptianSuspended: {
+            name: string;
+            shortName: string;
+            longName: string;
+            intervalsInOctave: number;
+            intervalRatios: number[][];
+            type: string;
+            scaleType: string;
+            includesComma: boolean;
+            notes: string;
+        };
+        bluesMinorManGong: {
+            name: string;
+            shortName: string;
+            longName: string;
+            intervalsInOctave: number;
+            intervalRatios: number[][];
+            type: string;
+            scaleType: string;
+            includesComma: boolean;
+            notes: string;
+        };
+        bluesMajorRitsusenYo: {
+            name: string;
+            shortName: string;
+            longName: string;
+            intervalsInOctave: number;
+            intervalRatios: number[][];
+            type: string;
+            scaleType: string;
+            includesComma: boolean;
+            notes: string;
+        };
+        minorPentatonic: {
+            name: string;
+            shortName: string;
+            longName: string;
+            intervalsInOctave: number;
+            intervalRatios: number[][];
+            type: string;
+            scaleType: string;
+            includesComma: boolean;
+            notes: string;
+        };
+    };
     CHROMATIC_SCALE: string[];
 };
 export default _default;
