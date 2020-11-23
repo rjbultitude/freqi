@@ -21,10 +21,6 @@ interface TuningSystemsData {
   [key: string]: TuningSystemDefinition;
 }
 
-interface JustTuningSystems {
-  [key: string]: Array<Array<number>>;
-}
-
 interface UserConfigObj {
   intervals: Array<number>;
   startFreq?: number;
@@ -333,22 +329,6 @@ function GetFreqsConfig(configObj: UserConfigObj) {
 }
 
 /**
- * ------------
- * Housekeeping
- * ------------
- */
-
-function getModes(tuningSystemsData): Array<string> {
-  const modes = [];
-  for (const key in tuningSystemsData) {
-    if (Object.prototype.hasOwnProperty.call(tuningSystemsData, key)) {
-      modes.push(key);
-    }
-  }
-  return modes;
-}
-
-/**
 * ------------
 * Main module functions
 * ------------
@@ -388,7 +368,7 @@ function getAllOctaveJustIntervals(interval: number, justIntervalsArrLength: num
   }
 }
 
-function raiseOrReduceByRatio(number: number, _up: boolean, ratio): number {
+function raiseOrReduceByRatio(number: number, _up: boolean, ratio: Array<number>): number {
   const numerator = ratio[0];
   const denominator = ratio[1];
   const upperRatio = numerator / denominator;
@@ -432,12 +412,12 @@ function getPythagNoteWithinOct(index, notesInOctave, noteFreq, _up): number {
   return noteFreq;
 }
 
-function getJustIntCommaNote(eTNoteConfig: ETNoteConfig, _up): number {
+function getJustIntCommaNote(eTNoteConfig: ETNoteConfig, _up, justTuningSystems: TuningSystemsData): number {
   if (eTNoteConfig.interval === 0) {
     return eTNoteConfig.startFreq;
   }
-  const notesInOctave = tuningSystemsData[eTNoteConfig.mode].intervalsInOctave;
-  const ratio = tuningSystemsData[eTNoteConfig.mode].intervalRatios;
+  const notesInOctave = justTuningSystems[eTNoteConfig.mode].intervalsInOctave;
+  const ratio = justTuningSystems[eTNoteConfig.mode].intervalRatios[0];
   // Get number of octave note is in
   const intervalAbs = Math.abs(eTNoteConfig.interval);
   const { mult } = getAllOctaveJustIntervals(intervalAbs, notesInOctave);
@@ -479,12 +459,14 @@ function getEqTempNote(eTNoteConfig: ETNoteConfig, _up): number {
  * and calculates the frequency in Hz
  * using one of the tuning systems specified
  */
-function getJustIntNote(eTNoteConfig: ETNoteConfig, _up: boolean, justTuningSystems: JustTuningSystems): number {
+function getJustIntNote(eTNoteConfig: ETNoteConfig, _up: boolean, justTuningSystems: TuningSystemsData): number {
   if (Object.prototype.hasOwnProperty.call(justTuningSystems, eTNoteConfig.mode) === false) {
     console.error(eTNoteConfig.mode, 'is not a supported tuning system. Please set a valid mode');
     return 0;
   }
-  const _justIntervalsArr = justTuningSystems[eTNoteConfig.mode];
+  // TODO decide whether to use array length or intervalsInOctave
+  const _justIntervalsArr = justTuningSystems[eTNoteConfig.mode].intervalRatios;
+  console.log('_justIntervalsArr', _justIntervalsArr);
   const _rangeObj = getAllOctaveJustIntervals(eTNoteConfig.interval, _justIntervalsArr.length);
   const _ratioFraction = _justIntervalsArr[_rangeObj.rangeInterval][0] / _justIntervalsArr[_rangeObj.rangeInterval][1];
   const _multiplier = Math.pow(2, _rangeObj.mult);
@@ -498,7 +480,7 @@ function getJustIntNote(eTNoteConfig: ETNoteConfig, _up: boolean, justTuningSyst
   return _noteVal / _multiplier;
 }
 
-function getJustTuningSystems(tuningSystemsData: TuningSystemsData): JustTuningSystems {
+function getJustTuningSystems(tuningSystemsData: TuningSystemsData): TuningSystemsData {
   const justTuningSysIntervals = {};
   Object.keys(tuningSystemsData).forEach((key) => {
     if (tuningSystemsData[key].type === JUST_STR) {
@@ -506,7 +488,7 @@ function getJustTuningSystems(tuningSystemsData: TuningSystemsData): JustTuningS
         justTuningSysIntervals,
         key,
         {
-          value: tuningSystemsData[key].intervalRatios,
+          value: tuningSystemsData[key],
           enumerable: true,
           writable: false,
         }
@@ -516,7 +498,7 @@ function getJustTuningSystems(tuningSystemsData: TuningSystemsData): JustTuningS
   return justTuningSysIntervals;
 }
 
-function getTuningSystemType(mode: string): string {
+function getTuningSystemType(mode: string, tuningSystemsData: TuningSystemsData): string {
   if (mode === EQ_TEMP_STR || mode === H_SERIES_STR) {
     return mode;
   }
@@ -528,7 +510,7 @@ function getTuningSystemType(mode: string): string {
 }
 
 // public
-function getSingleFreq(eTNoteConfig: ETNoteConfig): number | boolean {
+function getSingleFreq(eTNoteConfig: ETNoteConfig, tuningSystemsData: TuningSystemsData): number | boolean {
   try {
     checkGetSingleFreqConfigDataTypes(eTNoteConfig);
   } catch (e) {
@@ -544,15 +526,15 @@ function getSingleFreq(eTNoteConfig: ETNoteConfig): number | boolean {
   const _intervalIsPos = eTNoteConfig.interval >= 0;
   const _up = eTNoteConfig.upwardsScale === undefined ? _intervalIsPos : eTNoteConfig.upwardsScale;
   const justTuningSystems = getJustTuningSystems(tuningSystemsData);
-  const tuningSysType = getTuningSystemType(eTNoteConfig.mode);
+  const tuningSysType = getTuningSystemType(eTNoteConfig.mode, tuningSystemsData);
   switch (tuningSysType) {
   case EQ_TEMP_STR:
     return getEqTempNote(eTNoteConfig, _up);
   case H_SERIES_STR:
     return getHSeriesNote(eTNoteConfig, _up);
-  case 'JustComma':
-    return getJustIntCommaNote(eTNoteConfig, _up);
-  case 'JustNoComma':
+  case JUST_COMMA_STR:
+    return getJustIntCommaNote(eTNoteConfig, _up, justTuningSystems);
+  case JUST_NO_COMMA_STR:
     return getJustIntNote(eTNoteConfig, _up, justTuningSystems);
   default:
     return false;
@@ -579,19 +561,22 @@ function addMissingNotesFromInterval(pConfig: MNoteConfig): Array<number> {
   return _intervals;
 }
 
-function getNotesFromIntervals(pConfig: GetNoteConfig): Array<number> {
+function getNotesFromIntervals(pConfig: GetNoteConfig, tuningSystemsData: TuningSystemsData): Array<number> {
   const _scaleArray = [];
   // For Inversions or rootless voicings
   let _intervalStartIndex = pConfig.intervalStartIndex;
   let _newNote;
   for (let i = 0; i < pConfig.loopLength; i++) {
     const finalIndex = pConfig.scaleIntervals[_intervalStartIndex] + pConfig.rootNote;
-    _newNote = getSingleFreq({
-      startFreq: pConfig.startFreq,
-      numSemitones: pConfig.numSemitones,
-      mode: pConfig.mode,
-      interval: finalIndex,
-    });
+    _newNote = getSingleFreq(
+      {
+        startFreq: pConfig.startFreq,
+        numSemitones: pConfig.numSemitones,
+        mode: pConfig.mode,
+        interval: finalIndex,
+      },
+      tuningSystemsData
+    );
     // Error check
     if (_newNote !== undefined || Number.isNaN(_newNote) === false) {
       _scaleArray.push(_newNote);
@@ -646,16 +631,19 @@ function getFreqs(msConfig: UserConfigObj): Array<number> | boolean {
   // selecting an index from within the intervals themselves
   const _loopLength = _intervalsFull.length - _validConfig.intervalStartIndex;
   // Where the magic happens
-  _scaleArray = getNotesFromIntervals({
-    startFreq: _validConfig.startFreq,
-    scaleIntervals: _intervalsFull,
-    numSemitones: _validConfig.numSemitones,
-    rootNote: _validConfig.rootNote,
-    intervalStartIndex: _validConfig.intervalStartIndex,
-    loopLength: _loopLength,
-    mode: _validConfig.mode,
-    type: _validConfig.type,
-  });
+  _scaleArray = getNotesFromIntervals(
+    {
+      startFreq: _validConfig.startFreq,
+      scaleIntervals: _intervalsFull,
+      numSemitones: _validConfig.numSemitones,
+      rootNote: _validConfig.rootNote,
+      intervalStartIndex: _validConfig.intervalStartIndex,
+      loopLength: _loopLength,
+      mode: _validConfig.mode,
+      type: _validConfig.type,
+    },
+    tuningSystemsData
+  );
   return _scaleArray;
 }
 
@@ -672,7 +660,6 @@ export default {
   getJustIntCommaNote,
   getPythagNoteWithinOct,
   getAllOctaveJustIntervals,
-  getModes,
   tuningSystemsData,
   CHROMATIC_SCALE,
 };

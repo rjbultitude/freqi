@@ -473,6 +473,7 @@ describe('addMissingNotesFromInterval', function() {
 
 describe('getSingleFreq startFreq argument', function() {
   beforeEach(function() {
+    this.tuningSystemsData = {};
     this.startFreq = 440;
     this.negStartFreq = -220;
     this.posConfig = {
@@ -513,23 +514,23 @@ describe('getSingleFreq startFreq argument', function() {
   });
 
   it('should return a number when using 0 or high integer', function() {
-    expect(freqi.getSingleFreq(this.posConfig)).to.be.a('number');
+    expect(freqi.getSingleFreq(this.posConfig, this.tuningSystemsData)).to.be.a('number');
   });
 
   it('should return a number when startFreq is zero', function() {
-    expect(freqi.getSingleFreq(this.zeroConfig)).to.be.a('number');
+    expect(freqi.getSingleFreq(this.zeroConfig, this.tuningSystemsData)).to.be.a('number');
   });
 
   it('should return false when using a negative number', function() {
-    expect(freqi.getSingleFreq(this.negConfig)).to.be.false;
+    expect(freqi.getSingleFreq(this.negConfig, this.tuningSystemsData)).to.be.false;
   });
 
   it('should return false when using an incorrect data type', function() {
-    expect(freqi.getSingleFreq(this.badConfig)).to.be.false;
+    expect(freqi.getSingleFreq(this.badConfig, this.tuningSystemsData)).to.be.false;
   });
 
   it('should return false when NaN is generated', function() {
-    expect(freqi.getSingleFreq(this.nanConfig)).to.be.false;
+    expect(freqi.getSingleFreq(this.nanConfig, this.tuningSystemsData)).to.be.false;
   });
 });
 
@@ -568,19 +569,19 @@ describe('getSingleFreq numSemitones argument', function() {
   });
 
   it('should return a number when using 0 or high integer', function() {
-    expect(freqi.getSingleFreq(this.posConfig)).to.be.a('number');
+    expect(freqi.getSingleFreq(this.posConfig, {})).to.be.a('number');
   });
 
   it('should return false when using a negative number', function() {
-    expect(freqi.getSingleFreq(this.negConfig)).to.be.false;
+    expect(freqi.getSingleFreq(this.negConfig, {})).to.be.false;
   });
 
   it('should return false when using an incorrect data type', function() {
-    expect(freqi.getSingleFreq(this.badConfig)).to.be.false;
+    expect(freqi.getSingleFreq(this.badConfig, {})).to.be.false;
   });
 
   it('should return false when NaN is generated', function() {
-    expect(freqi.getSingleFreq(this.nanConfig)).to.be.false;
+    expect(freqi.getSingleFreq(this.nanConfig, {})).to.be.false;
   });
 });
 
@@ -619,19 +620,19 @@ describe('getSingleFreq interval argument', function() {
   });
 
   it('should return a number when using 0 or high integer', function() {
-    expect(freqi.getSingleFreq(this.posConfig)).to.be.a('number');
+    expect(freqi.getSingleFreq(this.posConfig, {})).to.be.a('number');
   });
 
   it('should return a number when using 0 or lower integer', function() {
-    expect(freqi.getSingleFreq(this.negConfig)).to.be.a('number');
+    expect(freqi.getSingleFreq(this.negConfig, {})).to.be.a('number');
   });
 
   it('should return false when using an incorrect data type', function() {
-    expect(freqi.getSingleFreq(this.badConfig)).to.be.false;
+    expect(freqi.getSingleFreq(this.badConfig, {})).to.be.false;
   });
 
   it('should return false when NaN is generated', function() {
-    expect(freqi.getSingleFreq(this.nanConfig)).to.be.false;
+    expect(freqi.getSingleFreq(this.nanConfig, {})).to.be.false;
   });
 });
 
@@ -643,6 +644,11 @@ describe('getSingleFreq interval argument', function() {
 
 describe('getJustIntNote interval argument', function() {
   beforeEach(function() {
+    this.justTuningSystems = {
+      pythagorean: {
+        intervalRatios: [[1, 1], [3,2]]
+      }
+    }
     this.configPythag = {
       interval: 2,
       mode: 'pythagorean'
@@ -672,27 +678,26 @@ describe('getJustIntNote interval argument', function() {
       mode: 'pythagorean typo'
     };
   });
-
   it('should return a number when ETNoteConfig arg object contains valid interval and mode', function() {
-    expect(freqi.getJustIntNote(this.configPythag, false, freqi.justTuningSystems)).to.be.a('number');
+    expect(freqi.getJustIntNote(this.configPythag, false, this.justTuningSystems)).to.be.a('number');
   });
   it('should return a number when ETNoteConfig arg object contains mode: diatonic', function() {
-    expect(freqi.getJustIntNote(this.configDiatonic, false, freqi.justTuningSystems)).to.be.a('number');
+    expect(freqi.getJustIntNote(this.configDiatonic, false, this.justTuningSystems)).to.be.a('number');
   });
   it('should return a number when ETNoteConfig arg object contains mode: fiveLimit', function() {
-    expect(freqi.getJustIntNote(this.configFiveLimit, false, freqi.justTuningSystems)).to.be.a('number');
+    expect(freqi.getJustIntNote(this.configFiveLimit, false, this.justTuningSystems)).to.be.a('number');
   });
   it('should return a number when ETNoteConfig arg object contains mode: diatonicIndian', function() {
-    expect(freqi.getJustIntNote(this.configIndDiatonic, false, freqi.justTuningSystems)).to.be.a('number');
+    expect(freqi.getJustIntNote(this.configIndDiatonic, false, this.justTuningSystems)).to.be.a('number');
   });
   it('should return a number when ETNoteConfig arg object contains mode: twentyTwoShrutis', function() {
-    expect(freqi.getJustIntNote(this.configIndTwentyTwo, false, freqi.justTuningSystems)).to.be.a('number');
+    expect(freqi.getJustIntNote(this.configIndTwentyTwo, false, this.justTuningSystems)).to.be.a('number');
   });
   it('should return a number when ETNoteConfig arg object contains mode: gioseffoZarlino', function() {
-    expect(freqi.getJustIntNote(this.configZarlino, false, freqi.justTuningSystems)).to.be.a('number');
+    expect(freqi.getJustIntNote(this.configZarlino, false, this.justTuningSystems)).to.be.a('number');
   });
   it('should return 0 when ETNoteConfig arg object contains an invalid mode string', function() {
-    expect(freqi.getJustIntNote(this.badConfig, false, freqi.justTuningSystems)).to.equal(0);
+    expect(freqi.getJustIntNote(this.badConfig, false, this.justTuningSystems)).to.equal(0);
   });
 });
 
@@ -801,12 +806,15 @@ describe('getCorrectIndex', function() {
   });
 });
 
-describe('raiseOrReduceByFifth', function() {
-  it('should return number times 1.5 if _up arg is true', function() {
-    expect(freqi.raiseOrReduceByFifth(1, true)).to.equal(1.5);
+describe('raiseOrReduceByRatio', function() {
+  beforeEach(function() {
+    this.ratio = [3, 2];
+  });
+  it('should return number times 1.5 if _up arg is true and ratio is 3:2', function() {
+    expect(freqi.raiseOrReduceByRatio(1, true, this.ratio)).to.equal(1.5);
   });
   it('should return number divided 1.5 if _up arg is false', function() {
-    expect(freqi.raiseOrReduceByFifth(3, false)).to.equal(2);
+    expect(freqi.raiseOrReduceByRatio(3, false, this.ratio)).to.equal(2);
   });
 });
 
@@ -834,46 +842,39 @@ describe('getPythagNoteWithinOct', function() {
   });
 });
 
-describe('getTruePythagNote', function() {
+describe('getJustIntCommaNote', function() {
   beforeEach(function() {
+    this.tuningSystemsData = {
+      eqTemp: {
+        intervalsInOctave: 12,
+        intervalRatios: [[3,2]],
+        type: 'just',
+        includesComma: true,
+      }
+    };
     this.config = {
       startFreq: 261.6,
-      interval: 0
+      interval: 0,
+      mode: 'eqTemp',
     };
     this.configGNote = {
       startFreq: 261.6,
-      interval: 7
+      interval: 7,
+      mode: 'eqTemp',
     };
     this.configLowerFNote = {
       startFreq: 261.6,
-      interval: -7
+      interval: -7,
+      mode: 'eqTemp',
     };
   });
   it('should return the start freq if interval is zero', function() {
-    expect(freqi.getTruePythagNote(this.config, true)).to.equal(261.6);
+    expect(freqi.getJustIntCommaNote(this.config, true, this.tuningSystemsData)).to.equal(261.6);
   });
   it('should return the start freq * 1.5 if interval is seven', function() {
-    expect(freqi.getTruePythagNote(this.configGNote, true)).to.equal(261.6 * 1.5);
+    expect(freqi.getJustIntCommaNote(this.configGNote, true, this.tuningSystemsData)).to.equal(261.6 * 1.5);
   });
   it('should return the start freq / 1.5 if interval is minus seven', function() {
-    expect(freqi.getTruePythagNote(this.configLowerFNote, false)).to.equal(261.6 / 1.5);
-  });
-});
-
-describe('getModes', function() {
-  it('should return an array the length of justTuningSystems plus the default (eqTemp), the harmonic series and true pythag', function() {
-    const justTuningSystemsLength = Object.keys(freqi.justTuningSystems).length;
-    expect(freqi.getModes().length).to.equal(justTuningSystemsLength + 3);
-  });
-});
-
-describe('getMetaData', function() {
-  it('should return an object', function() {
-    const metaData = freqi.getMetaData();
-    expect(metaData).to.be.an('object');
-  });
-  it('should return an object with a key named eqTemp', function() {
-    const metaData = freqi.getMetaData();
-    expect(metaData).to.include.keys('eqTemp');
+    expect(freqi.getJustIntCommaNote(this.configLowerFNote, false, this.tuningSystemsData)).to.equal(261.6 / 1.5);
   });
 });

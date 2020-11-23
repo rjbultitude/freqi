@@ -1,5 +1,16 @@
-interface JustTuningSystems {
-    [key: string]: Array<Array<number>>;
+interface TuningSystemDefinition {
+    "name": string;
+    "shortName": string;
+    "longName": string;
+    "intervalsInOctave": number;
+    "intervalRatios": Array<Array<number>>;
+    "type": string;
+    "scaleType": string;
+    "includesComma": boolean;
+    "notes": string;
+}
+interface TuningSystemsData {
+    [key: string]: TuningSystemDefinition;
 }
 interface UserConfigObj {
     intervals: Array<number>;
@@ -47,12 +58,6 @@ interface AllOctaveJustIntervals {
  */
 declare function augmentNumArray(augArrConfig: AugArrConfig): Array<number>;
 /**
- * ------------
- * Housekeeping
- * ------------
- */
-declare function getModes(tuningSystemsData: any): Array<string>;
-/**
 * ------------
 * Main module functions
 * ------------
@@ -63,19 +68,19 @@ declare function getModes(tuningSystemsData: any): Array<string>;
  * plus the number of times needed to multiply the array
  */
 declare function getAllOctaveJustIntervals(interval: number, justIntervalsArrLength: number): AllOctaveJustIntervals;
-declare function raiseOrReduceByRatio(number: number, _up: boolean, ratio: any): number;
+declare function raiseOrReduceByRatio(number: number, _up: boolean, ratio: Array<number>): number;
 declare function multOrDivide(_number: number, _mult: number, _up: boolean): number;
 declare function getCorrectIndex(interval: number, _up: boolean, notesInOctave: number, mult: number): number;
 declare function getPythagNoteWithinOct(index: any, notesInOctave: any, noteFreq: any, _up: any): number;
-declare function getJustIntCommaNote(eTNoteConfig: ETNoteConfig, _up: any): number;
+declare function getJustIntCommaNote(eTNoteConfig: ETNoteConfig, _up: any, justTuningSystems: TuningSystemsData): number;
 declare function getHSeriesNote(eTNoteConfig: ETNoteConfig, _up: any): number;
 /**
  * Takes the note index from the eTNoteConfig obj
  * and calculates the frequency in Hz
  * using one of the tuning systems specified
  */
-declare function getJustIntNote(eTNoteConfig: ETNoteConfig, _up: boolean, justTuningSystems: JustTuningSystems): number;
-declare function getSingleFreq(eTNoteConfig: ETNoteConfig): number | boolean;
+declare function getJustIntNote(eTNoteConfig: ETNoteConfig, _up: boolean, justTuningSystems: TuningSystemsData): number;
+declare function getSingleFreq(eTNoteConfig: ETNoteConfig, tuningSystemsData: TuningSystemsData): number | boolean;
 declare function addMissingNotesFromInterval(pConfig: MNoteConfig): Array<number>;
 /**
  * Accepts only an object
@@ -95,7 +100,6 @@ declare const _default: {
     getJustIntCommaNote: typeof getJustIntCommaNote;
     getPythagNoteWithinOct: typeof getPythagNoteWithinOct;
     getAllOctaveJustIntervals: typeof getAllOctaveJustIntervals;
-    getModes: typeof getModes;
     tuningSystemsData: {
         eqTemp: {
             name: string;
