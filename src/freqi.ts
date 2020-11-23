@@ -275,7 +275,11 @@ function checkGetFreqsNumericDataTypes(msConfig: UserConfigObj): boolean {
   return true;
 }
 
-function checkUsersConfig(msConfig: UserConfigObj): boolean {
+function getModes(tuningSystemsData: TuningSystemsData): Array<string> {
+  return Object.keys(tuningSystemsData);
+}
+
+function checkUsersConfig(msConfig: UserConfigObj, tuningSystemsData: TuningSystemsData): boolean {
   if (typeof msConfig !== 'object') {
     throw new TypeError('Musical Scale Config should be an object');
   }
@@ -290,6 +294,10 @@ function checkUsersConfig(msConfig: UserConfigObj): boolean {
     if (typeof msConfig.intervals[i] !== 'number' || Number.isNaN(msConfig.intervals[i])) {
       throw new TypeError('intervals is not an array of numbers');
     }
+  }
+  const modes = getModes(tuningSystemsData);
+  if (Object.prototype.hasOwnProperty.call(msConfig, 'mode') && modes.indexOf(msConfig.mode) === -1) {
+    throw new SyntaxError('mode is not a valid key');
   }
   return true;
 }
@@ -594,7 +602,7 @@ function getNotesFromIntervals(pConfig: GetNoteConfig, tuningSystemsData: Tuning
 function getFreqs(msConfig: UserConfigObj): Array<number> | boolean {
   // Check config for mandatory prop
   try {
-    checkUsersConfig(msConfig);
+    checkUsersConfig(msConfig, tuningSystemsData);
   } catch (e) {
     console.warn(e);
     return false;

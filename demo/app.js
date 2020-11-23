@@ -17,10 +17,10 @@ const scaleConfigAllOpts = {
 
 const scaleConfigJustIntOpts = {
   startFreq: cNoteFreq,
-  numSemitones: 12,
+  // numSemitones: 12,
   rootNote: 0,
-  intervals: cMajorScale,
-  mode: 'pythagorean'
+  intervals: [-24, -12, 0, 12, 24],
+  mode: 'blah'
 };
 
 const scaleConfigMandatoryOpts = {
@@ -39,25 +39,25 @@ const scaleConfigTruePythagOpts = {
   mode: 'truePythag'
 };
 
-const scaleConfigMajorPentatonic = {
+const scaleConfigPentatonic = {
   startFreq: 440,
-  intervals: [-0, 1, 2, 3, 4],
-  mode: 'majorPentatonic'
+  intervals: [-25, 1, 2, 3, 4, 5, 25],
+  mode: 'minorPentatonic'
 };
 
 // const scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigMandatoryOpts);
-// const scaleFrequencies = freqi.getFreqs(scaleConfigJustIntOpts);
+const scaleFrequencies = freqi.getFreqs(scaleConfigJustIntOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigHSeriesOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigTruePythagOpts);
-const scaleFrequencies = freqi.getFreqs(scaleConfigMajorPentatonic);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigPentatonic);
 console.log('scaleFrequencies', scaleFrequencies);
 
 const playBtn = document.getElementById('play');
 const stopBtn = document.getElementById('stop');
 let connected = false;
-
 let index = 0;
+let startOsc = false;
 
 // define audio context
 const context = new (window.AudioContext || window.webkitAudioContext)();
@@ -96,9 +96,12 @@ function play(scale, noteLength) {
 
 playBtn.addEventListener('click', function(e) {
   e.preventDefault();
-  if (!connected) {
+  if (!startOsc) {
     oscillator.start();
-    play(scaleFrequencies, 2000);
+    startOsc = true;
+  }
+  if (!connected) {
+    play(scaleFrequencies, 500);
   }
   console.log('connected', connected);
 });
