@@ -16,7 +16,7 @@
     "longName": "Harmonic Series",
     "intervalsInOctave": null,
     "intervalRatios": null,
-    "type": "just",
+    "type": "pure",
     "scaleType": "",
     "includesComma": false,
     "notes": "A set of whole number ratios representing how sound works in nature"

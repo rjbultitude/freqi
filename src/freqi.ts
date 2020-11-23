@@ -3,7 +3,7 @@
   github.com/rjbultitude
 */
 
-import tuningSystemsMeta from './tuning-systems.json';
+import tuningSystemsData from './tuning-systems.json';
 
 interface MetaDataTuningSys {
   "name": string;
@@ -119,37 +119,37 @@ function reallyIsNaN(x: number): boolean {
 
 function checkAugmentNumArrayConfigTypes(augArrConfig: AugArrConfig) {
   if (Array.isArray(augArrConfig.originalArray) !== true) {
-    throw TypeError('originalArray is not an array');
+    throw new TypeError('originalArray is not an array');
   } else {
     for (let i = 0; i < augArrConfig.originalArray.length; i++) {
       if (reallyIsNaN(augArrConfig.originalArray[i])) {
-        throw TypeError('originalArray contains values that are NaN');
+        throw new TypeError('originalArray contains values that are NaN');
       }
     }
   }
   if (typeof augArrConfig.difference !== 'number' || Number.isNaN(augArrConfig.difference)) {
-    throw TypeError('difference is not a number');
+    throw new TypeError('difference is not a number');
   }
   if (augArrConfig.difference <= 0) {
-    throw TypeError('difference cannot be 0 or less');
+    throw new TypeError('difference cannot be 0 or less');
   }
   if (typeof augArrConfig.repeatMultiple !== 'number' || Number.isNaN(augArrConfig.repeatMultiple)) {
-    throw TypeError('repeatMultiple is not a number');
+    throw new TypeError('repeatMultiple is not a number');
   }
   if (typeof augArrConfig.amountToAdd !== 'number' || Number.isNaN(augArrConfig.amountToAdd)) {
-    throw TypeError('amountToAdd is not a number');
+    throw new TypeError('amountToAdd is not a number');
   }
 }
 
 function checkAugmentNumArrayConfigForNegs(augArrConfig: AugArrConfig) {
   if (augArrConfig.difference <= 0) {
-    throw SyntaxError('difference should be higher than 0');
+    throw new SyntaxError('difference should be higher than 0');
   }
   if (augArrConfig.repeatMultiple < 0) {
-    throw SyntaxError('repeatMultiple should be 0 or higher');
+    throw new SyntaxError('repeatMultiple should be 0 or higher');
   }
   if (augArrConfig.amountToAdd < 0) {
-    throw SyntaxError('amountToAdd should be 0 or higher');
+    throw new SyntaxError('amountToAdd should be 0 or higher');
   }
 }
 
@@ -359,7 +359,7 @@ function getModes(): Array<string> {
 
 /*
   Modes stores available tuning systems
-  tuningSystemsMeta may contain objects not needed
+  tuningSystemsData may contain objects not needed
 */
 function getMetaData(): MetaData {
   const newMetaDataObj = {};
@@ -369,7 +369,7 @@ function getMetaData(): MetaData {
       newMetaDataObj,
       mode,
       {
-        value: tuningSystemsMeta[mode],
+        value: tuningSystemsData[mode],
         writable: false,
         enumerable: true
       }
@@ -418,13 +418,15 @@ function getAllOctaveJustIntervals(interval: number, justIntervalsArrLength: num
   }
 }
 
-function raiseOrReduceByFifth(number: number, _up: boolean): number {
-  const upperFifthRatio = 3/2;
-  const lowerFifthRatio = 2/3;
+function raiseOrReduceByRatio(number: number, _up: boolean, ratio): number {
+  const numerator = ratio[0];
+  const denominator = ratio[1];
+  const upperRatio = numerator / denominator;
+  const lowerRatio = denominator / numerator;
   if (_up) {
-    return number * upperFifthRatio;
+    return number * upperRatio;
   }
-  return number * lowerFifthRatio;
+  return number * lowerRatio;
 }
 
 function multOrDivide(_number: number, _mult: number, _up: boolean): number {
@@ -460,11 +462,12 @@ function getPythagNoteWithinOct(index, notesInOctave, noteFreq, _up): number {
   return noteFreq;
 }
 
-function getTruePythagNote(eTNoteConfig: ETNoteConfig, _up): number {
+function getJustIntCommaNote(eTNoteConfig: ETNoteConfig, _up): number {
   if (eTNoteConfig.interval === 0) {
     return eTNoteConfig.startFreq;
   }
-  const notesInOctave = 12;
+  const notesInOctave = tuningSystemsData[eTNoteConfig.mode].intervalsInOctave;
+  const ratio = tuningSystemsData[eTNoteConfig.mode].intervalRatios;
   // Get number of octave note is in
   const intervalAbs = Math.abs(eTNoteConfig.interval);
   const { mult } = getAllOctaveJustIntervals(intervalAbs, notesInOctave);
@@ -474,7 +477,7 @@ function getTruePythagNote(eTNoteConfig: ETNoteConfig, _up): number {
   let noteFreq = eTNoteConfig.startFreq;
   let prevNote = noteFreq;
   for (let index = 0; index < correctIndex; index++) {
-    noteFreq = raiseOrReduceByFifth(prevNote, _up);
+    noteFreq = raiseOrReduceByRatio(prevNote, _up, ratio);
     noteFreq = getPythagNoteWithinOct(index, notesInOctave, noteFreq, _up);
     prevNote = noteFreq;
   }
@@ -525,6 +528,17 @@ function getJustIntNote(eTNoteConfig: ETNoteConfig, _up: boolean, justTuningSyst
   return _noteVal / _multiplier;
 }
 
+function getTuningSystemType(mode) {
+  if (mode === EQ_TEMP_STR || mode === H_SERIES_STR) {
+    return mode;
+  }
+  if (tuningSystemsData[mode].includesComma) {
+    return 'JustComma';
+  } else {
+    return 'JustNoComma';
+  }
+}
+
 // public
 function getSingleFreq(eTNoteConfig: ETNoteConfig): number | boolean {
   try {
@@ -541,18 +555,24 @@ function getSingleFreq(eTNoteConfig: ETNoteConfig): number | boolean {
   }
   const _intervalIsPos = eTNoteConfig.interval >= 0;
   const _up = eTNoteConfig.upwardsScale === undefined ? _intervalIsPos : eTNoteConfig.upwardsScale;
-  let _note;
-  if (eTNoteConfig.mode === EQ_TEMP_STR) {
-    _note = getEqTempNote(eTNoteConfig, _up);
-  } else if (eTNoteConfig.mode === H_SERIES_STR) {
-    _note = getHSeriesNote(eTNoteConfig, _up);
-  } else if (eTNoteConfig.mode === TRUE_PYTHAG) {
-    _note = getTruePythagNote(eTNoteConfig, _up);
+  // TODO determine which cases require which logic
+  // match eTNoteConfig.mode with object
+  // and query whether it's just or tempered
+  // if just, does it include or exclude syntonic comma
+  // const tuningSysType = getTuningSystemType(eTNoteConfig.mode)
+  switch (tuningSysType) {
+  case EQ_TEMP_STR:
+    return getEqTempNote(eTNoteConfig, _up);
+  case H_SERIES_STR:
+    return getHSeriesNote(eTNoteConfig, _up);
+  case 'JustComma':
+    // TODO broaden remit of fn
+    return getJustIntCommaNote(eTNoteConfig, _up);
+  case 'JustNoComma':
+    return getJustIntNote(eTNoteConfig, _up, justTuningSystems);
+  default:
+    throw 'no such type';
   }
-  else {
-    _note = getJustIntNote(eTNoteConfig, _up, justTuningSystems);
-  }
-  return _note;
 }
 
 // Adds new items to the intervals array
@@ -672,12 +692,12 @@ export default {
   augmentNumArray,
   addMissingNotesFromInterval,
   getCorrectIndex,
-  raiseOrReduceByFifth,
+  raiseOrReduceByRatio,
   multOrDivide,
   getSingleFreq,
   getJustIntNote,
   getHSeriesNote,
-  getTruePythagNote,
+  getJustIntCommaNote,
   getPythagNoteWithinOct,
   getAllOctaveJustIntervals,
   getModes,
