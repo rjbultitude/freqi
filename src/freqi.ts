@@ -5,18 +5,16 @@
 
 import tuningSystemsData from './tuning-systems.json';
 
-interface MetaDataTuningSys {
+interface TuningSystemsData {
   "name": string;
   "shortName": string;
   "longName": string;
   "intervalsInOctave": number;
+  "intervalRatios": Array<Array<number>>;
   "type": string;
   "scaleType": string;
+  "includesComma": boolean;
   "notes": string;
-}
-
-interface MetaData {
-  [key: string]: MetaDataTuningSys;
 }
 
 interface JustTuningSystems {
@@ -90,6 +88,10 @@ interface AllOctaveJustIntervals {
   rangeInterval: number;
 }
 
+interface JustTuningSysIntervalsObj {
+  [key: string]: Array<number>;
+}
+
 // Constants
 const EQ_TEMP_STR = 'eqTemp';
 const H_SERIES_STR = 'hSeries';
@@ -106,7 +108,7 @@ function reallyIsNaN(x: number): boolean {
   return x !== x;
 }
 
-function checkAugmentNumArrayConfigTypes(augArrConfig: AugArrConfig) {
+function checkAugmentNumArrayConfigTypes(augArrConfig: AugArrConfig): never {
   if (Array.isArray(augArrConfig.originalArray) !== true) {
     throw new TypeError('originalArray is not an array');
   } else {
@@ -130,7 +132,7 @@ function checkAugmentNumArrayConfigTypes(augArrConfig: AugArrConfig) {
   }
 }
 
-function checkAugmentNumArrayConfigForNegs(augArrConfig: AugArrConfig) {
+function checkAugmentNumArrayConfigForNegs(augArrConfig: AugArrConfig): never {
   if (augArrConfig.difference <= 0) {
     throw new SyntaxError('difference should be higher than 0');
   }
@@ -496,12 +498,12 @@ function getJustIntNote(eTNoteConfig: ETNoteConfig, _up: boolean, justTuningSyst
   return _noteVal / _multiplier;
 }
 
-function getJustTuningSystems(tuningSystemsData) {
-  const justTuningSystems = {};
-  Object.keys(justTuningSystems).forEach((key) => {
+function getJustTuningSystems(tuningSystemsData: TuningSystemsData): JustTuningSysIntervalsObj {
+  const justTuningSysIntervals = {};
+  Object.keys(tuningSystemsData).forEach((key) => {
     if (tuningSystemsData[key].type === JUST_STR) {
       Object.defineProperty(
-        justTuningSystems,
+        justTuningSysIntervals,
         key,
         {
           value: tuningSystemsData[key].intervalRatios,
@@ -511,7 +513,7 @@ function getJustTuningSystems(tuningSystemsData) {
       );
     }
   });
-  return justTuningSystems;
+  return justTuningSysIntervals;
 }
 
 function getTuningSystemType(mode: string): string {
