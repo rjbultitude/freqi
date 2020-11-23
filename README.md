@@ -60,25 +60,19 @@ or for CommonJS loaders (such as [Browserify](http://browserify.org/)) use
 
 `startFreq` can be a frequency in Hz, such as `440` (for the note A) or a relative frequency such `1` which is useful for playing back audio files, such as MP3s or OGGs, where `1` is the original playback rate. `440` is the default value.
 
-**NEW | Tuning Systems**
-Freqi now supports just intonation tuning systems. By default it will use equal temperament, but to use a Just tuning system set the `mode` to one of the following:
+**Tuning Systems**
+Freqi supports just intonation tuning systems. By default it will use equal temperament, but to use a Just tuning system set the `mode` to one of the following:
 * `pythagorean` - Pythagorean just intonation excluding the syntonic comma
-
 * `truePythag` - Pythagorean just intonation that _includes_ the syntonic/[pyhthagorean comma](https://en.wikipedia.org/wiki/Pythagorean_comma)
-
 * `fiveLimit` - A set of whole number ratios using only powers of 2, 3, or 5
-
 * `diatonic` - A justly-tuned major diatonic scale that uses the 5-limit system devised by Ptolemy
-
 * `diatonicIndian` - A justly-tuned diatonic scale that uses 27/16 for Dha
-
 * `twentyTwoShrutis` - A justly-tuned 22 note Indian scale described by the Bharata and Dattilam
-
 * `gioseffoZarlino` - An early just tuning system of 16 notes per octave 
 
 Please note, once in one of these modes, other config params, such as `numNotes`, will have no effect as they are fixed scale systems.
 
-The object containing the ratios for each _just_ system is exported as `justTuningSystems` should you need to view it. If you want to list all the tuning system keys, use the method `getModes`. Furthermore, an object containing meta data about all the tuning systems can be obtained by calling `getMetaData` where each key is the same as above and `getModes`.
+The object containing the ratios for each _just_ system is exported as `justTuningSystems` should you need to view it. If you want to list all the tuning system keys, use the property `freqiModes`, which is an array of the keys. Furthermore, an object containing meta data about all the tuning systems can be obtained via `tuningSystemsData`.
 
 There is also a mode for the harmonic series called `hSeries`. In its raw state it may not particularly useful for making music, but may be of interest to music theorists.
 
