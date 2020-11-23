@@ -190,13 +190,6 @@ declare const _default: {
             shortName: string;
             longName: string;
             intervalsInOctave: number;
-            /**
-             * Duplicates items 'difference' number of times
-             * Can add a given amount to each duplicated item if desired
-             * Can start from beginning of array
-             * after repeatMultiple number of times.
-             * Is public
-             */
             intervalRatios: number[][];
             type: string;
             scaleType: string;

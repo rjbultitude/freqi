@@ -5,7 +5,7 @@
 
 import tuningSystemsData from './tuning-systems.json';
 
-interface TuningSystemsData {
+interface TuningSystemDefinition {
   "name": string;
   "shortName": string;
   "longName": string;
@@ -15,6 +15,10 @@ interface TuningSystemsData {
   "scaleType": string;
   "includesComma": boolean;
   "notes": string;
+}
+
+interface TuningSystemsData {
+  [key: string]: TuningSystemDefinition;
 }
 
 interface JustTuningSystems {
@@ -88,10 +92,6 @@ interface AllOctaveJustIntervals {
   rangeInterval: number;
 }
 
-interface JustTuningSysIntervalsObj {
-  [key: string]: Array<number>;
-}
-
 // Constants
 const EQ_TEMP_STR = 'eqTemp';
 const H_SERIES_STR = 'hSeries';
@@ -108,7 +108,7 @@ function reallyIsNaN(x: number): boolean {
   return x !== x;
 }
 
-function checkAugmentNumArrayConfigTypes(augArrConfig: AugArrConfig): never {
+function checkAugmentNumArrayConfigTypes(augArrConfig: AugArrConfig): void {
   if (Array.isArray(augArrConfig.originalArray) !== true) {
     throw new TypeError('originalArray is not an array');
   } else {
@@ -132,7 +132,7 @@ function checkAugmentNumArrayConfigTypes(augArrConfig: AugArrConfig): never {
   }
 }
 
-function checkAugmentNumArrayConfigForNegs(augArrConfig: AugArrConfig): never {
+function checkAugmentNumArrayConfigForNegs(augArrConfig: AugArrConfig): void {
   if (augArrConfig.difference <= 0) {
     throw new SyntaxError('difference should be higher than 0');
   }
@@ -498,7 +498,7 @@ function getJustIntNote(eTNoteConfig: ETNoteConfig, _up: boolean, justTuningSyst
   return _noteVal / _multiplier;
 }
 
-function getJustTuningSystems(tuningSystemsData: TuningSystemsData): JustTuningSysIntervalsObj {
+function getJustTuningSystems(tuningSystemsData: TuningSystemsData): JustTuningSystems {
   const justTuningSysIntervals = {};
   Object.keys(tuningSystemsData).forEach((key) => {
     if (tuningSystemsData[key].type === JUST_STR) {
