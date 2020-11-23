@@ -256,6 +256,7 @@ declare const _default: {
             notes: string;
         };
     };
+    freqiModes: string[];
     CHROMATIC_SCALE: string[];
 };
 export default _default;

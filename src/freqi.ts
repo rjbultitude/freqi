@@ -279,6 +279,9 @@ function getModes(tuningSystemsData: TuningSystemsData): Array<string> {
   return Object.keys(tuningSystemsData);
 }
 
+// Exported
+const freqiModes = getModes(tuningSystemsData);
+
 function checkUsersConfig(msConfig: UserConfigObj, tuningSystemsData: TuningSystemsData): boolean {
   if (typeof msConfig !== 'object') {
     throw new TypeError('Musical Scale Config should be an object');
@@ -668,5 +671,6 @@ export default {
   getPythagNoteWithinOct,
   getAllOctaveJustIntervals,
   tuningSystemsData,
+  freqiModes,
   CHROMATIC_SCALE,
 };

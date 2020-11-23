@@ -17,10 +17,10 @@ const scaleConfigAllOpts = {
 
 const scaleConfigJustIntOpts = {
   startFreq: cNoteFreq,
-  // numSemitones: 12,
+  numSemitones: 12,
   rootNote: 0,
   intervals: [-24, -12, 0, 12, 24],
-  mode: 'blah'
+  mode: 'fiveLimit'
 };
 
 const scaleConfigMandatoryOpts = {
