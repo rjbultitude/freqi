@@ -466,7 +466,6 @@ function getJustIntNote(eTNoteConfig: ETNoteConfig, _up: boolean, justTuningSyst
   }
   // TODO decide whether to use array length or intervalsInOctave
   const _justIntervalsArr = justTuningSystems[eTNoteConfig.mode].intervalRatios;
-  console.log('_justIntervalsArr', _justIntervalsArr);
   const _rangeObj = getAllOctaveJustIntervals(eTNoteConfig.interval, _justIntervalsArr.length);
   const _ratioFraction = _justIntervalsArr[_rangeObj.rangeInterval][0] / _justIntervalsArr[_rangeObj.rangeInterval][1];
   const _multiplier = Math.pow(2, _rangeObj.mult);
@@ -597,7 +596,7 @@ function getFreqs(msConfig: UserConfigObj): Array<number> | boolean {
   try {
     checkUsersConfig(msConfig);
   } catch (e) {
-    console.log(e);
+    console.warn(e);
     return false;
   }
   // Create valid config by adding any undefined values

@@ -39,11 +39,18 @@ const scaleConfigTruePythagOpts = {
   mode: 'truePythag'
 };
 
+const scaleConfigMajorPentatonic = {
+  startFreq: 440,
+  intervals: [-0, 1, 2, 3, 4],
+  mode: 'majorPentatonic'
+};
+
 // const scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigMandatoryOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigJustIntOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigHSeriesOpts);
-const scaleFrequencies = freqi.getFreqs(scaleConfigTruePythagOpts);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigTruePythagOpts);
+const scaleFrequencies = freqi.getFreqs(scaleConfigMajorPentatonic);
 console.log('scaleFrequencies', scaleFrequencies);
 
 const playBtn = document.getElementById('play');
