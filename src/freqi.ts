@@ -197,6 +197,8 @@ function augmentNumArray(augArrConfig: AugArrConfig): Array<number> {
   return _finalArr;
 }
 
+// TODO could substitute for Array includes
+// As web audio isn't supported in IE
 function isPropValid(prop, inValidKeys): boolean {
   for (let i = 0; i < inValidKeys.length; i++) {
     if (prop === inValidKeys[i]) {
@@ -475,7 +477,6 @@ function getJustIntNote(eTNoteConfig: ETNoteConfig, _up: boolean, justTuningSyst
     console.error(eTNoteConfig.mode, 'is not a supported tuning system. Please set a valid mode');
     return 0;
   }
-  // TODO decide whether to use array length or intervalsInOctave
   const _justIntervalsArr = justTuningSystems[eTNoteConfig.mode].intervalRatios;
   const _rangeObj = getAllOctaveJustIntervals(eTNoteConfig.interval, _justIntervalsArr.length);
   const _ratioFraction = _justIntervalsArr[_rangeObj.rangeInterval][0] / _justIntervalsArr[_rangeObj.rangeInterval][1];
@@ -670,7 +671,17 @@ export default {
   getJustIntCommaNote,
   getPythagNoteWithinOct,
   getAllOctaveJustIntervals,
+  getJustTuningSystems,
+  getTuningSystemType,
   tuningSystemsData,
   freqiModes,
+  getModes,
   CHROMATIC_SCALE,
+  errorCheckFns: {
+    checkAugmentNumArrayConfigTypes,
+    checkAugmentNumArrayConfigForNegs,
+    checkGetSingleFreqConfigForNegs,
+    checkGetSingleFreqConfigDataTypes,
+    checkGetFreqsNumericDataTypes
+  }
 };

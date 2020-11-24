@@ -45,12 +45,19 @@ const scaleConfigPentatonic = {
   mode: 'minorPentatonic'
 };
 
+const testConfig = {
+  startFreq: 440,
+  numSemitones: 12,
+  intervals: [-5, 0, 7]
+}
+
 // const scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigMandatoryOpts);
-const scaleFrequencies = freqi.getFreqs(scaleConfigJustIntOpts);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigJustIntOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigHSeriesOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigTruePythagOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigPentatonic);
+const scaleFrequencies = freqi.getFreqs(testConfig);
 console.log('scaleFrequencies', scaleFrequencies);
 
 const playBtn = document.getElementById('play');

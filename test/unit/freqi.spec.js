@@ -112,21 +112,21 @@ describe('getFreqs startFreq argument', function() {
     };
   });
 
-    it('should return an array when using 0 or high integer', function() {
-      expect(freqi.getFreqs(this.posConfig)).to.be.an('array');
-    });
+  it('should return an array when using 0 or high integer', function() {
+    expect(freqi.getFreqs(this.posConfig)).to.be.an('array');
+  });
 
-    it('should return false when using a negative number', function() {
-      expect(freqi.getFreqs(this.negConfig)).to.be.false;
-    });
+  it('should return false when using a negative number', function() {
+    expect(freqi.getFreqs(this.negConfig)).to.be.false;
+  });
 
-    it('should return false when using an incorrect data type', function() {
-      expect(freqi.getFreqs(this.badConfig)).to.be.false;
-    });
+  it('should return false when using an incorrect data type', function() {
+    expect(freqi.getFreqs(this.badConfig)).to.be.false;
+  });
 
-    it('should return false when NaN is generated', function() {
-      expect(freqi.getFreqs(this.nanConfig)).to.be.false;
-    });
+  it('should return false when NaN is generated', function() {
+    expect(freqi.getFreqs(this.nanConfig)).to.be.false;
+  });
 });
 
 describe('getFreqs numSemitones argument', function() {
@@ -464,7 +464,6 @@ describe('addMissingNotesFromInterval', function() {
 });
 
 
-
 /**
  * ---------------------
  * getSingleFreq tests
@@ -741,7 +740,7 @@ describe('getHSeriesNote', function() {
 
 /**
  * ---------------------
- * getAllOctaveJustIntervals tests
+ * Note within octave fns tests
  * ---------------------
  */
 
@@ -876,5 +875,84 @@ describe('getJustIntCommaNote', function() {
   });
   it('should return the start freq / 1.5 if interval is minus seven', function() {
     expect(freqi.getJustIntCommaNote(this.configLowerFNote, false, this.tuningSystemsData)).to.equal(261.6 / 1.5);
+  });
+});
+
+/**
+ * getJustTuningSystems
+*/
+
+describe('getJustTuningSystems', function() {
+  beforeEach(function() {
+    this.tuningSystemsData = {
+      fiveLimit: {
+        type: 'just'
+      }
+    }
+  });
+  it('should return an object when passed an object', function() {
+    expect(freqi.getJustTuningSystems({})).to.be.an('object');
+  });
+  it('should return an object with one key for each child that has a type prop of "just"', function() {
+    const justTuningSystems = freqi.getJustTuningSystems(this.tuningSystemsData);
+    const justTuningSystemsLength = Object.keys(justTuningSystems).length
+    expect(justTuningSystemsLength).to.equal(1);
+  });
+  it('should return an object with no keys if object arg has no children with "just" type prop', function() {
+    const justTuningSystems = freqi.getJustTuningSystems({});
+    const justTuningSystemsLength = Object.keys(justTuningSystems).length
+    expect(justTuningSystemsLength).to.equal(0);
+  });
+});
+
+describe('getTuningSystemType', function() {
+  beforeEach(function() {
+    const EQ_TEMP_STR = 'eqTemp';
+    const H_SERIES_STR = 'hSeries';
+    this.EQ_TEMP_STR = EQ_TEMP_STR;
+    this.H_SERIES_STR = H_SERIES_STR;
+    this.JUST_COMMA_STR = 'justComma';
+    this.tuningSystemEqTemp = {
+      eqTemp: {
+        mode: EQ_TEMP_STR,
+        includesComma: false
+      }
+    };
+    this.tuningSystemHSeries = {
+      hSeries: {
+        mode: H_SERIES_STR,
+        includesComma: false
+      }
+    };
+    this.tuningSystemFiveLimit = {
+      fiveLimit: {
+        mode: EQ_TEMP_STR,
+        includesComma: true
+      }
+    };
+  });
+  it('should return EQ_TEMP_STR when passed object with prop mode set to EQ_TEMP_STR', function() {
+    expect(freqi.getTuningSystemType(this.EQ_TEMP_STR, this.tuningSystemEqTemp)).to.equal(this.EQ_TEMP_STR);
+  });
+  it('should return H_SERIES_STR when passed object with prop mode set to H_SERIES_STR', function() {
+    expect(freqi.getTuningSystemType(this.H_SERIES_STR, this.tuningSystemHSeries)).to.equal(this.H_SERIES_STR);
+  });
+  it('should return JUST_COMMA_STR when passed object with prop includesComma set to true and mode is not EQ_TEMP_STR or H_SERIES_STR', function() {
+    expect(freqi.getTuningSystemType('fiveLimit', this.tuningSystemFiveLimit)).to.equal(this.JUST_COMMA_STR);
+  });
+});
+
+describe('getModes', function() {
+  beforeEach(function() {
+    this.tuningSystemsData= {
+      eqTemp: {}
+    }
+  });
+  it('should return an array', function() {
+    expect(freqi.getModes(this.tuningSystemsData)).to.be.an('array');
+  });
+  it('should return the key of first prop from object argument', function() {
+    const firstKey = freqi.getModes(this.tuningSystemsData)[0];
+    expect(firstKey).to.equal('eqTemp');
   });
 });

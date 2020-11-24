@@ -49,6 +49,8 @@ interface AllOctaveJustIntervals {
     mult: number;
     rangeInterval: number;
 }
+declare function checkAugmentNumArrayConfigTypes(augArrConfig: AugArrConfig): void;
+declare function checkAugmentNumArrayConfigForNegs(augArrConfig: AugArrConfig): void;
 /**
  * Duplicates items 'difference' number of times
  * Can add a given amount to each duplicated item if desired
@@ -57,6 +59,20 @@ interface AllOctaveJustIntervals {
  * Is public
  */
 declare function augmentNumArray(augArrConfig: AugArrConfig): Array<number>;
+/**
+ * ------------
+ * Equal temperament data sanitisation
+ * ------------
+ */
+declare function checkGetSingleFreqConfigForNegs(dataObj: any): boolean;
+declare function checkGetSingleFreqConfigDataTypes(dataObj: ETNoteConfig): boolean;
+/**
+* ------------
+* Musical Scale data sanitisation
+* ------------
+*/
+declare function checkGetFreqsNumericDataTypes(msConfig: UserConfigObj): boolean;
+declare function getModes(tuningSystemsData: TuningSystemsData): Array<string>;
 /**
 * ------------
 * Main module functions
@@ -80,6 +96,8 @@ declare function getHSeriesNote(eTNoteConfig: ETNoteConfig, _up: any): number;
  * using one of the tuning systems specified
  */
 declare function getJustIntNote(eTNoteConfig: ETNoteConfig, _up: boolean, justTuningSystems: TuningSystemsData): number;
+declare function getJustTuningSystems(tuningSystemsData: TuningSystemsData): TuningSystemsData;
+declare function getTuningSystemType(mode: string, tuningSystemsData: TuningSystemsData): string;
 declare function getSingleFreq(eTNoteConfig: ETNoteConfig, tuningSystemsData: TuningSystemsData): number | boolean;
 declare function addMissingNotesFromInterval(pConfig: MNoteConfig): Array<number>;
 /**
@@ -100,6 +118,8 @@ declare const _default: {
     getJustIntCommaNote: typeof getJustIntCommaNote;
     getPythagNoteWithinOct: typeof getPythagNoteWithinOct;
     getAllOctaveJustIntervals: typeof getAllOctaveJustIntervals;
+    getJustTuningSystems: typeof getJustTuningSystems;
+    getTuningSystemType: typeof getTuningSystemType;
     tuningSystemsData: {
         eqTemp: {
             name: string;
@@ -257,6 +277,14 @@ declare const _default: {
         };
     };
     freqiModes: string[];
+    getModes: typeof getModes;
     CHROMATIC_SCALE: string[];
+    errorCheckFns: {
+        checkAugmentNumArrayConfigTypes: typeof checkAugmentNumArrayConfigTypes;
+        checkAugmentNumArrayConfigForNegs: typeof checkAugmentNumArrayConfigForNegs;
+        checkGetSingleFreqConfigForNegs: typeof checkGetSingleFreqConfigForNegs;
+        checkGetSingleFreqConfigDataTypes: typeof checkGetSingleFreqConfigDataTypes;
+        checkGetFreqsNumericDataTypes: typeof checkGetFreqsNumericDataTypes;
+    };
 };
 export default _default;
