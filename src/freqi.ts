@@ -214,7 +214,8 @@ function isPropValid(prop, inValidKeys): boolean {
  * ------------
  */
 
-function checkGetSingleFreqConfigForNegs(dataObj): boolean {
+// TODO consider just checking props with data type of number
+function checkGetSingleFreqConfigForNegs(dataObj: ETNoteConfig): boolean {
   const invalidKeys = ['interval', 'upwardsScale', 'mode'];
   for (const prop in dataObj) {
     if (isPropValid(prop, invalidKeys)) {
