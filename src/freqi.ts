@@ -597,7 +597,7 @@ function getNotesFromIntervals(pConfig: GetNoteConfig, tuningSystemsData: Tuning
       tuningSystemsData
     );
     // Error check
-    if (_newNote !== undefined || Number.isNaN(_newNote) === false) {
+    if (_newNote !== undefined && Number.isNaN(_newNote) === false) {
       _scaleArray.push(_newNote);
     } else {
       console.error('undefined or NaN note');
@@ -674,6 +674,7 @@ export default {
   raiseOrReduceByRatio,
   multOrDivide,
   getSingleFreq,
+  getNotesFromIntervals,
   getJustIntNote,
   getHSeriesNote,
   getJustIntCommaNote,

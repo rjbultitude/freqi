@@ -32,6 +32,16 @@ interface MNoteConfig {
     scaleIntervals: Array<number>;
     type: string;
 }
+interface GetNoteConfig {
+    startFreq: number;
+    scaleIntervals: Array<number>;
+    numSemitones: number;
+    rootNote: number;
+    intervalStartIndex: number;
+    loopLength: number;
+    mode: string;
+    type: string;
+}
 interface ETNoteConfig {
     interval: number;
     startFreq: number;
@@ -100,6 +110,7 @@ declare function getJustTuningSystems(tuningSystemsData: TuningSystemsData): Tun
 declare function getTuningSystemType(mode: string, tuningSystemsData: TuningSystemsData): string;
 declare function getSingleFreq(eTNoteConfig: ETNoteConfig, tuningSystemsData: TuningSystemsData): number | boolean;
 declare function addMissingNotesFromInterval(pConfig: MNoteConfig): Array<number>;
+declare function getNotesFromIntervals(pConfig: GetNoteConfig, tuningSystemsData: TuningSystemsData): Array<number>;
 /**
  * Accepts only an object
  * Is public
@@ -113,6 +124,7 @@ declare const _default: {
     raiseOrReduceByRatio: typeof raiseOrReduceByRatio;
     multOrDivide: typeof multOrDivide;
     getSingleFreq: typeof getSingleFreq;
+    getNotesFromIntervals: typeof getNotesFromIntervals;
     getJustIntNote: typeof getJustIntNote;
     getHSeriesNote: typeof getHSeriesNote;
     getJustIntCommaNote: typeof getJustIntCommaNote;

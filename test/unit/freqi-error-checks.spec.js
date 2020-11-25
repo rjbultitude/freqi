@@ -141,3 +141,70 @@ describe('checkGetSingleFreqConfigForNegs', function() {
     }).to.throw;
   });
 });
+
+describe('checkGetSingleFreqConfigDataTypes', function() {
+  before(function() {
+    this.configBadStartFreq = {
+      startFreq: '1',
+      numSemitones: 2,
+      upwardsScale: true,
+      mode: 'eqTemp'
+    };
+    this.configBadStartFreqNaN = {
+      startFreq: NaN,
+      numSemitones: 2,
+      upwardsScale: true,
+      mode: 'eqTemp'
+    };
+    this.configBadUpwardsScale = {
+      startFreq: 200,
+      numSemitones: 2,
+      upwardsScale: 'true',
+      mode: 'eqTemp'
+    };
+    this.configBadMode = {
+      startFreq: 200,
+      numSemitones: 2,
+      upwardsScale: 'true',
+      mode: []
+    };
+  });
+  it('should throw if any numeric prop of arg obj is not type number or is NaN', function() {
+    expect(function() {
+      freqiErrChecks.checkGetSingleFreqConfigDataTypes(this.configBadStartFreq);
+    }).to.throw;
+    expect(function() {
+      freqiErrChecks.checkGetSingleFreqConfigDataTypes(this.configBadStartFreqNaN);
+    }).to.throw;
+  });
+  it('should throw if upwardsScale prop of arg obj is not a boolean', function() {
+    expect(function() {
+      freqiErrChecks.checkGetSingleFreqConfigDataTypes(this.configBadUpwardsScale);
+    }).to.throw;
+  });
+  it('should throw if mode prop of arg obj is not a string', function() {
+    expect(function() {
+      freqiErrChecks.checkGetSingleFreqConfigDataTypes(this.configBadUpwardsScale);
+    }).to.throw;
+  });
+});
+
+describe('checkGetFreqsNumericDataTypes', function() {
+  before(function() {
+    this.config = {
+      startFreq: -1,
+      numSemitones: -2,
+      rootNote: -3,
+      numNotes: 1,
+      amountToAdd: 1,
+      intervalStartIndex: 1,
+      mode: 'eqTemp',
+      type: 'test'
+    }
+  });
+  it('should throw if startFreq of arg obj is not a number', function() {
+    expect(function() {
+      freqiErrChecks.checkGetFreqsNumericDataTypes(this.config);
+    }).to.throw;
+  });
+});

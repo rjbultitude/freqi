@@ -463,6 +463,29 @@ describe('addMissingNotesFromInterval', function() {
   });
 });
 
+describe('getNotesFromIntervals', function() {
+  beforeEach(function () {
+    this.config = {
+      startFreq: 400,
+      scaleIntervals: [1, 2, 3],
+      numSemitones: 12,
+      rootNote: 0,
+      intervalStartIndex: 0,
+      loopLength: 1,
+      mode: 'eqTemp',
+      type: 'string',
+    };
+    this.tuningSystemsData = {
+      eqTemp: {}
+    }
+  });
+  it('should return an array when passed valid object arg', function() {
+    expect(freqi.getNotesFromIntervals(this.config, this.tuningSystemsData)).to.be.an('array');
+  });
+  it('should return an array of length object arg scaleIntervals', function() {
+    expect(freqi.getNotesFromIntervals(this.config, this.tuningSystemsData).length).to.equal(1);
+  });
+});
 
 /**
  * ---------------------
