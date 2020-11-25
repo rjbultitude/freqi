@@ -3,7 +3,13 @@
   github.com/rjbultitude
 */
 
+// TODO consider only passing objects not separate args
+// THis will mean A LOT of interfaces
+
+// Get essential data at build time
 import tuningSystemsData from './tuning-systems.json';
+// Protect the data from mutation
+Object.freeze(tuningSystemsData);
 
 interface TuningSystemDefinition {
   "name": string;
@@ -492,12 +498,13 @@ function getJustIntNote(eTNoteConfig: ETNoteConfig, _up: boolean, justTuningSyst
   return _noteVal / _multiplier;
 }
 
+// Factory function that creates new tuningSystems object from orginal one
 function getJustTuningSystems(tuningSystemsData: TuningSystemsData): TuningSystemsData {
-  const justTuningSysIntervals = {};
+  const justTuningSystemsData = {};
   Object.keys(tuningSystemsData).forEach((key) => {
     if (tuningSystemsData[key].type === JUST_STR) {
       Object.defineProperty(
-        justTuningSysIntervals,
+        justTuningSystemsData,
         key,
         {
           value: tuningSystemsData[key],
@@ -507,7 +514,7 @@ function getJustTuningSystems(tuningSystemsData: TuningSystemsData): TuningSyste
       );
     }
   });
-  return justTuningSysIntervals;
+  return justTuningSystemsData;
 }
 
 function getTuningSystemType(mode: string, tuningSystemsData: TuningSystemsData): string {

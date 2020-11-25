@@ -64,7 +64,7 @@ declare function augmentNumArray(augArrConfig: AugArrConfig): Array<number>;
  * Equal temperament data sanitisation
  * ------------
  */
-declare function checkGetSingleFreqConfigForNegs(dataObj: any): boolean;
+declare function checkGetSingleFreqConfigForNegs(dataObj: ETNoteConfig): boolean;
 declare function checkGetSingleFreqConfigDataTypes(dataObj: ETNoteConfig): boolean;
 /**
 * ------------
@@ -183,6 +183,9 @@ declare const _default: {
             intervalsInOctave: number;
             intervalRatios: number[][];
             type: string;
+            /**
+             * Error checking FNs
+             */
             scaleType: string;
             includesComma: boolean;
             notes: string;
