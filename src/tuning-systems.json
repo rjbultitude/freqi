@@ -107,7 +107,7 @@
     "type": "just",
     "scaleType": "pentatonic",
     "includesComma": false,
-    "notes": "TBC"
+    "notes": "A major pentatonic scale"
   },
   "egyptianSuspended": {
     "name": "egyptianSuspended",
@@ -118,7 +118,7 @@
     "type": "just",
     "scaleType": "pentatonic",
     "includesComma": false,
-    "notes": "TBC"
+    "notes": "An Egyptian pentatonic scale otherwise known as suspended pentatonic"
   },
   "bluesMinorManGong": {
     "name": "bluesMinorManGong",
@@ -129,7 +129,7 @@
     "type": "just",
     "scaleType": "pentatonic",
     "includesComma": false,
-    "notes": "TBC"
+    "notes": "An ancient Chinese pentatonic scale"
   },
   "bluesMajorRitsusenYo": {
     "name": "bluesMajorRitsusenYo",
@@ -140,7 +140,7 @@
     "type": "just",
     "scaleType": "pentatonic",
     "includesComma": false,
-    "notes": "TBC"
+    "notes": "A five-note scale without semitones used in the Japanese shōmyō chant"
   },
   "minorPentatonic": {
     "name": "minorPentatonic",
@@ -151,6 +151,6 @@
     "type": "just",
     "scaleType": "pentatonic",
     "includesComma": false,
-    "notes": "TBC"
+    "notes": "A five-note minor pentatonic scale without semitones"
   }
 }
