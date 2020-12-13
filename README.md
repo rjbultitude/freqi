@@ -74,15 +74,18 @@ Freqi supports a wide range of tuning systems. By default it will use 12 tone eq
 * `bluesMajorRitsusenYo` - A five-note scale without semitones used in the Japanese shōmyō chant
 * `minorPentatonic` - A five-note minor pentatonic scale without semitones
 
-If your program needs to explicitly set equal temperament mode, use the key `eqTemp`.
-
 Please note, once in one of these modes, other config params, such as `numNotes`, will have no effect as they are fixed scale tuning systems.
 
-The object containing the ratios for each _just_ system is exported as `justTuningSystems` should you need to view it. If you want to list all the tuning system keys, use the property `freqiModes`, which is an array of the keys. Furthermore, an object containing meta data about all the tuning systems can be obtained via `tuningSystemsData`.
+If your program needs to explicitly set equal temperament mode, use the key `eqTemp`.
+
+For quick access to these keys a you can use the method `freqiModes`, which will retuen an array of the keys.
 
 There is also a mode for the harmonic series called `hSeries`. In its raw state it may not particularly useful for making music, but may be of interest to music theorists. Unlike all other tuning systems it is not zero-based. It follows the scientific naming convention where 1 is the fundamental, 2 the 2nd harmonic and so on.
 
-**Optional Params**
+### Meta data
+An object containing meta data for use in your application can be accessed via `tuningSystemsData`. This includes the frequency ratios for each Just tuning system, short and long names plus long-form descriptions.
+
+## Optional Params
 You can pass in a custom number of semitones. The default is `12`, a western chromatic scale, but you could pass in 19 for a non-western scale - this can produce very interesting results!
 
 If you are using **Freqi** to generate multiple sequences of notes you can offset the root note using the `rootNote` property. A value of `2` for example will pitch the provided intervals up by two semitones.

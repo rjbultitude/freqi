@@ -68,6 +68,8 @@ const scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigPentatonic);
 // const scaleFrequencies = freqi.getFreqs(testConfig);
 console.log('scaleFrequencies', scaleFrequencies);
+console.log('tuningSystemsData', freqi.tuningSystemsData);
+console.log('tuningSystemsData', freqi.freqiModes);
 
 const playBtn = document.getElementById('play');
 const stopBtn = document.getElementById('stop');
