@@ -10,23 +10,22 @@ A javascript api for generating frequencies for use with the web audio API
 This package aims to:
 
 * Provide a simple API for creating sets of frequencies from numeric intervals
-* Return actual sonic frequencies in Hz or _relative_ frequencies for use with audio file playback
-* Supports multiple tuning systems both tempered and just
-* Allow for any number of semitones per octave(equal temperament mode only)
+* Return actual sonic frequencies in Hz or _relative_ frequencies for use with oscillator or audio file playback
+* Supports multiple tuning systems, both tempered and just
+* Allow for any number of semitones per octave (equal temperament mode only)
 * Return an array of frequencies of any length
 * Provide a way of creating frequencies from within the intervals themselves
 * Handle bad data
 
 What it doesn't do:
 
-* Does not allow for input of notes as letters
+* Does not allow for input of notes as letters (yet)
 * Does not allow for input of chords by name
 * It is not a sequencer or audio processor
 
 ## Dependencies
 
 This module has _no_ dependencies. 
-Please note that dependencies for the demo were mistakenly listed in pre-1.0.1 versions.
 
 ## Getting Started
 
@@ -61,16 +60,23 @@ or for CommonJS loaders (such as [Browserify](http://browserify.org/)) use
 `startFreq` can be a frequency in Hz, such as `440` (for the note A) or a relative frequency such `1` which is useful for playing back audio files, such as MP3s or OGGs, where `1` is the original playback rate. `440` is the default value.
 
 **Tuning Systems**
-Freqi supports just intonation tuning systems. By default it will use equal temperament, but to use a Just tuning system set the `mode` to one of the following:
+Freqi supports a wide range of tuning systems. By default it will use 12 tone equal temperament (12TET). To use 4TET for example, simply set `numSemitones` to `4`. For Just Intonation tuning systems set the `mode` to one of the following:
 * `pythagorean` - Pythagorean just intonation excluding the syntonic comma
 * `truePythag` - Pythagorean just intonation that _includes_ the syntonic/[pyhthagorean comma](https://en.wikipedia.org/wiki/Pythagorean_comma)
 * `fiveLimit` - A set of whole number ratios using only powers of 2, 3, or 5
 * `diatonic` - A justly-tuned major diatonic scale that uses the 5-limit system devised by Ptolemy
 * `diatonicIndian` - A justly-tuned diatonic scale that uses 27/16 for Dha
 * `twentyTwoShrutis` - A justly-tuned 22 note Indian scale described by the Bharata and Dattilam
-* `gioseffoZarlino` - An early just tuning system of 16 notes per octave 
+* `gioseffoZarlino` - An unusual justly tuned 16 note scale designed for one of Zarlino's harpsichords
+* `majorPentatonic` - A major pentatonic scale
+* `egyptianSuspended` - An Egyptian pentatonic scale otherwise known as suspended pentatonic
+* `bluesMinorManGong` - An ancient Chinese pentatonic scale
+* `bluesMajorRitsusenYo` - A five-note scale without semitones used in the Japanese shōmyō chant
+* `minorPentatonic` - A five-note minor pentatonic scale without semitones
 
-Please note, once in one of these modes, other config params, such as `numNotes`, will have no effect as they are fixed scale systems.
+If your program needs to explicitly set equal temperament mode, use the key `eqTemp`.
+
+Please note, once in one of these modes, other config params, such as `numNotes`, will have no effect as they are fixed scale tuning systems.
 
 The object containing the ratios for each _just_ system is exported as `justTuningSystems` should you need to view it. If you want to list all the tuning system keys, use the property `freqiModes`, which is an array of the keys. Furthermore, an object containing meta data about all the tuning systems can be obtained via `tuningSystemsData`.
 
