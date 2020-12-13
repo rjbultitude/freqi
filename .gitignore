@@ -26,7 +26,6 @@
 
 # Front-end
 node_modules/
-demo/freqi-demo.js
 
 # Reports
 coverage/

@@ -1,37 +1,87 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 'use strict';
-var freqi = require('../lib/freqi');
+const freqi = require('../lib/freqi');
 
-var scaleConfigAllOpts = {
-  startFreq: 440,
+const cNoteFreq =  261.6;
+const cMajorScale = [0, 2, 4, 5, 7, 9, 11];
+
+const scaleConfigAllOpts = {
+  startFreq: cNoteFreq,
   numSemitones: 12,
   numNotes: 8,
   inversionStartNote: 0,
   rootNote: 0,
-  intervals: [-12, 0, 12, 7],
+  intervals: cMajorScale,
   amountToAdd: 12,
-  type: 'sine'
+  type: 'some useful description'
 };
 
-var scaleConfigMandatoryOpts = {
-  intervals: [0, 3, 5]
+const scaleConfigJustIntOpts = {
+  startFreq: cNoteFreq,
+  numSemitones: 12,
+  rootNote: 0,
+  intervals: [-24, -12, 0, 12, 24],
+  mode: 'fiveLimit'
 };
 
-//var scaleFrequencies = freqi.getFreqs(scaleConfigMandatoryOpts);
-var scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
+const scaleConfigPythagOpts = {
+  startFreq: 440,
+  intervals: [-12, -7, 0, 7, 12],
+  mode: 'pythagorean'
+};
+
+// Should return four notes from a 12TET scale
+const scaleConfigMandatoryOpts = {
+  intervals: [-3, 0, 5, 7]
+};
+
+const scaleConfigHSeriesOpts = {
+  startFreq: 1960,
+  intervals: [-2, -1, 1.5, 2, 3, 4, 8],
+  mode: 'hSeries'
+};
+
+const scaleConfigTruePythagOpts = {
+  startFreq: 880,
+  intervals: [-24, -7, 0, 7, 12],
+  mode: 'truePythag'
+};
+
+const scaleConfigPentatonic = {
+  startFreq: 440,
+  intervals: [-25, 1, 2, 3, 4, 5, 25],
+  mode: 'minorPentatonic'
+};
+
+// Should return three notes from a 12TET scale
+const testConfig = {
+  startFreq: 440,
+  numSemitones: 12,
+  intervals: [-5, 0, 7]
+}
+
+const scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigMandatoryOpts);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigJustIntOpts);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigPythagOpts);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigHSeriesOpts);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigTruePythagOpts);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigPentatonic);
+// const scaleFrequencies = freqi.getFreqs(testConfig);
 console.log('scaleFrequencies', scaleFrequencies);
+console.log('tuningSystemsData', freqi.tuningSystemsData);
+console.log('tuningSystemsData', freqi.freqiModes);
 
-var playBtn = document.getElementById('play');
-var stopBtn = document.getElementById('stop');
-var connected = false;
-
-var index = 0;
+const playBtn = document.getElementById('play');
+const stopBtn = document.getElementById('stop');
+let connected = false;
+let index = 0;
+let startOsc = false;
 
 // define audio context
-var context = new (window.AudioContext || window.webkitAudioContext)();
-var oscillator = context.createOscillator();
-var myInterval;
-oscillator.start();
+const context = new (window.AudioContext || window.webkitAudioContext)();
+const oscillator = context.createOscillator();
+let myInterval;
 
 function playSine(freq) {
   oscillator.type = 'sine';
@@ -41,6 +91,7 @@ function playSine(freq) {
 }
 
 function playSineCb(scale) {
+  console.log(scale[index]);
   playSine(scale[index]);
   if (index >= scale.length - 1) {
     index = 0;
@@ -64,10 +115,14 @@ function play(scale, noteLength) {
 
 playBtn.addEventListener('click', function(e) {
   e.preventDefault();
-  if (!connected) {
-    //play(myScale.scale, 1000);
-    play(scaleFrequencies, 1000);
+  if (!startOsc) {
+    oscillator.start();
+    startOsc = true;
   }
+  if (!connected) {
+    play(scaleFrequencies, 500);
+  }
+  console.log('connected', connected);
 });
 
 stopBtn.addEventListener('click', function(e) {
@@ -75,376 +130,1136 @@ stopBtn.addEventListener('click', function(e) {
   if (connected) {
     stop();
   }
+  console.log('connected', connected);
 });
 
 },{"../lib/freqi":2}],2:[function(require,module,exports){
-(function (process){
-'use strict';
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (global = global || self, global.freqi = factory());
+}(this, (function () { 'use strict';
 
-var __PROD__ = process.env.NODE_ENV !== 'test';
-//var __PROD__ = true;
+  var eqTemp = {
+  	name: "eqTemp",
+  	shortName: "12TET",
+  	longName: "12 Tone Equal Temperament",
+  	intervalsInOctave: 12,
+  	intervalRatios: null,
+  	type: "tempered",
+  	scaleType: "",
+  	includesComma: false,
+  	notes: "An arbritray scale widely used in western music"
+  };
+  var hSeries = {
+  	name: "hSeries",
+  	shortName: "Harmonic Series",
+  	longName: "Harmonic Series",
+  	intervalsInOctave: null,
+  	intervalRatios: null,
+  	type: "pure",
+  	scaleType: "",
+  	includesComma: false,
+  	notes: "A set of whole number ratios representing how sound works in nature"
+  };
+  var truePythag = {
+  	name: "truePythag",
+  	shortName: "True Pythagorean",
+  	longName: "Pythagorean just intaonation including the syntonic comma",
+  	intervalsInOctave: 12,
+  	intervalRatios: [
+  		[
+  			3,
+  			2
+  		]
+  	],
+  	type: "just",
+  	scaleType: "chromatic",
+  	includesComma: true,
+  	notes: "A set of whole number ratios using only fifths e.g. 3/2"
+  };
+  var pythagorean = {
+  	name: "pythagorean",
+  	shortName: "Pythagorean",
+  	longName: "Pythagorean just intonation excluding the syntonic comma",
+  	intervalsInOctave: 12,
+  	intervalRatios: [
+  		[
+  			1,
+  			1
+  		],
+  		[
+  			256,
+  			243
+  		],
+  		[
+  			9,
+  			8
+  		],
+  		[
+  			32,
+  			27
+  		],
+  		[
+  			81,
+  			64
+  		],
+  		[
+  			4,
+  			3
+  		],
+  		[
+  			729,
+  			512
+  		],
+  		[
+  			3,
+  			2
+  		],
+  		[
+  			128,
+  			81
+  		],
+  		[
+  			27,
+  			16
+  		],
+  		[
+  			16,
+  			9
+  		],
+  		[
+  			243,
+  			128
+  		]
+  	],
+  	type: "just",
+  	scaleType: "chromatic",
+  	includesComma: false,
+  	notes: "A set of whole number ratios using only fifths (3/2) except for the octave (2/1)"
+  };
+  var fiveLimit = {
+  	name: "fiveLimit",
+  	shortName: "Five limit just intonation",
+  	longName: "Five limit just intonation",
+  	intervalsInOctave: 12,
+  	intervalRatios: [
+  		[
+  			1,
+  			1
+  		],
+  		[
+  			16,
+  			15
+  		],
+  		[
+  			9,
+  			8
+  		],
+  		[
+  			6,
+  			5
+  		],
+  		[
+  			5,
+  			4
+  		],
+  		[
+  			4,
+  			3
+  		],
+  		[
+  			64,
+  			45
+  		],
+  		[
+  			3,
+  			2
+  		],
+  		[
+  			8,
+  			5
+  		],
+  		[
+  			5,
+  			3
+  		],
+  		[
+  			9,
+  			5
+  		],
+  		[
+  			15,
+  			8
+  		]
+  	],
+  	type: "just",
+  	scaleType: "chromatic",
+  	includesComma: false,
+  	notes: "A set of whole number ratios using only powers of 2, 3, or 5"
+  };
+  var diatonic = {
+  	name: "diatonic",
+  	shortName: "Five limit diatonic",
+  	longName: "Five limit diatonic / Ptolemy's intense diatonic",
+  	intervalsInOctave: 7,
+  	intervalRatios: [
+  		[
+  			1,
+  			1
+  		],
+  		[
+  			9,
+  			8
+  		],
+  		[
+  			5,
+  			4
+  		],
+  		[
+  			4,
+  			3
+  		],
+  		[
+  			3,
+  			2
+  		],
+  		[
+  			5,
+  			3
+  		],
+  		[
+  			15,
+  			8
+  		]
+  	],
+  	type: "just",
+  	scaleType: "heptatonic",
+  	includesComma: false,
+  	notes: "A justly-tuned major diatonic scale that uses the 5-limit system devised by Ptolemy"
+  };
+  var diatonicIndian = {
+  	name: "diatonicIndian",
+  	shortName: "Five limit diatonic Indian",
+  	longName: "Five limit diatonic Indian",
+  	intervalsInOctave: 7,
+  	intervalRatios: [
+  		[
+  			1,
+  			1
+  		],
+  		[
+  			9,
+  			8
+  		],
+  		[
+  			5,
+  			4
+  		],
+  		[
+  			4,
+  			3
+  		],
+  		[
+  			3,
+  			2
+  		],
+  		[
+  			27,
+  			16
+  		],
+  		[
+  			15,
+  			8
+  		]
+  	],
+  	type: "just",
+  	scaleType: "heptatonic",
+  	includesComma: false,
+  	notes: "A justly-tuned diatonic scale that uses 27/16 for Dha"
+  };
+  var twentyTwoShrutis = {
+  	name: "twentyTwoShrutis",
+  	shortName: "Twenty Two Shrutis",
+  	longName: "Twenty Two Shrutis",
+  	intervalsInOctave: 22,
+  	intervalRatios: [
+  		[
+  			1,
+  			1
+  		],
+  		[
+  			256,
+  			243
+  		],
+  		[
+  			16,
+  			15
+  		],
+  		[
+  			10,
+  			9
+  		],
+  		[
+  			9,
+  			8
+  		],
+  		[
+  			32,
+  			27
+  		],
+  		[
+  			6,
+  			5
+  		],
+  		[
+  			5,
+  			4
+  		],
+  		[
+  			81,
+  			64
+  		],
+  		[
+  			4,
+  			3
+  		],
+  		[
+  			27,
+  			20
+  		],
+  		[
+  			45,
+  			32
+  		],
+  		[
+  			729,
+  			512
+  		],
+  		[
+  			3,
+  			2
+  		],
+  		[
+  			128,
+  			81
+  		],
+  		[
+  			8,
+  			5
+  		],
+  		[
+  			5,
+  			3
+  		],
+  		[
+  			27,
+  			16
+  		],
+  		[
+  			16,
+  			9
+  		],
+  		[
+  			9,
+  			5
+  		],
+  		[
+  			15,
+  			8
+  		],
+  		[
+  			243,
+  			128
+  		]
+  	],
+  	type: "just",
+  	scaleType: "",
+  	includesComma: false,
+  	notes: "A justly-tuned Indian scale described by the Bharata and Dattilam"
+  };
+  var gioseffoZarlino = {
+  	name: "gioseffoZarlino",
+  	shortName: "Gioseffo Zarlino 16",
+  	longName: "Gioseffo Zarlino 16 note just intonation",
+  	intervalsInOctave: 16,
+  	intervalRatios: [
+  		[
+  			1,
+  			1
+  		],
+  		[
+  			25,
+  			24
+  		],
+  		[
+  			10,
+  			9
+  		],
+  		[
+  			9,
+  			8
+  		],
+  		[
+  			32,
+  			27
+  		],
+  		[
+  			6,
+  			5
+  		],
+  		[
+  			5,
+  			4
+  		],
+  		[
+  			4,
+  			3
+  		],
+  		[
+  			25,
+  			18
+  		],
+  		[
+  			45,
+  			32
+  		],
+  		[
+  			3,
+  			2
+  		],
+  		[
+  			25,
+  			16
+  		],
+  		[
+  			5,
+  			3
+  		],
+  		[
+  			16,
+  			9
+  		],
+  		[
+  			9,
+  			5
+  		],
+  		[
+  			15,
+  			8
+  		]
+  	],
+  	type: "just",
+  	scaleType: "",
+  	includesComma: false,
+  	notes: "TBC"
+  };
+  var majorPentatonic = {
+  	name: "majorPentatonic",
+  	shortName: "Major pentatonic",
+  	longName: "Major pentatonic",
+  	intervalsInOctave: 5,
+  	intervalRatios: [
+  		[
+  			24,
+  			24
+  		],
+  		[
+  			27,
+  			24
+  		],
+  		[
+  			30,
+  			24
+  		],
+  		[
+  			36,
+  			24
+  		],
+  		[
+  			40,
+  			24
+  		]
+  	],
+  	type: "just",
+  	scaleType: "pentatonic",
+  	includesComma: false,
+  	notes: "TBC"
+  };
+  var egyptianSuspended = {
+  	name: "egyptianSuspended",
+  	shortName: "Egyptian, suspended",
+  	longName: "Egyptian, suspended",
+  	intervalsInOctave: 5,
+  	intervalRatios: [
+  		[
+  			24,
+  			24
+  		],
+  		[
+  			27,
+  			24
+  		],
+  		[
+  			32,
+  			24
+  		],
+  		[
+  			36,
+  			24
+  		],
+  		[
+  			42,
+  			24
+  		]
+  	],
+  	type: "just",
+  	scaleType: "pentatonic",
+  	includesComma: false,
+  	notes: "TBC"
+  };
+  var bluesMinorManGong = {
+  	name: "bluesMinorManGong",
+  	shortName: "Blues minor, Man Gong",
+  	longName: "Blues minor, Man Gong",
+  	intervalsInOctave: 5,
+  	intervalRatios: [
+  		[
+  			15,
+  			15
+  		],
+  		[
+  			18,
+  			15
+  		],
+  		[
+  			20,
+  			15
+  		],
+  		[
+  			24,
+  			15
+  		],
+  		[
+  			27,
+  			15
+  		]
+  	],
+  	type: "just",
+  	scaleType: "pentatonic",
+  	includesComma: false,
+  	notes: "TBC"
+  };
+  var bluesMajorRitsusenYo = {
+  	name: "bluesMajorRitsusenYo",
+  	shortName: "Blues major, Ritsusen (律旋), yo scale",
+  	longName: "Blues major, Ritsusen (律旋), yo scale",
+  	intervalsInOctave: 5,
+  	intervalRatios: [
+  		[
+  			24,
+  			24
+  		],
+  		[
+  			27,
+  			24
+  		],
+  		[
+  			32,
+  			24
+  		],
+  		[
+  			36,
+  			24
+  		],
+  		[
+  			40,
+  			24
+  		]
+  	],
+  	type: "just",
+  	scaleType: "pentatonic",
+  	includesComma: false,
+  	notes: "TBC"
+  };
+  var minorPentatonic = {
+  	name: "minorPentatonic",
+  	shortName: "Minor pentatonic",
+  	longName: "Minor pentatonic",
+  	intervalsInOctave: 5,
+  	intervalRatios: [
+  		[
+  			30,
+  			30
+  		],
+  		[
+  			36,
+  			30
+  		],
+  		[
+  			40,
+  			30
+  		],
+  		[
+  			45,
+  			30
+  		],
+  		[
+  			54,
+  			30
+  		]
+  	],
+  	type: "just",
+  	scaleType: "pentatonic",
+  	includesComma: false,
+  	notes: "TBC"
+  };
+  var tuningSystemsData = {
+  	eqTemp: eqTemp,
+  	hSeries: hSeries,
+  	truePythag: truePythag,
+  	pythagorean: pythagorean,
+  	fiveLimit: fiveLimit,
+  	diatonic: diatonic,
+  	diatonicIndian: diatonicIndian,
+  	twentyTwoShrutis: twentyTwoShrutis,
+  	gioseffoZarlino: gioseffoZarlino,
+  	majorPentatonic: majorPentatonic,
+  	egyptianSuspended: egyptianSuspended,
+  	bluesMinorManGong: bluesMinorManGong,
+  	bluesMajorRitsusenYo: bluesMajorRitsusenYo,
+  	minorPentatonic: minorPentatonic
+  };
 
-(function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define([], factory);
-    } else if (typeof module === 'object' && module.exports) {
-        // Node. Does not work with strict CommonJS, but
-        // only CommonJS-like environments that support module.exports,
-        // like Node.
-        module.exports = factory();
-    } else {
-        // Browser globals (root is window)
-        root.returnExports = factory();
-  }
-}(this, function () {
   /*
-      By Richard Bultitude
-      github.com/rjbultitude
+    By Richard Bultitude
+    github.com/rjbultitude
   */
-
+  // Protect the data from mutation
+  Object.freeze(tuningSystemsData);
   // Constants
+  var EQ_TEMP_STR = 'eqTemp';
+  var H_SERIES_STR = 'hSeries';
+  var JUST_STR = 'just';
+  var JUST_COMMA_STR = 'justComma';
+  var JUST_NO_COMMA_STR = 'justNoComma';
   var CHROMATIC_SCALE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-
+  /**
+   * Error checking FNs
+   */
   function reallyIsNaN(x) {
-    return x !== x;
+      return x !== x;
   }
-
   function checkAugmentNumArrayConfigTypes(augArrConfig) {
-    if (Array.isArray(augArrConfig.originalArray !== true)) {
-      throw TypeError('originalArray is not an array');
-    } else {
-      for (var i = 0; i < augArrConfig.originalArray.length; i++) {
-        if (reallyIsNaN(augArrConfig.originalArray[i])) {
-          throw TypeError('originalArray contains values that are NaN');
-        }
+      if (Array.isArray(augArrConfig.originalArray) !== true) {
+          throw new TypeError('originalArray is not an array');
       }
-    }
-    if (typeof augArrConfig.difference !== 'number' || isNaN(augArrConfig.difference)) {
-      throw TypeError('difference is not a number');
-    }
-    if (typeof augArrConfig.difference <= 0) {
-      throw TypeError('difference cannot be 0 or less');
-    }
-    if (typeof augArrConfig.repeatMultiple !== 'number' || isNaN(augArrConfig.repeatMultiple)) {
-      throw TypeError('repeatMultiple is not a number');
-    }
-    if (typeof augArrConfig.amountToAdd !== 'number' || isNaN(augArrConfig.amountToAdd)) {
-      throw TypeError('amountToAdd is not a number');
-    }
+      else {
+          for (var i = 0; i < augArrConfig.originalArray.length; i++) {
+              if (reallyIsNaN(augArrConfig.originalArray[i])) {
+                  throw new TypeError('originalArray contains values that are NaN');
+              }
+          }
+      }
+      if (typeof augArrConfig.difference !== 'number' || Number.isNaN(augArrConfig.difference)) {
+          throw new TypeError('difference is not a number');
+      }
+      if (augArrConfig.difference <= 0) {
+          throw new TypeError('difference cannot be 0 or less');
+      }
+      if (typeof augArrConfig.repeatMultiple !== 'number' || Number.isNaN(augArrConfig.repeatMultiple)) {
+          throw new TypeError('repeatMultiple is not a number');
+      }
+      if (typeof augArrConfig.amountToAdd !== 'number' || Number.isNaN(augArrConfig.amountToAdd)) {
+          throw new TypeError('amountToAdd is not a number');
+      }
   }
-
   function checkAugmentNumArrayConfigForNegs(augArrConfig) {
-    if (augArrConfig.difference <= 0) {
-      throw SyntaxError('difference should be higher than 0');
-    }
-    if (augArrConfig.repeatMultiple < 0) {
-      throw SyntaxError('repeatMultiple should be 0 or higher');
-    }
-    if (augArrConfig.amountToAdd < 0) {
-      throw SyntaxError('amountToAdd should be 0 or higher');
-    }
+      if (augArrConfig.difference <= 0) {
+          throw new SyntaxError('difference should be higher than 0');
+      }
+      if (augArrConfig.repeatMultiple < 0) {
+          throw new SyntaxError('repeatMultiple should be 0 or higher');
+      }
+      if (augArrConfig.amountToAdd < 0) {
+          throw new SyntaxError('amountToAdd should be 0 or higher');
+      }
   }
-
   /**
    * Duplicates items 'difference' number of times
    * Can add a given amount to each duplicated item if desired
    * Can start from beginning of array
-   * after repeatMultiple number of times
-   * @param  {Object} augArrConfig    [config object]
-   * @return {Array}                  [new array]
+   * after repeatMultiple number of times.
+   * Is public
    */
   function augmentNumArray(augArrConfig) {
-    // error check
-    try {
-      checkAugmentNumArrayConfigTypes(augArrConfig);
-    } catch (e) {
-      __PROD__ && console.error(e);
-      return false;
-    }
-    try {
-      checkAugmentNumArrayConfigForNegs(augArrConfig);
-    } catch (e) {
-      __PROD__ && console.error(e);
-      return false;
-    }
-    // begin fn
-    var _index = 0;
-    var _newArr = augArrConfig.originalArray.map(function(item) {
-      return item;
-    });
-    var _finalArr = [];
-    var _diffArr = [];
-    var _newVal;
-    var _repeatPoint = (augArrConfig.originalArray.length * augArrConfig.repeatMultiple) - 1;
-    // loop the number of times
-    // needed to make the missing items
-    addMissingLoop:
-    for (var i = 0; i < augArrConfig.difference; i++) {
-      _newVal = _newArr[_index];
-      // Add the extra amount
-      // if we're dealing with numbers
-      if (typeof augArrConfig.amountToAdd === 'number' && typeof _newVal === 'number') {
-        _newVal += augArrConfig.amountToAdd;
+      var _index = 0;
+      // error check
+      try {
+          checkAugmentNumArrayConfigTypes(augArrConfig);
       }
-      _diffArr.push(_newVal);
-      // Start from 0 index
-      if (i === _repeatPoint) {
-        _index = 0;
-        augArrConfig.amountToAdd = 0;
-        continue addMissingLoop;
-      } else if (_index === augArrConfig.originalArray.length - 1) {
-        _index = 0;
-        augArrConfig.amountToAdd += augArrConfig.amountToAdd;
-        continue addMissingLoop;
+      catch (e) {
+          console.error(e);
+          return [];
       }
-      _index++;
-    }
-    _finalArr = _newArr.concat(_diffArr);
-    return _finalArr;
+      try {
+          checkAugmentNumArrayConfigForNegs(augArrConfig);
+      }
+      catch (e) {
+          console.error(e);
+          return [];
+      }
+      // begin fn
+      var _newArr = augArrConfig.originalArray.map(function (item) {
+          return item;
+      });
+      var _finalArr = [];
+      var _diffArr = [];
+      var _newVal;
+      var _repeatPoint = (augArrConfig.originalArray.length * augArrConfig.repeatMultiple) - 1;
+      // loop the number of times
+      // needed to make the missing items
+      addMissingLoop: for (var i = 0; i < augArrConfig.difference; i++) {
+          _newVal = _newArr[_index];
+          // Add the extra amount
+          // if we're dealing with numbers
+          if (typeof augArrConfig.amountToAdd === 'number' && typeof _newVal === 'number') {
+              _newVal += augArrConfig.amountToAdd;
+          }
+          _diffArr.push(_newVal);
+          // Start from 0 index
+          if (i === _repeatPoint) {
+              _index = 0;
+              augArrConfig.amountToAdd = 0;
+              continue addMissingLoop;
+          }
+          else if (_index === augArrConfig.originalArray.length - 1) {
+              _index = 0;
+              augArrConfig.amountToAdd += augArrConfig.amountToAdd;
+              continue addMissingLoop;
+          }
+          _index += 1;
+      }
+      _finalArr = _newArr.concat(_diffArr);
+      return _finalArr;
   }
-
+  // TODO could substitute for Array includes
+  // As web audio isn't supported in IE
   function isPropValid(prop, inValidKeys) {
-    for (var i = 0; i < inValidKeys.length; i++) {
-      if (prop === inValidKeys[i]) {
-        return false;
+      for (var i = 0; i < inValidKeys.length; i++) {
+          if (prop === inValidKeys[i]) {
+              return false;
+          }
       }
-    }
-    return true;
+      return true;
   }
-
   /**
    * ------------
    * Equal temperament data sanitisation
    * ------------
    */
-
+  // TODO consider just checking props with data type of number
   function checkGetSingleFreqConfigForNegs(dataObj) {
-    var invalidKeys = ['interval', 'upwardsScale'];
+      var invalidKeys = ['interval', 'upwardsScale', 'mode'];
       for (var prop in dataObj) {
-        if (isPropValid(prop, invalidKeys)) {
-          if (dataObj[prop] < 0) {
-            throw new SyntaxError(prop + ' must be a positive number');
-        }
+          if (isPropValid(prop, invalidKeys)) {
+              if (dataObj[prop] < 0) {
+                  throw new SyntaxError(prop + ' must be a positive number');
+              }
+          }
       }
-    }
+      return true;
   }
-
   function checkGetSingleFreqConfigDataTypes(dataObj) {
-    for (var prop in dataObj) {
-      if (prop !== 'upwardsScale') {
-        if (typeof dataObj[prop] !== 'number' || isNaN(dataObj[prop])) {
-          throw new TypeError('Config property ' + prop + ' is not a number');
-        }
-      } else {
-        if (typeof dataObj[prop] !== 'boolean') {
-          throw new TypeError('Config property ' + prop + ' is not a boolean');
-        }
+      for (var prop in dataObj) {
+          if (prop !== 'upwardsScale' && prop !== 'mode') {
+              if (typeof dataObj[prop] !== 'number' || Number.isNaN(dataObj[prop])) {
+                  throw new TypeError("Config property " + prop + " is not a number");
+              }
+          }
+          else if (prop === 'upwardsScale') {
+              if (typeof dataObj[prop] !== 'boolean') {
+                  throw new TypeError("Config property " + prop + " is not a boolean");
+              }
+          }
+          else if (prop === 'mode') {
+              if (typeof dataObj[prop] !== 'string') {
+                  throw new TypeError("Config property " + prop + " is not a string");
+              }
+          }
       }
-    }
-    return true;
+      return true;
   }
-
   /**
   * ------------
   * Musical Scale data sanitisation
   * ------------
   */
-
-  function checkGetFreqsForZerosNegs(data) {
-    var invalidKeys = ['intervals', 'type', 'rootNote'];
-    for (var prop in data) {
-      if (isPropValid(prop, invalidKeys)) {
-        if (prop === 'numSemitones' && data[prop] === 0) {
-          throw new SyntaxError('numSemitones must be a positive number');
-        }
-        if (data[prop] < 0) {
-          throw new SyntaxError(prop + ' must be zero or a positive number');
-        }
-      }
-    }
+  // Check numeric values
+  function checkGetFreqsNumericDataTypes(msConfig) {
+      // Create list of props here
+      // then loop through only them
+      var invalidKeysAnyNum = ['intervals', 'type', 'mode'];
+      var invalidKeysNegNum = ['intervals', 'type', 'rootNote', 'mode'];
+      Object.keys(msConfig).forEach(function (prop) {
+          if (isPropValid(prop, invalidKeysAnyNum)) {
+              if (typeof msConfig[prop] !== 'number' || Number.isNaN(msConfig[prop])) {
+                  throw new TypeError('Config property ' + prop + ' is not a number');
+              }
+          }
+      });
+      Object.keys(msConfig).forEach(function (prop) {
+          if (isPropValid(prop, invalidKeysNegNum)) {
+              if (prop === 'numSemitones' && msConfig[prop] <= 0) {
+                  throw new SyntaxError('numSemitones must be a positive number');
+              }
+              if (msConfig[prop] < 0) {
+                  throw new SyntaxError(prop + ' must be zero or a positive number');
+              }
+          }
+      });
+      return true;
   }
-
-  function checkGetFreqsNumericDataTypes(dataObj) {
-    for (var prop in dataObj) {
-      // Check numeric values
-      if (prop !== 'type' && prop !== 'intervals') {
-        if (typeof dataObj[prop] !== 'number' || isNaN(dataObj[prop])) {
-           throw new TypeError('Config property ' + prop + ' is not a number');
-        }
-      }
-    }
-    return true;
+  function getModes(tuningSystemsData) {
+      return Object.keys(tuningSystemsData);
   }
-
-  function checkGetFreqsIntervalsProp(prop) {
-    if (Array.isArray(prop) !== true) {
-     throw new TypeError('intervals is not an array');
-    } else {
-      for (var i = 0, length = prop.length; i < length; i++) {
-        if (typeof prop[i] !== 'number' || isNaN(prop[i])) {
-          throw new TypeError('intervals is not an array of numbers');
-        }
+  // Exported
+  var freqiModes = getModes(tuningSystemsData);
+  function checkUsersConfig(msConfig, tuningSystemsData) {
+      if (typeof msConfig !== 'object') {
+          throw new TypeError('Musical Scale Config should be an object');
       }
-    }
+      // Handle bad intervals array cases from user
+      if (Array.isArray(msConfig.intervals) !== true) {
+          throw new TypeError('intervals is not an array');
+      }
+      if (msConfig.intervals.length === 0) {
+          throw new TypeError('intervals array is empty');
+      }
+      for (var i = 0, length = msConfig.intervals.length; i < length; i++) {
+          if (typeof msConfig.intervals[i] !== 'number' || Number.isNaN(msConfig.intervals[i])) {
+              throw new TypeError('intervals is not an array of numbers');
+          }
+      }
+      var modes = getModes(tuningSystemsData);
+      if (Object.prototype.hasOwnProperty.call(msConfig, 'mode') && modes.indexOf(msConfig.mode) === -1) {
+          throw new SyntaxError('mode is not a valid key');
+      }
+      return true;
   }
-
   /**
    * ------------
    * Constructors
    * ------------
    */
-
-  function getFreqsConfig(configObj) {
-    // Start frequency
-    this.startFreq = configObj.startFreq === undefined ? 440 : configObj.startFreq;
-    // Number of semitones in octave
-    this.numSemitones = configObj.numSemitones === undefined ? 12 : configObj.numSemitones;
-    // Index for start note in scale/chord
-    this.rootNote = configObj.rootNote === undefined ? 0 : configObj.rootNote;
-    // Pattern to use when using inversions
-    this.intervalStartIndex = configObj.intervalStartIndex === undefined ? 0 : configObj.intervalStartIndex;
-    // Pattern to use for playback play
-    this.intervals = configObj.intervals;
-    // The number of times we want to start from the beginning of the intervals arr again
-    this.repeatMultiple = configObj.repeatMultiple === undefined ? 0 : configObj.repeatMultiple;
-    // For debugging
-    this.type = configObj.type || 'unknown';
-
-    // Optional extras for handling interval arrays
-    // which are of a different length
-    // to the desired number of notes
-
-    // Total number of desired notes in the scale
-    this.numNotes = configObj.numNotes;
-    // How many notes to add if items are missing
-    this.amountToAdd = configObj.amountToAdd === undefined ? this.numSemitones : configObj.amountToAdd;
+  function GetFreqsConfig(configObj) {
+      // Start frequency
+      this.startFreq = configObj.startFreq === undefined ? 440 : configObj.startFreq;
+      // Number of semitones in octave
+      this.numSemitones = configObj.numSemitones === undefined ? 12 : configObj.numSemitones;
+      // Index for start note in scale/chord
+      this.rootNote = configObj.rootNote === undefined ? 0 : configObj.rootNote;
+      // Pattern to use when using inversions
+      this.intervalStartIndex = configObj.intervalStartIndex === undefined ? 0 : configObj.intervalStartIndex;
+      // Pattern to use for playback play
+      this.intervals = configObj.intervals;
+      // The number of times we want to start from the beginning of the intervals arr again
+      this.repeatMultiple = configObj.repeatMultiple === undefined ? 0 : configObj.repeatMultiple;
+      // Musical tuning mode
+      this.mode = configObj.mode === undefined ? EQ_TEMP_STR : configObj.mode;
+      // For debugging
+      this.type = configObj.type || 'unknown';
+      // Optional extras for handling interval arrays
+      // which are of a different length
+      // to the desired number of notes
+      // Total number of desired notes in the scale
+      this.numNotes = configObj.numNotes;
+      // How many notes to add if items are missing
+      this.amountToAdd = configObj.amountToAdd === undefined ? this.numSemitones : configObj.amountToAdd;
   }
-
   /**
   * ------------
   * Main module functions
   * ------------
   */
-
-  function getSingleFreq(eTNoteConfig) {
-    try {
-      checkGetSingleFreqConfigDataTypes(eTNoteConfig);
-    } catch (e) {
-      __PROD__ && console.error(e);
-      return false;
-    }
-    try {
-      checkGetSingleFreqConfigForNegs(eTNoteConfig);
-    } catch (e) {
-      __PROD__ && console.error(e);
-      return false;
-    }
-    var _intervalIsPos = eTNoteConfig.interval >= 0 ? true : false;
-    var _up = eTNoteConfig.upwardsScale === undefined ? _intervalIsPos : eTNoteConfig.upwardsScale;
-    var _note = null;
-    if (_up) {
-      _note = eTNoteConfig.startFreq * Math.pow(2, eTNoteConfig.interval/eTNoteConfig.numSemitones);
-    } else {
-      _note = eTNoteConfig.startFreq / Math.pow(2, Math.abs(eTNoteConfig.interval)/eTNoteConfig.numSemitones);
-    }
-    return _note;
+  /**
+   * Takes a number to be used as an index for a musical tuning system array,
+   * which may be out of range, and returns a valid (in-range) index
+   * plus the number of times needed to multiply the array
+   */
+  function getAllOctaveJustIntervals(interval, justIntervalsArrLength) {
+      var _intervalAbs = Math.abs(interval);
+      var _mult = _intervalAbs / justIntervalsArrLength;
+      var _multFloor = Math.floor(_mult);
+      var _inRangeIndex = _intervalAbs - (_multFloor * justIntervalsArrLength);
+      var _negIndex = justIntervalsArrLength - _inRangeIndex;
+      var _multF;
+      if (_intervalAbs % justIntervalsArrLength === 0) {
+          return {
+              mult: _mult,
+              rangeInterval: 0
+          };
+      }
+      var _newInterval;
+      var _isPos = interval >= 0;
+      if (_isPos) {
+          _newInterval = interval - (_multFloor * justIntervalsArrLength);
+          _multF = _multFloor;
+      }
+      else {
+          _newInterval = _negIndex;
+          _multF = _multFloor + 1;
+      }
+      return {
+          mult: _multF,
+          rangeInterval: _newInterval
+      };
   }
-
+  function raiseOrReduceByRatio(number, _up, ratio) {
+      var numerator = ratio[0];
+      var denominator = ratio[1];
+      var upperRatio = numerator / denominator;
+      var lowerRatio = denominator / numerator;
+      if (_up) {
+          return number * upperRatio;
+      }
+      return number * lowerRatio;
+  }
+  function multOrDivide(_number, _mult, _up) {
+      if (_up) {
+          return _number / _mult;
+      }
+      return _number * _mult;
+  }
+  function getCorrectIndex(interval, _up, notesInOctave, mult) {
+      var step = 5;
+      var oct = mult * notesInOctave;
+      var result = notesInOctave;
+      var prevNum = result;
+      var actInterval = Math.abs(interval);
+      for (var index = 0; index < actInterval; index++) {
+          result = prevNum - step;
+          prevNum = result;
+          if (result < 0) {
+              result = notesInOctave - Math.abs(result);
+              prevNum = result;
+          }
+      }
+      return result + oct;
+  }
+  function getPythagNoteWithinOct(index, notesInOctave, noteFreq, _up) {
+      var halfOctave = notesInOctave / 2;
+      var rangeInterval = getAllOctaveJustIntervals(index, notesInOctave).rangeInterval;
+      if (rangeInterval < halfOctave && index % 2 !== 0 || rangeInterval >= halfOctave && index % 2 === 0) {
+          return multOrDivide(noteFreq, 2, _up);
+      }
+      return noteFreq;
+  }
+  function getJustIntCommaNote(eTNoteConfig, _up, justTuningSystems) {
+      if (eTNoteConfig.interval === 0) {
+          return eTNoteConfig.startFreq;
+      }
+      var notesInOctave = justTuningSystems[eTNoteConfig.mode].intervalsInOctave;
+      var ratio = justTuningSystems[eTNoteConfig.mode].intervalRatios[0];
+      // Get number of octave note is in
+      var intervalAbs = Math.abs(eTNoteConfig.interval);
+      var mult = getAllOctaveJustIntervals(intervalAbs, notesInOctave).mult;
+      // Get number of times to loop
+      // to reach note via circle of fifths
+      var correctIndex = getCorrectIndex(eTNoteConfig.interval, _up, notesInOctave, mult);
+      var noteFreq = eTNoteConfig.startFreq;
+      var prevNote = noteFreq;
+      for (var index = 0; index < correctIndex; index++) {
+          noteFreq = raiseOrReduceByRatio(prevNote, _up, ratio);
+          noteFreq = getPythagNoteWithinOct(index, notesInOctave, noteFreq, _up);
+          prevNote = noteFreq;
+      }
+      return noteFreq;
+  }
+  function getHSeriesNote(eTNoteConfig, _up) {
+      var interval;
+      if (eTNoteConfig.interval === 0) {
+          interval = 1;
+      }
+      else {
+          interval = eTNoteConfig.interval;
+      }
+      if (_up) {
+          return eTNoteConfig.startFreq * interval;
+      }
+      return eTNoteConfig.startFreq / Math.abs(interval);
+  }
+  function getEqTempNote(eTNoteConfig, _up) {
+      if (_up) {
+          return eTNoteConfig.startFreq * Math.pow(2, eTNoteConfig.interval / eTNoteConfig.numSemitones);
+      }
+      return eTNoteConfig.startFreq / Math.pow(2, Math.abs(eTNoteConfig.interval) / eTNoteConfig.numSemitones);
+  }
+  /**
+   * Takes the note index from the eTNoteConfig obj
+   * and calculates the frequency in Hz
+   * using one of the tuning systems specified
+   */
+  function getJustIntNote(eTNoteConfig, _up, justTuningSystems) {
+      if (Object.prototype.hasOwnProperty.call(justTuningSystems, eTNoteConfig.mode) === false) {
+          console.error(eTNoteConfig.mode, 'is not a supported tuning system. Please set a valid mode');
+          return 0;
+      }
+      var _justIntervalsArr = justTuningSystems[eTNoteConfig.mode].intervalRatios;
+      var _rangeObj = getAllOctaveJustIntervals(eTNoteConfig.interval, _justIntervalsArr.length);
+      var _ratioFraction = _justIntervalsArr[_rangeObj.rangeInterval][0] / _justIntervalsArr[_rangeObj.rangeInterval][1];
+      var _multiplier = Math.pow(2, _rangeObj.mult);
+      var _noteVal = eTNoteConfig.startFreq * _ratioFraction;
+      if (_rangeObj.rangeInterval > _justIntervalsArr.length) {
+          throw new SyntaxError('rangeInterval larger than just intervals array');
+      }
+      if (_up) {
+          return _noteVal * _multiplier;
+      }
+      return _noteVal / _multiplier;
+  }
+  // Factory function that creates new tuningSystems object from orginal one
+  function getJustTuningSystems(tuningSystemsData) {
+      var justTuningSystemsData = {};
+      Object.keys(tuningSystemsData).forEach(function (key) {
+          if (tuningSystemsData[key].type === JUST_STR) {
+              Object.defineProperty(justTuningSystemsData, key, {
+                  value: tuningSystemsData[key],
+                  enumerable: true,
+                  writable: false,
+              });
+          }
+      });
+      return justTuningSystemsData;
+  }
+  function getTuningSystemType(mode, tuningSystemsData) {
+      if (mode === EQ_TEMP_STR || mode === H_SERIES_STR) {
+          return mode;
+      }
+      if (tuningSystemsData[mode].includesComma) {
+          return JUST_COMMA_STR;
+      }
+      else {
+          return JUST_NO_COMMA_STR;
+      }
+  }
+  // public
+  function getSingleFreq(eTNoteConfig, tuningSystemsData) {
+      try {
+          checkGetSingleFreqConfigDataTypes(eTNoteConfig);
+      }
+      catch (e) {
+          console.error(e);
+          return false;
+      }
+      try {
+          checkGetSingleFreqConfigForNegs(eTNoteConfig);
+      }
+      catch (e) {
+          console.error(e);
+          return false;
+      }
+      var _intervalIsPos = eTNoteConfig.interval >= 0;
+      var _up = eTNoteConfig.upwardsScale === undefined ? _intervalIsPos : eTNoteConfig.upwardsScale;
+      var justTuningSystems = getJustTuningSystems(tuningSystemsData);
+      var tuningSysType = getTuningSystemType(eTNoteConfig.mode, tuningSystemsData);
+      switch (tuningSysType) {
+          case EQ_TEMP_STR:
+              return getEqTempNote(eTNoteConfig, _up);
+          case H_SERIES_STR:
+              return getHSeriesNote(eTNoteConfig, _up);
+          case JUST_COMMA_STR:
+              return getJustIntCommaNote(eTNoteConfig, _up, justTuningSystems);
+          case JUST_NO_COMMA_STR:
+              return getJustIntNote(eTNoteConfig, _up, justTuningSystems);
+          default:
+              return false;
+      }
+  }
   // Adds new items to the intervals array
   // should it not have enough notes
   function addMissingNotesFromInterval(pConfig) {
       var _intervals = [];
-      var _highestIndex = pConfig.intervalStartIndexIndex + pConfig.numNotes;
+      var _highestIndex = pConfig.intervalStartIndex + pConfig.numNotes;
       var _intervalsLength = pConfig.scaleIntervals.length;
       if (_highestIndex > _intervalsLength) {
-        var _diff = _highestIndex - _intervalsLength;
-        _intervals = augmentNumArray({
-          originalArray: pConfig.scaleIntervals,
-          difference: _diff,
-          amountToAdd: pConfig.amountToAdd,
-          repeatMultiple: pConfig.repeatMultiple
-        });
-        //__PROD__ && console.log('added missing items to ' + pConfig.type, _intervals);
-      } else {
-        _intervals = pConfig.scaleIntervals;
+          var _diff = _highestIndex - _intervalsLength;
+          _intervals = augmentNumArray({
+              originalArray: pConfig.scaleIntervals,
+              difference: _diff,
+              amountToAdd: pConfig.amountToAdd,
+              repeatMultiple: pConfig.repeatMultiple,
+          });
+      }
+      else {
+          _intervals = pConfig.scaleIntervals;
       }
       return _intervals;
   }
-
-  function getNotesFromIntervals(pConfig) {
+  function getNotesFromIntervals(pConfig, tuningSystemsData) {
       var _scaleArray = [];
       // For Inversions or rootless voicings
-      var _intervalStartIndexIndex = pConfig.intervalStartIndex;
+      var _intervalStartIndex = pConfig.intervalStartIndex;
       var _newNote;
       for (var i = 0; i < pConfig.loopLength; i++) {
-        //__PROD__ && console.log('note ' + i + ' ' + pConfig.type);
-        //__PROD__ && console.log('scaleInterval', pConfig.scaleIntervals[_intervalStartIndexIndex]);
-        //__PROD__ && console.log('intervaloffset ' + _intervalStartIndexIndex + ' centreNote Index ' + pConfig.rootNote);
-        var finalIndex = pConfig.scaleIntervals[_intervalStartIndexIndex] + pConfig.rootNote;
-        //__PROD__ && console.log('final highest Index', finalIndex);
-        _newNote = getSingleFreq({
-          startFreq: pConfig.startFreq,
-          numSemitones: pConfig.numSemitones,
-          interval: finalIndex,
-        });
-        // Error check
-        if (_newNote !== undefined || isNaN(_newNote) === false) {
-          _scaleArray.push(_newNote);
-        } else {
-          __PROD__ && console.error('undefined or NaN note');
-        }
-        _intervalStartIndexIndex++;
+          var finalIndex = pConfig.scaleIntervals[_intervalStartIndex] + pConfig.rootNote;
+          _newNote = getSingleFreq({
+              startFreq: pConfig.startFreq,
+              numSemitones: pConfig.numSemitones,
+              mode: pConfig.mode,
+              interval: finalIndex,
+          }, tuningSystemsData);
+          // Error check
+          if (_newNote !== undefined && Number.isNaN(_newNote) === false) {
+              _scaleArray.push(_newNote);
+          }
+          else {
+              console.error('undefined or NaN note');
+          }
+          _intervalStartIndex += 1;
       }
       return _scaleArray;
   }
-
-  // Accepts only an object
+  /**
+   * Accepts only an object
+   * Is public
+   * */
   function getFreqs(msConfig) {
-      var _validConfig;
-      // Check config exists
-      if (typeof msConfig !== 'object') {
-        __PROD__ && console.error()('Musical Scale Config should be an object');
-        return false;
-      // Check and fix undefined
-      } else {
-        _validConfig = new getFreqsConfig(msConfig);
-      }
+      // Check config for mandatory prop
       try {
-        checkGetFreqsIntervalsProp(_validConfig.intervals);
-      } catch (e) {
-        __PROD__ && console.error(e);
-        return false;
+          checkUsersConfig(msConfig, tuningSystemsData);
       }
-      // Ensure numNotes is set
+      catch (e) {
+          console.warn(e);
+          return false;
+      }
+      // Create valid config by adding any undefined values
+      var _validConfig = new GetFreqsConfig(msConfig);
+      // If the user hasn't set the number of desired notes per octave
+      // derive it from the intervals array
       if (_validConfig.numNotes === undefined) {
-        _validConfig.numNotes = _validConfig.intervals.length;
+          _validConfig.numNotes = _validConfig.intervals.length;
       }
-      // Check all data types
+      // Check numeric data types
       try {
-        checkGetFreqsNumericDataTypes(msConfig);
-      } catch(e) {
-        __PROD__ && console.error('Check your config values are valid', e);
-        return false;
+          checkGetFreqsNumericDataTypes(msConfig);
       }
-      // Check for negative numbers
-      try {
-        checkGetFreqsForZerosNegs(msConfig);
-      } catch(e) {
-        __PROD__ && console.error('Check your config values are valid', e);
-        return false;
+      catch (e) {
+          console.error('Check your config values are valid', e);
+          return false;
       }
       // Set vars
       var _scaleArray = [];
       var _intervals = _validConfig.intervals;
+      // TODO is this needed for Just tunings?
       // Add missing scale intervals
       var _intervalsFull = addMissingNotesFromInterval({
-        amountToAdd: _validConfig.amountToAdd,
-        intervalStartIndexIndex: _validConfig.intervalStartIndex,
-        numNotes: _validConfig.numNotes,
-        repeatMultiple: _validConfig.repeatMultiple,
-        scaleIntervals: _intervals,
-        type: _validConfig.type
+          amountToAdd: _validConfig.amountToAdd,
+          intervalStartIndex: _validConfig.intervalStartIndex,
+          numNotes: _validConfig.numNotes,
+          repeatMultiple: _validConfig.repeatMultiple,
+          scaleIntervals: _intervals,
+          type: _validConfig.type,
       });
       // Inversions are acheived by
       // selecting an index from within the intervals themselves
@@ -457,204 +1272,42 @@ var __PROD__ = process.env.NODE_ENV !== 'test';
           rootNote: _validConfig.rootNote,
           intervalStartIndex: _validConfig.intervalStartIndex,
           loopLength: _loopLength,
-          type: _validConfig.type
-        });
+          mode: _validConfig.mode,
+          type: _validConfig.type,
+      }, tuningSystemsData);
       return _scaleArray;
   }
-
-  return {
-    getFreqs: getFreqs,
-    augmentNumArray: augmentNumArray,
-    getSingleFreq: getSingleFreq,
-    CHROMATIC_SCALE: CHROMATIC_SCALE
+  var freqi = {
+      getFreqs: getFreqs,
+      augmentNumArray: augmentNumArray,
+      addMissingNotesFromInterval: addMissingNotesFromInterval,
+      getCorrectIndex: getCorrectIndex,
+      raiseOrReduceByRatio: raiseOrReduceByRatio,
+      multOrDivide: multOrDivide,
+      getSingleFreq: getSingleFreq,
+      getNotesFromIntervals: getNotesFromIntervals,
+      getJustIntNote: getJustIntNote,
+      getHSeriesNote: getHSeriesNote,
+      getJustIntCommaNote: getJustIntCommaNote,
+      getPythagNoteWithinOct: getPythagNoteWithinOct,
+      getAllOctaveJustIntervals: getAllOctaveJustIntervals,
+      getJustTuningSystems: getJustTuningSystems,
+      getTuningSystemType: getTuningSystemType,
+      tuningSystemsData: tuningSystemsData,
+      freqiModes: freqiModes,
+      getModes: getModes,
+      CHROMATIC_SCALE: CHROMATIC_SCALE,
+      errorCheckFns: {
+          checkAugmentNumArrayConfigTypes: checkAugmentNumArrayConfigTypes,
+          checkAugmentNumArrayConfigForNegs: checkAugmentNumArrayConfigForNegs,
+          checkGetSingleFreqConfigForNegs: checkGetSingleFreqConfigForNegs,
+          checkGetSingleFreqConfigDataTypes: checkGetSingleFreqConfigDataTypes,
+          checkGetFreqsNumericDataTypes: checkGetFreqsNumericDataTypes
+      }
   };
-}));
 
-}).call(this,require('_process'))
-},{"_process":3}],3:[function(require,module,exports){
-// shim for using process in browser
-var process = module.exports = {};
+  return freqi;
 
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
+})));
 
 },{}]},{},[1]);
