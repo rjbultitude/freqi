@@ -29,7 +29,7 @@ const scaleConfigMandatoryOpts = {
 
 const scaleConfigHSeriesOpts = {
   startFreq: 1960,
-  intervals: [1, -2, -3, -4, -5],
+  intervals: [-2, -1, 1.5, 2, 3, 4, 8],
   mode: 'hSeries'
 };
 
@@ -54,10 +54,10 @@ const testConfig = {
 // const scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigMandatoryOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigJustIntOpts);
-// const scaleFrequencies = freqi.getFreqs(scaleConfigHSeriesOpts);
+const scaleFrequencies = freqi.getFreqs(scaleConfigHSeriesOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigTruePythagOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigPentatonic);
-const scaleFrequencies = freqi.getFreqs(testConfig);
+// const scaleFrequencies = freqi.getFreqs(testConfig);
 console.log('scaleFrequencies', scaleFrequencies);
 
 const playBtn = document.getElementById('play');
