@@ -142,3 +142,15 @@ Mocha is used as the testing framework.
 
 Browserify is used to build the demo.
 
+## Contributing
+
+### Commands
+`npm build` creates the TS definitions and compiles the library using TS and Rollup respectively
+
+`npm build run` will compile the lib, then the demo and then start the local server. Navigate to localhost:8080/demo to view it
+
+### Features
+* Please post feature requets or sugestions as issues here: [https://github.com/rjbultitude/freqi/issues](https://github.com/rjbultitude/freqi/issues)
+* As of version 1.6.0 all tuning system data is stored in the src/tuning-systems.json file. Any additional systems must be added here. 
+* There is no need to create any additional equally tempered tuning systems in the core lib as the function `getEqTempNote` will allow for the division of an octave into any number of notes.
+* Based on annecdotal feedback, the most useful feature to develop next is support for note letters e.g. `getFreqs(['A', 'C', 'D#'])` or `getFreqs(['Sa', 'Re', 'Ga'])`
