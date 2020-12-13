@@ -121,7 +121,9 @@ Then, be sure to navigate to the demo folder in order to see the page i.e. local
 
 ## Release notes
 
-1.6.0 Addition of pentatonic tuning systems. Addition of `freqiModes` property as alternative to `getModes`. `getMetaData` is deprecated in favour of `tuningSystemsData`.
+1.6.0 Addition of pentatonic tuning systems.
+The `getModes`. method is deprecated in favour of the `freqiModes` property.
+The `getMetaData` method is deprecated in favour of the `tuningSystemsData` property.
 
 1.5.3 Addition of meta data for each tuning system and `getMetaData` method
 
