@@ -25,8 +25,12 @@
 *.publishsettings
 
 # Front-end
-.sass-cache/
 node_modules/
+demo/freqi-demo.js
+
+# Reports
+coverage/
+.nyc_output
 
 # JavaScript
 dist/

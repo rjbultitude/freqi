@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+  - 'stable'
+jobs:
+  include:
+    - stage: test
+      name: 'unit tests'
+      script:
+        - npm i
+        - echo 'Testing'
+        - npm run test
+    - stage: 'build_branch'
+      name: 'build feature'
+      script:
+        - npm run build
+stages:
+  - name: test
+  - name: deploy_branch

@@ -1,36 +1,86 @@
 'use strict';
-var freqi = require('../lib/freqi');
+const freqi = require('../lib/freqi');
 
-var scaleConfigAllOpts = {
-  startFreq: 440,
+const cNoteFreq =  261.6;
+const cMajorScale = [0, 2, 4, 5, 7, 9, 11];
+
+const scaleConfigAllOpts = {
+  startFreq: cNoteFreq,
   numSemitones: 12,
   numNotes: 8,
   inversionStartNote: 0,
   rootNote: 0,
-  intervals: [-12, 0, 12, 7],
+  intervals: cMajorScale,
   amountToAdd: 12,
-  type: 'sine'
+  type: 'some useful description'
 };
 
-var scaleConfigMandatoryOpts = {
-  intervals: [0, 3, 5]
+const scaleConfigJustIntOpts = {
+  startFreq: cNoteFreq,
+  numSemitones: 12,
+  rootNote: 0,
+  intervals: [-24, -12, 0, 12, 24],
+  mode: 'fiveLimit'
 };
 
-//var scaleFrequencies = freqi.getFreqs(scaleConfigMandatoryOpts);
-var scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
+const scaleConfigPythagOpts = {
+  startFreq: 440,
+  intervals: [-12, -7, 0, 7, 12],
+  mode: 'pythagorean'
+};
+
+// Should return four notes from a 12TET scale
+const scaleConfigMandatoryOpts = {
+  intervals: [-3, 0, 5, 7]
+};
+
+const scaleConfigHSeriesOpts = {
+  startFreq: 1960,
+  intervals: [-2, -1, 1.5, 2, 3, 4, 8],
+  mode: 'hSeries'
+};
+
+const scaleConfigTruePythagOpts = {
+  startFreq: 880,
+  intervals: [-24, -7, 0, 7, 12],
+  mode: 'truePythag'
+};
+
+const scaleConfigPentatonic = {
+  startFreq: 440,
+  intervals: [-25, 1, 2, 3, 4, 5, 25],
+  mode: 'minorPentatonic'
+};
+
+// Should return three notes from a 12TET scale
+const testConfig = {
+  startFreq: 440,
+  numSemitones: 12,
+  intervals: [-5, 0, 7]
+}
+
+const scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigMandatoryOpts);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigJustIntOpts);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigPythagOpts);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigHSeriesOpts);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigTruePythagOpts);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigPentatonic);
+// const scaleFrequencies = freqi.getFreqs(testConfig);
 console.log('scaleFrequencies', scaleFrequencies);
+console.log('tuningSystemsData', freqi.tuningSystemsData);
+console.log('tuningSystemsData', freqi.freqiModes);
 
-var playBtn = document.getElementById('play');
-var stopBtn = document.getElementById('stop');
-var connected = false;
-
-var index = 0;
+const playBtn = document.getElementById('play');
+const stopBtn = document.getElementById('stop');
+let connected = false;
+let index = 0;
+let startOsc = false;
 
 // define audio context
-var context = new (window.AudioContext || window.webkitAudioContext)();
-var oscillator = context.createOscillator();
-var myInterval;
-oscillator.start();
+const context = new (window.AudioContext || window.webkitAudioContext)();
+const oscillator = context.createOscillator();
+let myInterval;
 
 function playSine(freq) {
   oscillator.type = 'sine';
@@ -40,6 +90,7 @@ function playSine(freq) {
 }
 
 function playSineCb(scale) {
+  console.log(scale[index]);
   playSine(scale[index]);
   if (index >= scale.length - 1) {
     index = 0;
@@ -63,10 +114,14 @@ function play(scale, noteLength) {
 
 playBtn.addEventListener('click', function(e) {
   e.preventDefault();
-  if (!connected) {
-    //play(myScale.scale, 1000);
-    play(scaleFrequencies, 1000);
+  if (!startOsc) {
+    oscillator.start();
+    startOsc = true;
   }
+  if (!connected) {
+    play(scaleFrequencies, 500);
+  }
+  console.log('connected', connected);
 });
 
 stopBtn.addEventListener('click', function(e) {
@@ -74,4 +129,5 @@ stopBtn.addEventListener('click', function(e) {
   if (connected) {
     stop();
   }
+  console.log('connected', connected);
 });
