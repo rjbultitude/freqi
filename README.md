@@ -59,7 +59,7 @@ or for CommonJS loaders (such as [Browserify](http://browserify.org/)) use
 
 `startFreq` can be a frequency in Hz, such as `440` (for the note A) or a relative frequency such `1` which is useful for playing back audio files, such as MP3s or OGGs, where `1` is the original playback rate. `440` is the default value.
 
-**Tuning Systems**
+### Tuning Systems
 Freqi supports a wide range of tuning systems. By default it will use 12 tone equal temperament (12TET). To use 4TET for example, simply set `numSemitones` to `4`. For Just Intonation tuning systems set the `mode` to one of the following:
 * `pythagorean` - Pythagorean just intonation excluding the syntonic comma
 * `truePythag` - Pythagorean just intonation that _includes_ the syntonic/[pyhthagorean comma](https://en.wikipedia.org/wiki/Pythagorean_comma)
