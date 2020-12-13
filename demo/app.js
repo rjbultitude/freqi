@@ -23,6 +23,13 @@ const scaleConfigJustIntOpts = {
   mode: 'fiveLimit'
 };
 
+const scaleConfigPythagOpts = {
+  startFreq: 440,
+  intervals: [-12, -7, 0, 7, 12],
+  mode: 'pythagorean'
+};
+
+// Should return four notes from a 12TET scale
 const scaleConfigMandatoryOpts = {
   intervals: [-3, 0, 5, 7]
 };
@@ -45,16 +52,18 @@ const scaleConfigPentatonic = {
   mode: 'minorPentatonic'
 };
 
+// Should return three notes from a 12TET scale
 const testConfig = {
   startFreq: 440,
   numSemitones: 12,
   intervals: [-5, 0, 7]
 }
 
-// const scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
+const scaleFrequencies = freqi.getFreqs(scaleConfigAllOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigMandatoryOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigJustIntOpts);
-const scaleFrequencies = freqi.getFreqs(scaleConfigHSeriesOpts);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigPythagOpts);
+// const scaleFrequencies = freqi.getFreqs(scaleConfigHSeriesOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigTruePythagOpts);
 // const scaleFrequencies = freqi.getFreqs(scaleConfigPentatonic);
 // const scaleFrequencies = freqi.getFreqs(testConfig);
