@@ -78,8 +78,8 @@
   },
   "twentyTwoShrutis": {
     "name": "twentyTwoShrutis",
-    "shortName": "Twenty Two Shrutis",
-    "longName": "Twenty Two Shrutis",
+    "shortName": "Twenty-two Shrutis",
+    "longName": "Twenty-two Shrutis",
     "intervalsInOctave": 22,
     "intervalRatios": [[1,1], [256,243], [16,15], [10,9], [9,8], [32,27], [6,5], [5,4], [81,64], [4,3], [27,20], [45,32], [729,512], [3,2], [128,81], [8,5], [5,3], [27,16], [16,9], [9,5], [15,8], [243,128]],
     "type": "just",
@@ -133,7 +133,7 @@
   },
   "bluesMajorRitsusenYo": {
     "name": "bluesMajorRitsusenYo",
-    "shortName": "Blues major, Ritsusen (律旋), yo scale",
+    "shortName": "Blues major, Ritsusen (律旋)",
     "longName": "Blues major, Ritsusen (律旋), yo scale",
     "intervalsInOctave": 5,
     "intervalRatios": [[24, 24], [27, 24], [32, 24], [36, 24], [40, 24]],
