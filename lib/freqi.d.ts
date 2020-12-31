@@ -286,6 +286,11 @@ declare const _default: {
             intervalsInOctave: number;
             intervalRatios: number[][];
             type: string;
+            /**
+             * ------------
+             * Equal temperament data sanitisation
+             * ------------
+             */
             scaleType: string;
             includesComma: boolean;
             notes: string;
