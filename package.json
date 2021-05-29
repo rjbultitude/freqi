@@ -1,6 +1,6 @@
 {
   "name": "freqi",
-  "version": "1.6.3",
+  "version": "1.7.0",
   "description": "A library that generates musical frequencies for use with the Web Audio API",
   "main": "./lib/freqi.js",
   "module": "./lib/freqi.mjs",
